@@ -1,0 +1,1568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Shadi Mohammadi — Machine Learning Engineer</title>
+<meta name="description" content="Machine learning engineer in Toronto. Production ML over large-scale network telemetry: long-tailed data, anomaly detection, evaluation, and agentic systems.">
+<meta name="theme-color" content="#0A0D1C">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+(function(){
+  var t = null;
+  try{ t = localStorage.getItem('sm-theme'); }catch(e){}
+  if(t !== 'light' && t !== 'dark') t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', t);
+})();
+</script>
+<style>
+  :root{
+    --bg:#F3F4F8;--bg-2:#FFFFFF;--line:#DDE0EA;--line-2:#C4C9DA;
+    --ink:#11152B;--ink-2:#454D6A;--ink-3:#5F6886;--c1:#0B8F7E;--c2:#5443D1;--hot:#A35C00;
+    --btn-bg:rgba(255,255,255,.8);--bar-bg:rgba(243,244,248,.86);--glow:#7B6FE6;--cue:rgba(69,77,106,.4);
+    --sel:#CFC8FF;--sel-ink:#11152B;--solid-hover:#2A3152;color-scheme:light;
+    --sans:"Geist",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+    --display:"Archivo","Geist",ui-sans-serif,system-ui,sans-serif;
+    --mono:"Geist Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+    --gutter:clamp(1.25rem,4.5vw,4rem);
+    box-sizing:border-box;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --bg:#0A0D1C;--bg-2:#0F1429;--line:#1D2543;--line-2:#2B3560;
+    --ink:#ECEFFA;--ink-2:#A8B1CF;--ink-3:#8089AD;--c1:#5EE6D0;--c2:#A193FF;--hot:#FFB547;
+    --btn-bg:rgba(15,20,41,.72);--bar-bg:rgba(10,13,28,.82);--glow:#8C93E8;--cue:rgba(128,137,173,.45);
+    --sel:#3A2F86;--sel-ink:#fff;--solid-hover:#fff;color-scheme:dark;
+  }}
+  :root[data-theme="dark"]{
+    --bg:#0A0D1C;--bg-2:#0F1429;--line:#1D2543;--line-2:#2B3560;
+    --ink:#ECEFFA;--ink-2:#A8B1CF;--ink-3:#8089AD;--c1:#5EE6D0;--c2:#A193FF;--hot:#FFB547;
+    --btn-bg:rgba(15,20,41,.72);--bar-bg:rgba(10,13,28,.82);--glow:#8C93E8;--cue:rgba(128,137,173,.45);
+    --sel:#3A2F86;--sel-ink:#fff;--solid-hover:#fff;color-scheme:dark;
+  }
+  html.theming,html.theming *{transition:background-color .35s ease,color .35s ease,border-color .35s ease !important}
+
+  html{background:var(--bg);scroll-padding-top:env(safe-area-inset-top,0px);-webkit-text-size-adjust:100%}
+  *,*::before,*::after{box-sizing:border-box}
+
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-size:clamp(1rem,.96rem + .18vw,1.0625rem);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  ::selection{background:var(--sel);color:var(--sel-ink)}
+
+  a{color:var(--ink);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:.22em;text-decoration-color:var(--line-2);transition:text-decoration-color .15s ease,color .15s ease}
+  a:hover{text-decoration-color:var(--c2)}
+
+  a:focus-visible,button:focus-visible{outline:2px solid var(--c2);outline-offset:3px;border-radius:4px}
+
+  .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+
+  /* ================= HERO ================= */
+
+  .hero{position:relative;z-index:1;height:100svh;min-height:600px;cursor:crosshair}
+  main,.foot{position:relative;z-index:1}
+
+  #field{position:fixed;inset:0;z-index:0;width:100%;height:100%;display:block;pointer-events:none;transition:opacity .45s ease}
+  #field.gone{opacity:0}
+  #net{position:fixed;inset:0;z-index:0;width:100%;height:100%;display:block;pointer-events:none}
+
+  .hero-top{
+    position:absolute;top:0;left:0;right:0;
+    display:flex;justify-content:space-between;align-items:center;gap:1rem;
+    padding:1.35rem var(--gutter);
+    font-family:var(--mono);font-size:.8125rem;
+    pointer-events:none;
+  }
+  .hero-top > *{pointer-events:auto}
+  .wordmark{color:var(--ink-2)}
+  .nav{display:flex;gap:1.4rem;margin:0;padding:0;list-style:none}
+  .nav a{color:var(--ink-2);text-decoration:none}
+  .nav a:hover{color:var(--ink)}
+
+  .hero-foot{
+    position:absolute;left:0;right:0;bottom:0;
+    display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2rem;align-items:end;
+    padding:0 var(--gutter) clamp(1.5rem,4.5vh,2.75rem);
+    pointer-events:none;
+  }
+  .hero-foot > *{pointer-events:auto}
+
+  .intro{max-width:34rem}
+  .intro .role{margin:0;font-family:var(--display);font-weight:600;font-size:clamp(1.15rem,1rem + .6vw,1.45rem);letter-spacing:-.01em;line-height:1.3}
+  .intro .blurb{margin:.55rem 0 0;color:var(--ink-2);font-size:1rem;line-height:1.55}
+
+  .actions{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.3rem}
+  .btn{
+    display:inline-flex;align-items:center;justify-content:center;
+    min-height:44px;padding:0 1.15rem;
+    border-radius:999px;border:1px solid var(--line-2);
+    background:var(--btn-bg);color:var(--ink);
+    font:500 .8125rem/1 var(--mono);text-decoration:none;cursor:pointer;
+    transition:border-color .15s ease,background .15s ease,color .15s ease;
+  }
+  .btn:hover{border-color:var(--c2)}
+  .btn-solid{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+  .btn-solid:hover{background:var(--solid-hover);border-color:var(--solid-hover)}
+
+  .readout{font-family:var(--mono);font-size:.75rem;color:var(--ink-3);min-width:13rem}
+  .readout dl{display:grid;grid-template-columns:auto 1fr;gap:.2rem 1.4rem;margin:0}
+  .readout dt{color:var(--ink-3)}
+  .readout dd{margin:0;color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
+  .readout .st-on{color:var(--c1)}
+
+  .hint{margin:0;line-height:1.5}
+
+
+  /* text-free hero: a faint loss trace and a scroll cue that appear once training converges */
+  .hero .spark{
+    position:absolute;right:var(--gutter);bottom:clamp(1.6rem,5vh,3rem);
+    width:120px;height:28px;overflow:visible;opacity:.55;pointer-events:none;
+  }
+  .cue{
+    position:absolute;left:50%;bottom:clamp(1.4rem,4.5vh,2.6rem);
+    width:44px;height:64px;margin-left:-22px;display:block;
+    opacity:0;transition:opacity 1.2s ease;
+  }
+  .cue span{position:absolute;left:21px;top:8px;width:1px;height:46px;background:var(--cue);overflow:hidden}
+  .cue span::after{content:'';position:absolute;left:-2px;top:-10px;width:5px;height:10px;border-radius:3px;background:var(--c2);animation:drip 1.9s cubic-bezier(.5,0,.3,1) infinite}
+  @keyframes drip{0%{transform:translateY(0);opacity:0}20%{opacity:1}100%{transform:translateY(56px);opacity:0}}
+  .hero.ready .cue{opacity:1}
+
+
+  .hero-id{
+    position:absolute;left:var(--gutter);top:50%;max-width:min(36rem,40vw);
+    opacity:0;transform:translateY(calc(-50% + 14px));
+    transition:opacity 1.4s ease,transform 1.4s cubic-bezier(.2,.7,.3,1);
+    pointer-events:none;
+  }
+  .hero.ready .hero-id{opacity:1;transform:translateY(-50%)}
+  .hero-name{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(3rem,5.4vw,5.4rem);letter-spacing:-.045em;line-height:.9}
+  .hero-pitch{margin:1.4rem 0 0;max-width:30rem;font-size:clamp(1.05rem,.95rem + .45vw,1.3rem);line-height:1.45;color:var(--ink-2)}
+  .hero-role{margin:1rem 0 0;font-family:var(--mono);font-size:.8125rem;color:var(--ink-3)}
+  @media (max-width:999px){
+    .hero-id{top:calc(env(safe-area-inset-top,0px) + 1.4rem);max-width:none;right:var(--gutter);transform:translateY(10px)}
+    .hero.ready .hero-id{transform:none}
+    .hero-name{font-size:clamp(2.1rem,8.5vw,3rem)}
+    .hero-pitch{margin-top:.8rem;font-size:1rem;max-width:26rem}
+    .hero-role{margin-top:.55rem;font-size:.75rem}
+  }
+
+  /* ================= TIMELINE ================= */
+
+  .run{padding-top:14vh}
+
+  .fig-h{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(1.7rem,2.6vw,2.4rem);letter-spacing:-.035em;line-height:1}
+  .fig-sub{margin:.6rem 0 2.2rem;max-width:30rem;color:var(--ink-2);font-size:.9375rem;line-height:1.5}
+
+  .run-body{
+    max-width:80rem;margin:0 auto;padding-inline:var(--gutter);
+    display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,1fr);gap:clamp(2rem,5vw,5.5rem);
+  }
+
+  .fig{
+    position:sticky;top:env(safe-area-inset-top,0px);align-self:start;
+    height:100svh;
+    display:flex;flex-direction:column;justify-content:center;
+    padding-block:5.5rem 2rem;
+  }
+
+  .fig-now{display:flex;align-items:flex-end;justify-content:space-between;gap:1.5rem}
+  .fig-year{
+    margin:0;font-family:var(--display);font-weight:800;
+    font-size:clamp(4.2rem,9vw,8.4rem);line-height:.82;letter-spacing:-.05em;
+    font-variant-numeric:tabular-nums;
+  }
+  .fig-meta{text-align:right;padding-bottom:.35rem;max-width:15rem}
+  .fig-tag{margin:0;font-family:var(--mono);font-size:.75rem;color:var(--c2)}
+  .fig-title{margin:.3rem 0 0;font-size:.9375rem;line-height:1.35;color:var(--ink-2)}
+  .flip{animation:flip .38s cubic-bezier(.2,.7,.3,1)}
+  @keyframes flip{from{opacity:.15;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+  .chart{display:block;width:100%;height:auto;margin-top:1.6rem;overflow:visible;opacity:0;transition:opacity .45s ease}
+  .run.handoff .chart{opacity:1}
+  .run.handoff .chart .dim{animation:afterglow 1.6s ease-out}
+  @keyframes afterglow{from{stroke:var(--glow);stroke-width:2.4}to{stroke:var(--line-2);stroke-width:1.5}}
+  .chart .g1{stop-color:var(--c1)}
+  .chart .g2{stop-color:var(--c2)}
+  .chart .grid{stroke:var(--line);stroke-width:1}
+  .chart .tick{fill:var(--ink-3);font:400 11px var(--mono)}
+  .chart .axis-label{fill:var(--ink-3);font:400 11px var(--mono)}
+  .chart .dim{fill:none;stroke:var(--line-2);stroke-width:1.5}
+  .chart .live{fill:none;stroke:url(#liveGrad);stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round}
+  .chart .ck{fill:var(--bg);stroke:var(--line-2);stroke-width:1.5;transition:fill .2s ease,stroke .2s ease}
+  .chart .ck.done{fill:var(--c2);stroke:var(--c2)}
+  .chart .mk-line{stroke:var(--hot);stroke-width:1;stroke-dasharray:3 4;opacity:.55}
+  .chart .mk-halo{fill:var(--hot);opacity:.18}
+  .chart .mk-dot{fill:var(--hot)}
+  .chart .mk-label{fill:var(--hot);font:500 11px var(--mono)}
+
+  .scrub{display:flex;flex-wrap:wrap;gap:.45rem;margin:1.6rem 0 0;padding:0;list-style:none}
+  .scrub button{
+    min-height:36px;padding:0 .85rem;border-radius:999px;
+    border:1px solid var(--line);background:transparent;color:var(--ink-3);
+    font:500 .75rem/1 var(--mono);cursor:pointer;
+    transition:color .15s ease,border-color .15s ease,background .15s ease;
+  }
+  .scrub button:hover{color:var(--ink);border-color:var(--line-2)}
+  .scrub button[aria-current="step"]{color:var(--bg);background:var(--ink);border-color:var(--ink)}
+
+  .steps{list-style:none;margin:0;padding:34vh 0 38vh}
+
+  .step{
+    min-height:78vh;
+    display:flex;flex-direction:column;justify-content:center;
+    opacity:.36;transition:opacity .45s ease;
+  }
+  .step.on,.step:focus-within{opacity:1}
+
+  .step-head{display:flex;flex-wrap:wrap;gap:.35rem 1rem;align-items:baseline;font-family:var(--mono);font-size:.75rem}
+  .step-tag{color:var(--c2)}
+  .step-date{color:var(--ink-3);font-variant-numeric:tabular-nums}
+
+  .step h3{margin:.7rem 0 0;font-family:var(--display);font-weight:700;font-size:clamp(1.7rem,1.2rem + 1.6vw,2.5rem);letter-spacing:-.03em;line-height:1.08}
+  .step .org{margin:.45rem 0 0;color:var(--ink-3);font-size:.9375rem}
+  .step .body{margin:1.1rem 0 0;max-width:34rem;color:var(--ink-2)}
+
+  .wins{margin:1.6rem 0 0;display:grid;gap:0}
+  .wins div{display:grid;grid-template-columns:10.5rem minmax(0,1fr);gap:1.25rem;padding:.95rem 0;border-top:1px solid var(--line)}
+  .wins div:last-child{border-bottom:1px solid var(--line)}
+  .wins dt{font-family:var(--mono);font-size:.8125rem;color:var(--c1);padding-top:.12rem}
+  .wins dd{margin:0;color:var(--ink-2);font-size:.9375rem;line-height:1.55}
+
+  .contact-links{display:flex;flex-wrap:wrap;gap:.7rem;margin-top:1.5rem}
+
+
+  .projects{margin:1.6rem 0 0;padding:0;list-style:none}
+  .proj{padding:1.15rem 0 1.2rem;border-top:1px solid var(--line)}
+  .proj:last-child{border-bottom:1px solid var(--line)}
+  .proj h4{
+    display:flex;flex-wrap:wrap;align-items:baseline;gap:.3rem .8rem;
+    margin:0;font-family:var(--display);font-weight:600;font-size:1.0625rem;letter-spacing:-.01em;line-height:1.35;color:var(--ink);
+  }
+  .proj ul{margin:.6rem 0 0;padding:0;list-style:none;display:grid;gap:.45rem}
+  .proj ul li{position:relative;padding-left:1.1rem;color:var(--ink-2);font-size:.9375rem;line-height:1.55}
+  .proj ul li::before{content:'';position:absolute;left:0;top:.62em;width:5px;height:5px;border-radius:1px;background:var(--c1)}
+  .live{font-family:var(--mono);font-size:.72rem;font-weight:500;color:var(--hot);text-decoration:none;border-bottom:1px solid rgba(255,181,71,.4)}
+  .live:hover{border-bottom-color:var(--hot)}
+
+  /* ================= SKILLS ================= */
+
+  .skills-wrap{border-top:1px solid var(--line)}
+  .skills{
+    max-width:80rem;margin:0 auto;padding:clamp(3.5rem,8vw,6rem) var(--gutter) clamp(3rem,6vw,4.5rem);
+    display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,1fr);gap:clamp(2rem,5vw,5.5rem);
+  }
+  .skills h2{margin:0;font-family:var(--display);font-weight:800;font-size:clamp(1.9rem,3.4vw,3rem);letter-spacing:-.035em;line-height:1}
+  .skills-lede{margin:.8rem 0 0;max-width:26rem;color:var(--ink-2);font-size:.9375rem;line-height:1.55}
+  .groups{margin:0;display:grid;gap:1.6rem}
+  .groups dt{font-family:var(--mono);font-size:.75rem;color:var(--c2)}
+  .groups dd{margin:.55rem 0 0}
+  .tags{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:.4rem}
+  .tags li{
+    padding:.34rem .72rem;border:1px solid var(--line-2);border-radius:999px;
+    color:var(--ink-2);font-size:.8125rem;line-height:1.2;
+    opacity:0;transform:translateY(6px);
+    transition:opacity .5s ease,transform .5s ease,border-color .15s ease,color .15s ease;
+    transition-delay:calc(var(--i, 0) * 16ms),calc(var(--i, 0) * 16ms),0s,0s;
+  }
+  .tags li:hover{border-color:var(--c2);color:var(--ink)}
+  .skills.in .tags li{opacity:1;transform:none}
+
+  /* ================= FOOTER ================= */
+
+  .foot{border-top:1px solid var(--line);margin-top:2rem}
+  .foot-in{
+    max-width:80rem;margin:0 auto;padding:clamp(3rem,7vw,5rem) var(--gutter) 3rem;
+    display:grid;grid-template-columns:minmax(0,1.08fr) minmax(0,1fr);gap:clamp(2rem,5vw,5.5rem);
+  }
+  .foot h2{margin:0;font-family:var(--mono);font-weight:500;font-size:.75rem;color:var(--ink-3)}
+  .pubs{margin:1rem 0 0;padding:0;list-style:none}
+  .pubs li{padding:.9rem 0;border-top:1px solid var(--line);color:var(--ink-2);font-size:.9375rem;line-height:1.55}
+  .pubs li:last-child{border-bottom:1px solid var(--line)}
+  .pubs cite{color:var(--ink);font-style:italic}
+  .award{display:block;margin-top:.3rem;font-family:var(--mono);font-size:.75rem;color:var(--hot)}
+  .reach{margin:1rem 0 0;padding:0;list-style:none;display:grid;gap:.55rem;font-size:.9375rem}
+  .reach span{display:inline-block;width:5.5rem;font-family:var(--mono);font-size:.75rem;color:var(--ink-3)}
+  .colophon{margin:2.5rem 0 0;font-family:var(--mono);font-size:.75rem;color:var(--ink-3)}
+
+
+  /* ================= SOUND ================= */
+
+  .sound,.theme{
+    position:fixed;z-index:20;
+    top:calc(env(safe-area-inset-top,0px) + 10px);right:var(--gutter);
+    display:inline-flex;align-items:center;justify-content:center;
+    width:44px;height:44px;padding:0;
+    border-radius:999px;border:1px solid var(--line-2);
+    background:var(--btn-bg);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);
+    color:var(--ink-2);font:500 .75rem/1 var(--mono);cursor:pointer;
+    transition:color .15s ease,border-color .15s ease;
+  }
+  .theme{right:calc(var(--gutter) + 52px)}
+  .theme svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round}
+  .theme .i-moon{display:none}
+  :root[data-theme="light"] .theme .i-sun{display:none}
+  :root[data-theme="light"] .theme .i-moon{display:block}
+  .theme:hover{color:var(--ink);border-color:var(--c2)}
+  .sound:hover{color:var(--ink);border-color:var(--c2)}
+  .sound[aria-pressed="true"]{color:var(--ink);border-color:var(--c2)}
+  .eq{width:16px;height:14px;fill:currentColor;overflow:visible}
+  .sound-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .eq rect{transform-box:fill-box;transform-origin:center;transform:scaleY(.35);transition:transform .3s ease}
+  .sound[aria-pressed="true"] .eq rect{animation:eq 1.1s ease-in-out infinite}
+  .sound[aria-pressed="true"] .eq rect:nth-child(2){animation-delay:-.35s}
+  .sound[aria-pressed="true"] .eq rect:nth-child(3){animation-delay:-.7s}
+  .sound[aria-pressed="true"] .eq rect:nth-child(4){animation-delay:-.2s}
+  @keyframes eq{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
+  .hero-top{padding-right:calc(var(--gutter) + 8.6rem);padding-top:1.62rem}
+  .eq .mute{stroke:currentColor;stroke-width:1.7;stroke-linecap:round}
+  .sound[aria-pressed="true"] .eq .mute{display:none}
+
+
+
+  /* ================= HEADER ================= */
+
+  .bar{
+    position:fixed;z-index:15;top:0;left:0;right:0;
+    height:calc(env(safe-area-inset-top,0px) + 64px);padding-top:env(safe-area-inset-top,0px);
+    padding-left:var(--gutter);padding-right:calc(var(--gutter) + 112px);
+    display:flex;align-items:center;justify-content:space-between;gap:1rem;
+    background:var(--bar-bg);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+    transform:translateY(-100%);opacity:0;visibility:hidden;
+    transition:transform .35s cubic-bezier(.2,.7,.3,1),opacity .35s ease,visibility 0s linear .35s;
+  }
+  .bar.show{transform:none;opacity:1;visibility:visible;transition:transform .35s cubic-bezier(.2,.7,.3,1),opacity .35s ease,visibility 0s}
+  .bar-name{font-family:var(--display);font-weight:700;font-size:1rem;letter-spacing:-.01em;color:var(--ink);text-decoration:none}
+  .bar-links{display:flex;gap:1.5rem;margin:0;padding:0;list-style:none;font-family:var(--mono);font-size:.8125rem}
+  .bar-links a{color:var(--ink-2);text-decoration:none;display:inline-block;padding:.6rem 0}
+  .bar-links a:hover{color:var(--ink)}
+
+  /* ================= SMALL SCREENS ================= */
+
+  @media (max-width:900px){
+    .hero-foot{grid-template-columns:1fr;gap:1.1rem}
+    .readout{order:-1;min-width:0}
+    .readout dl{display:flex;flex-wrap:wrap;gap:.2rem .5rem}
+    .readout dd{text-align:left;margin-right:.9rem}
+    .hero .spark{display:none}
+    .wordmark{display:none}
+    .nav{gap:1rem}
+
+    .run-body{grid-template-columns:1fr;gap:0}
+    .fig{
+      z-index:3;height:auto;
+      margin-inline:calc(-1 * var(--gutter));padding:.9rem var(--gutter) .6rem;
+      background:transparent;border-bottom:1px solid transparent;
+      transition:background-color .35s ease,border-color .35s ease;
+    }
+    .run.handoff .fig{background:var(--bg);border-bottom-color:var(--line)}
+    .fig-h{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+    .fig-sub{display:none}
+    .fig-now{align-items:center}
+    .fig-year{font-size:2.3rem}
+    .fig-meta{padding-bottom:0}
+    .fig-title{display:none}
+    .chart{margin-top:.55rem}
+    .chart .tick,.chart .axis-label,.chart .mk-label{display:none}
+    .scrub{display:none}
+    .steps{padding:2rem 0 30vh}
+    .step{min-height:0;padding-block:2.6rem;opacity:.45}
+    .wins div{grid-template-columns:1fr;gap:.25rem}
+
+    .foot-in{grid-template-columns:1fr}
+    .bar-name,.bar-career{display:none}
+    .bar{justify-content:flex-start}
+    .bar-links{gap:1.25rem}
+    .fig{top:calc(env(safe-area-inset-top,0px) + 64px)}
+    .skills{grid-template-columns:1fr;gap:1.6rem}
+
+    .sound-label{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.001ms !important;transition-duration:.001ms !important;scroll-behavior:auto !important}
+  }
+</style>
+<noscript><style>
+  .hero-id{opacity:1;transform:translateY(-50%)}
+  .step{opacity:1}
+  #field,#net,.spark,.cue{display:none}
+  .tags li{opacity:1;transform:none}
+  .chart{opacity:1}
+</style></noscript>
+</head>
+<body>
+
+<canvas id="net" aria-hidden="true"></canvas>
+<canvas id="field" aria-hidden="true"></canvas>
+
+<header class="bar" id="bar" aria-label="Site">
+  <a class="bar-name" href="#top">Shadi Mohammadi</a>
+  <nav>
+    <ul class="bar-links">
+      <li class="bar-career"><a href="#career">Career</a></li>
+      <li><a href="https://linkedin.com/in/shadi-mohammadi-56a4a38b">LinkedIn</a></li>
+      <li><a href="https://github.com/shadim74">GitHub</a></li>
+      <li><a href="mailto:shadi.mohammadi995@gmail.com">Email</a></li>
+    </ul>
+  </nav>
+</header>
+
+<button class="theme" id="theme" type="button" aria-label="Switch to light mode">
+  <svg class="i-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"></circle><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M5.3 18.7l1.6-1.6M17.1 6.9l1.6-1.6"></path></svg>
+  <svg class="i-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.6A8 8 0 0 1 9.4 4a8 8 0 1 0 10.6 10.6z"></path></svg>
+</button>
+<button class="sound" id="sound" type="button" aria-pressed="false" aria-label="Sound">
+  <svg class="eq" viewBox="0 0 16 14" aria-hidden="true"><rect x="0" y="2" width="2.4" height="10" rx="1"></rect><rect x="4.5" y="0" width="2.4" height="14" rx="1"></rect><rect x="9" y="3" width="2.4" height="8" rx="1"></rect><rect x="13.5" y="4" width="2.4" height="6" rx="1"></rect><line class="mute" x1="-1" y1="15" x2="17" y2="-1"></line></svg>
+  <span class="sound-label" id="sound-label">Sound off</span>
+</button>
+
+<header class="hero" id="top">
+  <div class="hero-id">
+    <h1 class="hero-name">Shadi<br>Mohammadi</h1>
+    <p class="hero-pitch">I build LLM, RAG and agentic systems that ship, and the evaluations that prove they work.</p>
+    <p class="hero-role">Machine learning engineer, Toronto</p>
+  </div>
+
+  <a class="cue" href="#career" aria-label="Scroll to the career timeline"><span></span></a>
+</header>
+
+<main>
+<section class="run" id="career" aria-labelledby="run-title">
+  <div class="run-body">
+    <div class="fig" id="fig">
+      <h2 class="fig-h" id="run-title">The training run</h2>
+      <p class="fig-sub">Machine learning engineer in Toronto. My career, logged the way I'd log a model: every move was a warm restart, where the loss jumps and then settles lower than before.</p>
+      <div class="fig-now">
+        <p class="fig-year" id="fig-year" aria-hidden="true">2013</p>
+        <div class="fig-meta" aria-hidden="true">
+          <p class="fig-tag" id="fig-tag">Initialization</p>
+          <p class="fig-title" id="fig-title">B.Sc. Electrical Engineering</p>
+        </div>
+      </div>
+      <svg class="chart" id="chart" viewBox="0 0 600 300" role="img" aria-label="Training loss over Shadi's career from 2013 to now, with a warm restart at each move and a lower floor after each one."></svg>
+      <ul class="scrub" id="scrub" aria-label="Jump to a checkpoint"></ul>
+    </div>
+
+    <ol class="steps" id="steps">
+
+      <li class="step" data-t="2013.6" data-year="2013" data-short="B.Sc.">
+        <div class="step-head"><span class="step-tag">Initialization</span><span class="step-date">2013 — 2017</span></div>
+        <h3>B.Sc. Electrical Engineering</h3>
+        <p class="org">Amirkabir University of Technology, Tehran. Electronics stream.</p>
+        <p class="body">Circuits, signals and instrumentation. The thesis was a PC-based oscilloscope: hardware for looking closely at signals, which turned out to be the job ever since.</p>
+      </li>
+
+      <li class="step" data-t="2018.45" data-year="2018" data-short="IPM">
+        <div class="step-head"><span class="step-tag">Pretraining</span><span class="step-date">Jun 2018 — Aug 2019</span></div>
+        <h3>Research Software Engineer</h3>
+        <p class="org">IPM, Institute for Research in Fundamental Sciences, Tehran. Internship.</p>
+        <p class="body">First machine learning on real signals: ML and DSP models for emotional state recognition from EEG, with spatial feature extraction and cross-subject generalization evaluation. Models that had to work on people they never saw in training.</p>
+      </li>
+
+      <li class="step" data-t="2019.7" data-year="2019" data-short="M.Sc.">
+        <div class="step-head"><span class="step-tag">Warm restart</span><span class="step-date">Sep 2019 — 2022</span></div>
+        <h3>M.Sc. Electrical &amp; Computer Engineering</h3>
+        <p class="org">Ontario Tech University, Oshawa. Also Research &amp; Teaching Assistant.</p>
+        <p class="body">A new country and a harder objective. Research on pre-coder design for 5G large antenna systems, with convergence and computational-complexity ablations against published baselines, reaching substantially lower complexity at equivalent performance. The thesis on fast joint unicast and multicast beamforming became a first-author paper in IEEE Transactions on Signal Processing.</p>
+      </li>
+
+      <li class="step" data-t="2021.6" data-year="2021" data-short="Award">
+        <div class="step-head"><span class="step-tag">Validation</span><span class="step-date">2021</span></div>
+        <h3>Best Student Paper Award, IEEE SPAWC</h3>
+        <p class="org">Lucca, Italy</p>
+        <p class="body">Awarded for the conference version of the thesis work: a fast algorithm for joint unicast and multicast beamforming in large-scale systems.</p>
+      </li>
+
+      <li class="step" data-t="2022.0" data-year="2022" data-short="GTLP">
+        <div class="step-head"><span class="step-tag">Domain shift</span><span class="step-date">Jan 2022 — Aug 2024</span></div>
+        <h3>Graduate Technology Program (GTLP)</h3>
+        <p class="org">TELUS Communications, Toronto. Rotational graduate program.</p>
+        <p class="body">Into industry through two rotations: first software, then machine learning. Alongside them, I was the prime for the GTLP AI Learning Community for a year, running workshops and launching four applied AI initiatives.</p>
+        <dl class="wins">
+          <div><dt>Jan — Sep 2022</dt><dd>Software Developer, Home Network Dev team. Automated hardware and lab testing with Python and Groovy in Jenkins, and built a live test-results dashboard in Dash, React and Flask over PostgreSQL to triage regressions.</dd></div>
+          <div><dt>Oct 2022 — Aug 2024</dt><dd>Machine Learning Engineer, AI Accelerator team. Production ML over large-scale network telemetry, the start of the work in the next checkpoint.</dd></div>
+        </dl>
+      </li>
+
+      <li class="step" data-t="2024.6" data-year="2024" data-short="MLE">
+        <div class="step-head"><span class="step-tag">Production</span><span class="step-date">Aug 2024 — present</span></div>
+        <h3>Machine Learning Engineer</h3>
+        <p class="org">TELUS Communications, AI Accelerator team, Toronto</p>
+        <p class="body">Stayed on the AI Accelerator team after the program, prototyping, evaluating and productionizing ML systems end to end: LLM, RAG and agentic applications alongside classic predictive models over large-scale network telemetry.</p>
+        <p class="body">Much of the work is evaluation: turning business goals into success metrics, golden datasets and LLM-as-a-judge setups, then shipping reproducible, monitored pipelines on GCP.</p>
+      </li>
+
+      <li class="step" data-t="2026.73" data-year="Now" data-short="Now">
+        <div class="step-head"><span class="step-tag">Still training</span><span class="step-date">2026</span></div>
+        <h3>The loss is still going down</h3>
+        <p class="body">Always glad to talk about data-centric ML, anomaly detection, evaluation, and getting models to behave in production.</p>
+        <div class="contact-links">
+          <a class="btn btn-solid" href="mailto:shadi.mohammadi995@gmail.com">Email me</a>
+          <a class="btn" href="https://linkedin.com/in/shadi-mohammadi-56a4a38b">LinkedIn</a>
+          <a class="btn" href="https://github.com/shadim74">GitHub</a>
+        </div>
+      </li>
+
+    </ol>
+  </div>
+</section>
+
+<section class="skills-wrap" aria-labelledby="skills-title">
+  <div class="skills" id="skills">
+    <div>
+      <h2 id="skills-title">Technical skills</h2>
+      <p class="skills-lede">The stack behind the work above.</p>
+    </div>
+    <dl class="groups">
+        <div><dt>Languages</dt><dd><ul class="tags"><li>Python</li><li>SQL</li><li>C/C++</li></ul></dd></div>
+        <div><dt>ML frameworks</dt><dd><ul class="tags"><li>PyTorch</li><li>TensorFlow</li><li>Keras</li><li>LSTM autoencoders</li><li>EfficientNet</li><li>scikit-learn</li><li>XGBoost</li><li>PyCaret</li><li>Optuna</li><li>SHAP</li><li>LIME</li><li>NumPy</li><li>Pandas</li></ul></dd></div>
+        <div><dt>Data &amp; GenAI</dt><dd><ul class="tags"><li>Spark (PySpark)</li><li>BigQuery</li><li>LangChain</li><li>LangGraph</li><li>LiteLLM</li><li>TurboPuffer</li><li>Arize Phoenix</li><li>Langfuse</li><li>RAGAS</li><li>RAG</li><li>Agentic AI</li></ul></dd></div>
+        <div><dt>Cloud &amp; MLOps</dt><dd><ul class="tags"><li>GCP (BigQuery, Vertex AI, GCS)</li><li>Kubeflow Pipelines</li><li>Docker</li><li>FastAPI</li><li>Pulumi</li><li>Git</li><li>GitHub Actions CI/CD</li><li>Looker</li><li>Linux</li></ul></dd></div>
+        <div><dt>Core domains</dt><dd><ul class="tags"><li>Data-centric ML</li><li>Self-supervised &amp; representation learning</li><li>Anomaly &amp; OOD detection</li><li>Long-tail &amp; imbalanced data</li><li>Behavior cloning</li><li>Synthetic data generation</li><li>Computer vision &amp; transfer learning</li></ul></dd></div>
+    </dl>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="foot-in">
+    <div>
+      <h2>Publications</h2>
+      <ul class="pubs">
+        <li>S. Mohammadi et al. Fast Algorithm for Joint Unicast and Multicast Beamforming in Large-Scale Massive MIMO. <cite>IEEE Transactions on Signal Processing</cite>, vol. 70, pp. 5413–5428, 2022.</li>
+        <li>S. Mohammadi et al. Fast Algorithm for Joint Unicast and Multicast Beamforming in Large-scale Systems. <cite>IEEE SPAWC</cite>, Lucca, Italy, 2021.<span class="award">Best Student Paper Award</span></li>
+      </ul>
+    </div>
+    <div>
+      <h2>Contact</h2>
+      <ul class="reach">
+        <li><span>Email</span><a href="mailto:shadi.mohammadi995@gmail.com">shadi.mohammadi995@gmail.com</a></li>
+        <li><span>LinkedIn</span><a href="https://linkedin.com/in/shadi-mohammadi-56a4a38b">shadi-mohammadi-56a4a38b</a></li>
+        <li><span>GitHub</span><a href="https://github.com/shadim74">shadim74</a></li>
+      </ul>
+      <p class="colophon">Toronto, Canada</p>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+/* ---------- Light / dark: follows the system until the visitor picks, then remembers ---------- */
+(function(){
+  var root = document.documentElement, btn = document.getElementById('theme');
+  var meta = document.querySelector('meta[name="theme-color"]');
+  if(!btn) return;
+  function cur(){ return root.getAttribute('data-theme') === 'light' ? 'light' : 'dark'; }
+  function paint(){
+    var l = cur() === 'light';
+    btn.setAttribute('aria-label', l ? 'Switch to dark mode' : 'Switch to light mode');
+    if(meta) meta.setAttribute('content', l ? '#F3F4F8' : '#0A0D1C');
+  }
+  function set(t, save){
+    root.classList.add('theming');
+    root.setAttribute('data-theme', t);
+    if(save){ try{ localStorage.setItem('sm-theme', t); }catch(e){} }
+    setTimeout(function(){ root.classList.remove('theming'); }, 450);
+  }
+  btn.addEventListener('click', function(){ set(cur() === 'light' ? 'dark' : 'light', true); });
+  var mq = window.matchMedia('(prefers-color-scheme: light)');
+  if(mq.addEventListener) mq.addEventListener('change', function(e){
+    var saved = null;
+    try{ saved = localStorage.getItem('sm-theme'); }catch(_){}
+    if(saved !== 'light' && saved !== 'dark') set(e.matches ? 'light' : 'dark', false);
+  });
+  // One place announces changes, whether they come from the button, the system, or the page's host.
+  new MutationObserver(function(){ paint(); window.dispatchEvent(new Event('themechange')); })
+    .observe(root, {attributes: true, attributeFilter: ['data-theme']});
+  paint();
+})();
+</script>
+
+<script>
+/* ---------- Sound: generated live from the model's state, no audio files ---------- */
+window.SND = (function(){
+  var AC = window.AudioContext || window.webkitAudioContext;
+  var btn = document.getElementById('sound');
+  var label = document.getElementById('sound-label');
+  if(!AC || !btn){ if(btn) btn.hidden = true; return null; }
+
+  var ctx = null, running = false, pref = false;
+  var master, verb, padFilter, padGain, pad = [], lfo;
+  var lastPluck = 0, heroOn = true;
+  var ROOT = 146.83;                 // D3
+  var PENTA = [0, 2, 4, 7, 9];       // D major pentatonic
+
+  function hz(deg){
+    var oct = Math.floor(deg / 5), d = ((deg % 5) + 5) % 5;
+    return ROOT * Math.pow(2, oct + PENTA[d] / 12);
+  }
+
+  function impulse(sec, decay){
+    var len = Math.floor(ctx.sampleRate * sec), b = ctx.createBuffer(2, len, ctx.sampleRate);
+    for(var c = 0; c < 2; c++){
+      var d = b.getChannelData(c);
+      for(var i = 0; i < len; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / len, decay);
+    }
+    return b;
+  }
+
+  function build(){
+    ctx = new AC();
+    master = ctx.createGain(); master.gain.value = 0;
+    var comp = ctx.createDynamicsCompressor();
+    comp.threshold.value = -20; comp.ratio.value = 3;
+    master.connect(comp); comp.connect(ctx.destination);
+
+    verb = ctx.createConvolver(); verb.buffer = impulse(3.4, 2.4);
+    var wet = ctx.createGain(); wet.gain.value = .5;
+    verb.connect(wet); wet.connect(master);
+
+    padFilter = ctx.createBiquadFilter();
+    padFilter.type = 'lowpass'; padFilter.frequency.value = 380; padFilter.Q.value = .8;
+    padGain = ctx.createGain(); padGain.gain.value = 0;
+    padFilter.connect(padGain); padGain.connect(master); padGain.connect(verb);
+
+    // D2, D3, A3, F#4: a D major voicing that only sounds in tune once the model converges.
+    [[-5, 'sine', .11], [0, 'sine', .08], [3, 'triangle', .045], [7, 'sine', .05]].forEach(function(v){
+      var o = ctx.createOscillator(), g = ctx.createGain();
+      o.type = v[1]; o.frequency.value = hz(v[0]); g.gain.value = v[2];
+      o.connect(g); g.connect(padFilter); o.start();
+      pad.push(o);
+    });
+
+    lfo = ctx.createOscillator(); lfo.frequency.value = .07;
+    var lg = ctx.createGain(); lg.gain.value = 110;
+    lfo.connect(lg); lg.connect(padFilter.frequency); lfo.start();
+  }
+
+  function now(){ return ctx.currentTime; }
+
+  function note(freq, amp, decay, dest){
+    var t = now(), o = ctx.createOscillator(), o2 = ctx.createOscillator(), g = ctx.createGain(), g2 = ctx.createGain();
+    o.type = 'sine'; o.frequency.value = freq;
+    o2.type = 'sine'; o2.frequency.value = freq * 2.01;
+    g2.gain.value = .28;
+    g.gain.setValueAtTime(0, t);
+    g.gain.linearRampToValueAtTime(amp, t + .006);
+    g.gain.exponentialRampToValueAtTime(.0001, t + decay);
+    o.connect(g); o2.connect(g2); g2.connect(g);
+    g.connect(master); g.connect(verb);
+    o.start(t); o2.start(t); o.stop(t + decay + .05); o2.stop(t + decay + .05);
+  }
+
+  function start(){
+    if(!ctx) build();
+    ctx.resume();
+    running = true;
+    var t = now();
+    master.gain.cancelScheduledValues(t);
+    master.gain.setTargetAtTime(.85, t, .25);
+    padGain.gain.setTargetAtTime(heroOn ? .17 : .07, t, .6);
+    paint();
+  }
+
+  function stop(){
+    running = false;
+    if(ctx){
+      var t = now();
+      master.gain.cancelScheduledValues(t);
+      master.gain.setTargetAtTime(0, t, .08);
+      setTimeout(function(){ if(!running && ctx) ctx.suspend(); }, 500);
+    }
+    paint();
+  }
+
+  function paint(){
+    var on = pref;
+    btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+    label.textContent = on ? 'Sound on' : 'Sound off';
+  }
+
+  function save(){ try{ localStorage.setItem('sm-sound', pref ? 'on' : 'off'); }catch(e){} }
+
+  btn.addEventListener('click', function(){
+    if(pref && !running){ start(); return; }      // preference remembered, audio not yet unlocked
+    pref = !pref; save();
+    if(pref) start(); else stop();
+  });
+
+  // A remembered "on" can only start after a user gesture, per browser autoplay rules.
+  try{ pref = localStorage.getItem('sm-sound') === 'on'; }catch(e){}
+  paint();
+  function unlock(e){
+    if(e.target && e.target.closest && e.target.closest('#sound')) return;
+    if(pref && !running) start();
+  }
+  ['pointerdown', 'keydown'].forEach(function(ev){ window.addEventListener(ev, unlock, {capture: true}); });
+
+  document.addEventListener('visibilitychange', function(){
+    if(!ctx) return;
+    if(document.hidden) ctx.suspend(); else if(running) ctx.resume();
+  });
+
+  return {
+    loss: function(v){
+      if(!running) return;
+      var t = now(), x = Math.min(1, v / .12);
+      for(var i = 0; i < pad.length; i++) pad[i].detune.setTargetAtTime((i % 2 ? 1 : -1) * (12 + i * 9) * x, t, .4);
+      padFilter.frequency.setTargetAtTime(360 + (1 - x) * 1500, t, .6);
+    },
+    pluck: function(xn, strength){
+      if(!running) return;
+      var t = performance.now();
+      if(t - lastPluck < 85) return;
+      lastPluck = t;
+      note(hz(5 + Math.round(Math.max(0, Math.min(1, xn)) * 9)), .05 + .07 * strength, 1.3);
+    },
+    converge: function(){
+      if(!running) return;
+      [5, 7, 8, 10, 12].forEach(function(d, i){ setTimeout(function(){ note(hz(d), .07, 2.2); }, i * 120); });
+    },
+    swoosh: function(){
+      if(!running) return;
+      var t = now(), len = Math.floor(ctx.sampleRate * .9), b = ctx.createBuffer(1, len, ctx.sampleRate), d = b.getChannelData(0);
+      for(var i = 0; i < len; i++) d[i] = Math.random() * 2 - 1;
+      var src = ctx.createBufferSource(), f = ctx.createBiquadFilter(), g = ctx.createGain();
+      src.buffer = b; f.type = 'bandpass'; f.Q.value = 1.2;
+      f.frequency.setValueAtTime(2600, t); f.frequency.exponentialRampToValueAtTime(260, t + .85);
+      g.gain.setValueAtTime(0, t); g.gain.linearRampToValueAtTime(.09, t + .05); g.gain.exponentialRampToValueAtTime(.0001, t + .9);
+      src.connect(f); f.connect(g); g.connect(master); g.connect(verb);
+      src.start(t);
+    },
+    step: function(i, tag){
+      if(!running) return;
+      var degs = [5, 6, 7, 8, 9, 10, 12];
+      var d = degs[Math.min(i, degs.length - 1)];
+      if(tag === 'Warm restart'){ note(hz(d - 3), .05, 1.6); setTimeout(function(){ note(hz(d), .08, 2.6); }, 140); }
+      else note(hz(d), .08, 2.6);
+    },
+    chirp: function(){
+      if(!running) return;
+      note(hz(10), .06, .35);
+      setTimeout(function(){ note(hz(12), .07, .6); }, 110);
+    },
+    hero: function(vis){
+      heroOn = vis;
+      if(running) padGain.gain.setTargetAtTime(vis ? .17 : .07, now(), .8);
+    }
+  };
+})();
+</script>
+
+<script>
+/* ---------- Background network: drifting nodes, linked when close, across the whole page ---------- */
+(function(){
+  var cv = document.getElementById('net');
+  if(!cv || !cv.getContext) return;
+  var ctx = cv.getContext('2d');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var W = 0, H = 0, DPR = 1, N = [], D = 160, glow = null, raf = 0, mx = -1e4, my = -1e4, mOn = false;
+  function light(){ return document.documentElement.getAttribute('data-theme') === 'light'; }
+
+  function sprite(){
+    var c = document.createElement('canvas'); c.width = c.height = 64;
+    var g = c.getContext('2d'), col = light() ? '84,67,209' : '228,234,255';
+    var gr = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+    gr.addColorStop(0, 'rgba(' + col + ',1)');
+    gr.addColorStop(.18, 'rgba(' + col + ',.75)');
+    gr.addColorStop(.45, 'rgba(' + col + ',.18)');
+    gr.addColorStop(1, 'rgba(' + col + ',0)');
+    g.fillStyle = gr; g.fillRect(0, 0, 64, 64);
+    glow = c;
+  }
+
+  function build(){
+    W = window.innerWidth; H = window.innerHeight;
+    DPR = Math.min(2, window.devicePixelRatio || 1);
+    cv.width = Math.round(W * DPR); cv.height = Math.round(H * DPR);
+    var n = Math.round(Math.max(38, Math.min(115, W * H / 14500)));
+    D = Math.max(110, Math.min(210, Math.min(W, H) * .24));
+    while(N.length < n){
+      N.push({x: Math.random() * W, y: Math.random() * H,
+              vx: (Math.random() - .5) * .3, vy: (Math.random() - .5) * .3,
+              r: Math.random(), g: Math.random() < .17});
+    }
+    N.length = n;
+    for(var i = 0; i < n; i++){ if(N[i].x > W) N[i].x = Math.random() * W; if(N[i].y > H) N[i].y = Math.random() * H; }
+    sprite();
+  }
+
+  // Full strength on the opening screen, a quiet texture behind the reading sections.
+  function level(){ var t = Math.min(1, window.scrollY / (window.innerHeight * 1.1)); return 1 - t * .64; }
+
+  function draw(){
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    var L = light(), lv = level(), col = L ? '84,67,209' : '150,166,236', D2 = D * D;
+    var paths = [[], [], [], []];                       // bucket lines by strength, one stroke each
+    for(var i = 0; i < N.length; i++){
+      var a = N[i];
+      for(var j = i + 1; j < N.length; j++){
+        var b = N[j], dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy;
+        if(d2 < D2){ var f = 1 - Math.sqrt(d2) / D; paths[Math.min(3, Math.floor(f * 4))].push(a, b); }
+      }
+    }
+    ctx.lineWidth = .75;
+    for(var q = 0; q < 4; q++){
+      var pl = paths[q]; if(!pl.length) continue;
+      ctx.strokeStyle = 'rgba(' + col + ',' + (((q + .5) / 4) * (L ? .3 : .34) * lv).toFixed(3) + ')';
+      ctx.beginPath();
+      for(var k = 0; k < pl.length; k += 2){ ctx.moveTo(pl[k].x, pl[k].y); ctx.lineTo(pl[k + 1].x, pl[k + 1].y); }
+      ctx.stroke();
+    }
+    if(mOn){
+      var MD = D * 1.15, MD2 = MD * MD;
+      ctx.beginPath();
+      for(i = 0; i < N.length; i++){
+        var dx2 = N[i].x - mx, dy2 = N[i].y - my;
+        if(dx2 * dx2 + dy2 * dy2 < MD2){ ctx.moveTo(mx, my); ctx.lineTo(N[i].x, N[i].y); }
+      }
+      ctx.strokeStyle = 'rgba(' + col + ',' + ((L ? .28 : .32) * lv).toFixed(3) + ')';
+      ctx.stroke();
+    }
+    ctx.fillStyle = 'rgba(' + col + ',' + (.8 * lv).toFixed(3) + ')';
+    for(i = 0; i < N.length; i++){
+      var n = N[i], r = .8 + n.r * 1.3;
+      ctx.beginPath(); ctx.arc(n.x, n.y, r, 0, Math.PI * 2); ctx.fill();
+    }
+    ctx.globalAlpha = lv * (L ? .7 : .95);
+    for(i = 0; i < N.length; i++){
+      if(!N[i].g) continue;
+      var sz = 14 + N[i].r * 20;
+      ctx.drawImage(glow, N[i].x - sz / 2, N[i].y - sz / 2, sz, sz);
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function step(){
+    for(var i = 0; i < N.length; i++){
+      var n = N[i];
+      n.x += n.vx; n.y += n.vy;
+      if(n.x < -20) n.x = W + 20; else if(n.x > W + 20) n.x = -20;
+      if(n.y < -20) n.y = H + 20; else if(n.y > H + 20) n.y = -20;
+    }
+  }
+
+  function frame(){
+    raf = 0;
+    if(document.hidden) return;
+    step(); draw();
+    raf = requestAnimationFrame(frame);
+  }
+  function kick(){ if(!raf && !reduce && !document.hidden) raf = requestAnimationFrame(frame); }
+
+  window.addEventListener('pointermove', function(e){
+    if(e.target.closest && e.target.closest('button,a,.bar')){ mOn = false; return; }
+    mx = e.clientX; my = e.clientY; mOn = true;
+    if(reduce) draw();
+  }, {passive: true});
+  document.addEventListener('mouseout', function(e){ if(!e.relatedTarget){ mOn = false; if(reduce) draw(); } });
+  window.addEventListener('themechange', function(){ sprite(); draw(); });
+  window.addEventListener('scroll', function(){ if(reduce) draw(); }, {passive: true});
+  var rt;
+  window.addEventListener('resize', function(){ clearTimeout(rt); rt = setTimeout(function(){ build(); draw(); }, 150); });
+  document.addEventListener('visibilitychange', kick);
+  build(); draw(); kick();
+})();
+</script>
+
+<script>
+/* ---------- Hero: points learn the name, then flow into the training curve as you scroll ---------- */
+(function(){
+  var hero = document.getElementById('top');
+  var cvs = document.getElementById('field');
+  var run = document.getElementById('career');
+  if(!cvs || !cvs.getContext || !hero || !run) return;
+  window.__morph = true;
+  var ctx = cvs.getContext('2d');
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  var W = 0, H = 0, DPR = 1, narrow = false;
+  var P = [], nT = 0, curveOK = false;
+  var epoch = 0, frame = 0, hist = [], converged = false, lastLoss = 1;
+  var mx = -1e4, my = -1e4, mOn = false, pmx = null, pmy = null;
+  var raf = 0, started = false, handed = false, prog = 0, pinY = 1, heroSnd = null;
+
+  var elSpark = document.getElementById('ro-spark');
+
+  function isLight(){ return document.documentElement.getAttribute('data-theme') === 'light'; }
+  var NB = 12, cols = [], colsHi = [], buckets = [], HOT = '#FFB547', TRAIL = '', SOLID = '';
+  // Dark: light dots that brighten toward white. Light: ink dots that deepen toward navy.
+  function palette(){
+    var l = isLight();
+    var C1 = l ? [11,143,126] : [94,230,208], C2 = l ? [84,67,209] : [161,147,255];
+    var to = l ? [17,21,43] : [255,255,255], amt = l ? .38 : .55;
+    HOT = l ? '#C77D12' : '#FFB547';
+    TRAIL = l ? 'rgba(243,244,248,.36)' : 'rgba(10,13,28,.36)';
+    SOLID = l ? '#F3F4F8' : '#0A0D1C';
+    cols = []; colsHi = [];
+    for(var i = 0; i < NB; i++){
+      var t = i / (NB - 1), c = [], h = [];
+      for(var k = 0; k < 3; k++){
+        c[k] = Math.round(C1[k] + (C2[k] - C1[k]) * t);
+        h[k] = Math.round(c[k] + (to[k] - c[k]) * amt);
+      }
+      cols.push('rgb(' + c.join(',') + ')');
+      colsHi.push('rgb(' + h.join(',') + ')');
+    }
+  }
+  palette();
+  for(var bk = 0; bk < NB * 3 + 4; bk++) buckets.push([]);
+  var B_HOT = NB * 2, B_OUT = NB * 2 + 1, B_FIG = NB * 2 + 2, B_FIGHI = NB * 2 + 3, B_DIM = NB * 2 + 4;
+
+  function gauss(){
+    var u = 0, v = 0;
+    while(!u) u = Math.random();
+    while(!v) v = Math.random();
+    return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+  }
+
+  function shuffle(a){
+    for(var i = a.length - 1; i > 0; i--){
+      var j = Math.floor(Math.random() * (i + 1)), x = a[i]; a[i] = a[j]; a[j] = x;
+    }
+    return a;
+  }
+
+  // Stipple points precomputed from a photo; only the dot positions ship, never the image.
+  var PORTRAIT = {"aspect":1.1148,"stride":4,"p":[831,499,5,0,599,442,5,0,307,189,4,0,362,160,5,0,591,86,5,0,400,633,3,0,365,58,2,0,813,274,3,0,902,216,7,0,524,303,6,0,79,683,5,0,83,688,4,0,373,42,8,0,78,258,6,0,369,510,5,0,676,629,5,0,464,126,2,0,142,493,4,0,56,303,6,0,480,771,8,0,646,665,9,0,641,665,9,0,127,536,8,0,170,799,9,0,662,85,4,0,132,234,6,0,330,381,4,0,783,511,3,0,225,141,8,0,293,670,6,0,40,651,8,0,330,689,6,0,568,459,3,0,184,446,4,0,146,758,6,0,191,745,3,0,301,617,4,0,632,203,8,0,356,163,5,0,694,538,9,0,424,550,7,0,832,134,8,0,372,286,4,0,457,676,3,0,33,542,8,0,804,240,3,0,236,178,7,0,528,52,7,0,755,601,8,0,207,394,4,0,374,64,4,0,419,628,5,0,469,770,8,0,32,650,6,0,716,428,2,0,244,75,9,0,504,757,9,0,938,431,6,0,944,433,8,0,592,693,9,0,605,526,2,0,367,169,4,0,408,115,2,0,332,187,5,0,538,722,9,0,920,261,7,0,733,507,5,0,203,265,6,0,824,130,6,0,783,360,6,0,367,581,4,0,822,227,6,0,830,244,5,0,477,177,6,0,166,815,9,0,127,719,5,0,376,177,4,0,526,724,8,0,322,89,5,0,68,244,6,0,855,387,5,0,711,572,3,0,129,247,5,0,918,444,7,0,713,144,6,0,734,124,3,0,708,442,6,0,611,45,6,0,925,265,4,0,445,644,6,0,780,365,9,0,221,336,3,0,246,402,7,0,453,23,9,0,238,259,3,0,675,222,4,0,775,427,7,0,35,579,6,0,261,62,6,0,240,722,3,0,525,112,6,0,107,213,8,0,745,258,4,0,741,282,8,0,499,40,4,0,356,273,3,0,907,474,9,0,829,229,4,0,405,887,9,0,618,289,5,0,94,364,5,0,431,553,6,0,437,26,9,0,519,67,3,0,568,239,7,0,536,298,8,0,136,672,5,0,562,655,6,0,106,748,7,0,216,302,7,0,438,569,6,0,549,268,6,0,33,571,5,0,58,310,6,0,887,490,9,0,290,291,7,0,709,347,9,0,253,73,9,0,363,801,2,0,586,144,5,0,515,509,7,0,198,868,4,0,652,419,7,0,755,529,6,0,98,752,8,0,591,659,7,0,110,758,6,0,660,488,3,0,573,702,9,0,227,561,9,0,54,685,9,0,131,528,8,0,397,355,5,0,85,742,6,0,817,315,5,0,451,159,2,0,228,555,9,0,308,556,4,0,363,448,7,0,593,681,8,0,502,113,4,0,78,710,5,0,89,275,5,0,779,104,6,0,441,316,4,0,102,251,5,0,573,158,4,0,127,531,8,0,351,331,5,0,777,523,6,0,41,641,6,0,403,918,6,0,823,384,5,0,578,45,8,0,650,308,4,0,204,559,7,0,398,591,4,0,384,77,6,0,205,759,5,0,559,152,9,0,367,829,6,0,475,753,7,0,449,103,7,0,41,623,5,0,575,39,9,0,931,443,8,0,16,592,6,0,215,745,7,0,396,850,6,0,347,804,4,0,546,285,4,0,97,708,7,0,315,70,5,0,796,383,6,0,328,580,6,0,228,547,5,0,60,703,6,0,36,366,9,0,42,635,6,0,111,184,6,0,207,627,4,0,465,240,4,0,658,64,4,0,707,181,8,0,233,150,6,0,432,903,2,0,276,891,6,0,686,247,4,0,286,309,7,0,149,190,4,0,580,162,3,0,439,651,3,0,300,97,5,0,179,836,7,0,120,732,4,0,904,451,5,0,150,292,5,0,179,130,9,0,470,510,7,0,260,263,3,0,372,434,2,0,702,609,6,0,414,964,9,0,160,145,7,0,270,63,6,0,710,341,9,0,156,762,6,0,475,36,9,0,451,959,9,0,892,211,7,0,381,808,6,0,358,292,1,0,617,629,7,0,359,101,5,0,694,339,6,0,831,161,5,0,125,756,7,0,305,52,6,0,539,632,4,0,266,538,6,0,16,539,6,0,323,575,6,0,214,888,9,0,80,250,8,0,49,663,9,0,265,63,6,0,47,310,9,0,23,527,6,0,213,205,5,0,321,589,6,0,104,203,8,0,537,114,5,0,267,142,3,0,512,223,2,0,721,597,6,0,478,324,7,0,564,144,5,0,175,516,2,0,503,515,7,0,472,40,8,0,576,528,3,0,69,705,5,0,112,538,3,0,381,187,8,0,257,724,3,0,824,138,9,0,70,267,9,0,437,255,1,0,739,533,6,0,572,712,9,0,39,606,8,0,690,139,8,0,557,146,9,0,780,427,8,0,885,466,5,0,705,347,5,0,468,25,9,0,819,488,7,0,771,432,7,0,138,478,9,0,461,904,6,0,122,256,1,0,519,291,4,0,45,300,6,0,334,47,8,0,254,448,2,0,460,819,6,0,529,406,2,0,255,897,6,0,174,837,9,0,493,635,9,0,927,373,6,0,405,606,4,0,94,357,6,0,429,797,6,0,511,731,7,0,515,719,9,0,453,95,6,0,98,214,7,0,31,384,7,0,245,545,5,0,177,124,6,0,634,308,1,0,885,199,9,0,554,280,3,0,504,220,7,0,364,822,9,0,70,238,6,0,170,842,8,0,283,670,9,0,119,433,4,0,328,811,3,0,579,715,6,0,463,805,6,0,773,115,6,0,75,265,9,0,711,352,6,0,626,547,7,0,178,145,8,0,416,72,4,0,936,419,3,0,718,209,3,0,184,494,3,0,159,384,6,0,400,809,6,0,50,370,5,0,41,658,9,0,43,596,9,0,171,133,9,0,165,140,7,0,192,649,7,0,52,674,9,0,186,246,9,0,362,33,6,0,156,196,4,0,676,394,5,0,179,761,5,0,184,869,9,0,462,740,6,0,148,201,3,0,415,386,8,0,183,439,8,0,437,679,6,0,200,443,5,0,309,495,5,0,828,236,6,0,333,837,2,0,802,499,8,0,239,434,3,0,605,359,7,0,175,130,8,0,124,660,7,0,62,407,3,0,421,30,9,0,458,953,7,0,33,621,9,0,145,521,9,0,169,399,2,0,162,833,8,0,195,738,4,0,560,273,4,0,178,140,6,0,883,486,9,0,685,614,9,0,286,321,9,0,228,453,3,0,416,980,6,0,907,276,6,0,746,198,3,0,263,559,6,0,564,490,7,0,895,489,9,0,706,343,9,0,711,134,6,0,190,148,6,0,712,90,7,0,559,704,6,0,870,347,2,0,926,441,9,0,219,782,4,0,313,357,6,0,818,373,4,0,674,140,4,0,99,676,2,0,188,125,9,0,210,562,8,0,727,519,8,0,633,74,7,0,309,863,9,0,685,140,8,0,337,421,3,0,746,599,9,0,293,620,4,0,20,602,6,0,622,637,6,0,741,597,9,0,375,302,6,0,536,465,2,0,853,192,2,0,755,314,4,0,951,434,6,0,741,608,6,0,924,256,4,0,716,442,6,0,203,458,6,0,594,581,8,0,894,184,6,0,784,265,3,0,945,293,9,0,609,608,6,0,383,786,3,0,174,831,5,0,552,731,6,0,125,769,9,0,746,129,4,0,871,444,6,0,651,508,4,0,628,516,2,0,570,40,7,0,675,617,9,0,727,78,6,0,867,395,4,0,565,730,9,0,535,599,3,0,943,247,6,0,903,335,5,0,390,306,8,0,587,39,6,0,349,814,9,0,24,503,8,0,480,428,3,0,33,615,9,0,949,411,3,0,442,414,2,0,460,109,2,0,572,91,5,0,310,723,4,0,176,774,9,0,915,203,6,0,393,64,6,0,80,327,7,0,181,875,9,0,431,776,4,0,912,246,4,0,518,498,4,0,240,827,3,0,384,37,6,0,744,441,7,0,268,432,4,0,528,301,9,0,687,269,0,0,98,461,4,0,108,207,9,0,544,703,4,0,903,499,6,0,340,47,3,0,341,671,7,0,515,527,5,0,137,606,4,0,401,447,1,0,292,77,9,0,31,489,4,0,225,836,2,0,668,288,3,0,4,389,6,0,144,525,8,0,957,399,8,0,316,165,1,0,305,836,3,0,112,368,3,0,466,75,5,0,144,429,4,0,379,77,5,0,437,632,6,0,453,328,3,0,212,736,7,0,112,398,4,0,387,598,4,0,536,566,3,0,138,666,6,0,193,252,8,0,66,294,7,0,543,716,7,0,150,754,8,0,55,563,3,0,271,596,7,0,285,615,7,0,240,154,6,0,870,186,7,0,67,677,7,0,292,869,9,0,880,200,5,0,225,892,9,0,138,346,8,0,517,729,9,0,877,438,9,0,158,152,8,0,393,44,7,0,420,789,5,0,511,711,8,0,755,197,3,0,485,28,8,0,620,551,7,0,589,576,4,0,207,286,8,0,5,385,6,0,312,64,5,0,715,474,4,0,294,242,6,0,40,670,7,0,705,186,6,0,378,647,3,0,699,467,5,0,242,531,1,0,806,212,2,0,701,335,5,0,211,90,6,0,567,697,6,0,415,821,5,0,653,237,7,0,63,699,6,0,768,134,4,0,719,88,9,0,931,427,5,0,80,229,6,0,51,596,6,0,530,721,9,0,844,153,8,0,304,302,2,0,83,216,6,0,451,116,7,0,448,489,8,0,439,787,6,0,86,325,8,0,853,455,3,0,403,924,6,0,820,414,7,0,494,644,9,0,801,506,7,0,37,641,9,0,498,417,3,0,312,861,7,0,684,65,7,0,405,892,9,0,339,394,7,0,485,760,9,0,273,672,5,0,465,746,9,0,548,261,5,0,689,534,6,0,204,777,4,0,325,681,5,0,633,482,4,0,286,639,4,0,382,581,4,0,688,341,5,0,511,717,9,0,644,359,3,0,810,514,7,0,410,756,5,0,425,21,7,0,894,500,6,0,279,65,6,0,152,536,7,0,588,353,6,0,890,478,9,0,131,764,9,0,580,363,5,0,408,908,9,0,426,770,4,0,611,325,5,0,177,738,5,0,593,363,5,0,409,985,9,0,920,287,6,0,687,617,7,0,733,535,6,0,887,494,9,0,338,864,6,0,424,179,5,0,632,670,8,0,698,543,7,0,287,93,3,0,599,603,3,0,838,387,6,0,889,199,8,0,508,509,3,0,336,677,5,0,76,299,5,0,179,862,5,0,968,328,6,0,339,780,3,0,960,318,7,0,441,842,5,0,353,100,7,0,382,43,8,0,451,109,8,0,844,497,9,0,309,58,5,0,319,352,8,0,215,282,9,0,714,234,4,0,751,94,6,0,682,294,4,0,446,572,3,0,423,885,5,0,595,577,6,0,478,158,5,0,142,330,6,0,240,124,4,0,658,232,7,0,57,708,6,0,310,394,1,0,751,532,6,0,55,323,4,0,388,114,4,0,175,849,5,0,283,113,4,0,430,527,6,0,775,518,6,0,698,415,2,0,261,711,4,0,319,827,1,0,910,300,8,0,163,455,2,0,601,661,4,0,695,378,3,0,211,300,7,0,460,28,9,0,409,613,5,0,43,391,6,0,203,481,3,0,915,440,6,0,332,42,9,0,165,826,6,0,748,252,5,0,404,359,9,0,440,464,4,0,193,305,1,0,850,499,9,0,604,42,6,0,782,469,2,0,212,305,9,0,317,42,6,0,26,448,9,0,420,399,9,0,612,91,4,0,19,420,6,0,70,539,5,0,37,356,9,0,251,69,9,0,511,751,9,0,510,365,3,0,826,510,6,0,738,271,8,0,340,178,3,0,434,821,9,0,433,30,8,0,549,636,3,0,460,96,4,0,306,577,5,0,225,269,7,0,189,242,9,0,92,725,9,0,443,24,9,0,352,816,9,0,622,430,7,0,361,83,5,0,554,367,9,0,428,661,3,0,146,665,2,0,957,339,8,0,332,859,9,0,383,70,7,0,696,577,6,0,457,121,3,0,350,405,6,0,514,25,6,0,937,424,6,0,791,379,8,0,315,871,6,0,421,169,4,0,286,870,9,0,239,647,4,0,435,115,7,0,763,95,6,0,473,394,3,0,500,64,3,0,928,460,6,0,781,168,5,0,501,594,5,0,242,245,1,0,418,881,5,0,198,881,9,0,422,939,4,0,213,278,6,0,366,79,5,0,137,765,6,0,269,362,4,0,316,796,2,0,442,487,7,0,845,491,9,0,162,838,7,0,251,546,9,0,81,274,7,0,44,655,9,0,290,699,7,0,834,150,9,0,450,839,8,0,372,546,1,0,864,370,4,0,287,673,7,0,140,148,6,0,170,823,6,0,426,807,7,0,349,626,3,0,14,564,6,0,682,646,6,0,183,656,6,0,926,282,8,0,156,251,5,0,887,187,6,0,644,651,7,0,35,405,5,0,539,121,8,0,475,200,7,0,94,399,3,0,370,461,7,0,171,411,9,0,691,599,4,0,268,704,4,0,461,790,3,0,557,548,4,0,210,104,6,0,722,120,3,0,439,794,7,0,318,584,8,0,61,641,6,0,35,617,9,0,223,126,6,0,453,908,6,0,251,691,4,0,273,885,8,0,931,378,6,0,225,567,9,0,392,277,4,0,696,596,9,0,324,370,7,0,823,311,8,0,315,865,9,0,326,102,4,0,713,193,8,0,98,351,6,0,300,440,6,0,398,857,6,0,790,518,6,0,361,91,4,0,69,686,9,0,28,389,5,0,564,364,9,0,455,488,8,0,121,752,8,0,214,316,4,0,426,829,6,0,877,486,5,0,177,842,6,0,604,311,8,0,727,167,2,0,184,146,8,0,502,174,2,0,820,220,5,0,45,605,7,0,109,408,3,0,486,540,4,0,355,572,9,0,398,125,4,0,237,624,5,0,297,60,6,0,713,81,9,0,256,544,9,0,19,489,6,0,279,228,3,0,138,273,6,0,723,259,5,0,690,627,6,0,416,541,6,0,163,804,6,0,522,510,4,0,502,772,6,0,365,104,4,0,819,496,7,0,732,263,6,0,660,404,4,0,357,31,6,0,299,515,7,0,470,20,6,0,221,107,4,0,800,417,4,0,355,826,4,0,966,317,6,0,477,640,1,0,707,86,9,0,482,403,3,0,90,334,6,0,211,894,6,0,459,482,6,0,755,233,6,0,283,325,9,0,221,321,7,0,818,332,5,0,427,668,6,0,48,675,9,0,808,121,6,0,218,242,4,0,272,534,5,0,45,363,8,0,134,734,3,0,627,670,9,0,578,149,9,0,169,708,5,0,436,586,3,0,782,125,9,0,767,335,2,0,435,812,8,0,631,184,4,0,524,687,2,0,336,684,4,0,543,430,4,0,707,604,6,0,794,113,6,0,492,30,5,0,197,663,6,0,594,296,8,0,30,531,6,0,20,428,6,0,590,298,8,0,198,563,8,0,21,608,6,0,223,281,9,0,452,880,7,0,210,310,7,0,664,597,4,0,381,124,4,0,727,85,9,0,212,285,9,0,167,572,9,0,64,512,3,0,966,350,8,0,519,748,6,0,195,258,7,0,281,710,5,0,627,47,6,0,482,329,8,0,326,444,8,0,176,786,9,0,324,47,9,0,321,457,9,0,477,605,5,0,562,555,5,0,176,135,8,0,133,176,9,0,953,300,9,0,667,472,4,0,437,18,6,0,122,450,6,0,897,495,9,0,908,455,5,0,933,283,9,0,747,610,6,0,488,329,9,0,265,68,9,0,25,465,9,0,244,714,4,0,369,838,6,0,936,231,6,0,142,313,6,0,570,731,6,0,51,678,9,0,209,784,5,0,859,174,2,0,346,32,6,0,529,294,6,0,41,579,7,0,35,589,5,0,483,163,9,0,347,673,6,0,354,844,9,0,459,859,6,0,678,624,9,0,814,410,6,0,24,485,7,0,707,332,9,0,49,529,6,0,752,377,3,0,20,588,8,0,912,459,4,0,45,350,9,0,143,280,5,0,707,222,5,0,819,235,5,0,225,92,7,0,478,688,8,0,201,329,5,0,433,667,6,0,374,312,5,0,133,517,4,0,736,498,8,0,959,295,6,0,428,840,4,0,28,637,6,0,707,251,3,0,181,881,6,0,649,412,5,0,883,498,6,0,135,538,6,0,478,190,9,0,344,422,6,0,77,693,4,0,85,332,7,0,503,523,6,0,344,564,5,0,486,186,7,0,385,794,5,0,557,730,5,0,916,271,8,0,143,500,7,0,693,95,6,0,382,315,9,0,620,504,4,0,468,441,7,0,850,151,6,0,720,195,7,0,887,354,5,0,54,397,6,0,57,652,7,0,569,704,9,0,148,359,6,0,468,32,9,0,163,797,6,0,700,491,6,0,33,341,6,0,25,459,8,0,323,801,2,0,218,133,7,0,229,628,7,0,128,651,3,0,507,754,9,0,41,346,8,0,527,580,3,0,725,200,4,0,373,262,4,0,235,75,9,0,50,687,8,0,231,96,6,0,58,316,6,0,130,313,7,0,294,450,5,0,493,39,5,0,562,174,4,0,95,758,6,0,358,117,4,0,508,759,9,0,310,564,4,0,100,734,4,0,939,252,4,0,93,695,4,0,23,560,5,0,456,31,7,0,223,558,9,0,129,404,4,0,138,287,5,0,539,241,4,0,395,803,3,0,10,394,6,0,564,483,5,0,421,462,6,0,532,708,8,0,313,53,7,0,706,137,8,0,245,96,2,0,234,374,5,0,44,345,9,0,248,722,4,0,911,272,7,0,160,547,4,0,217,328,9,0,907,230,5,0,884,452,3,0,375,729,4,0,230,154,9,0,39,322,6,0,360,820,7,0,692,623,6,0,644,214,7,0,619,682,6,0,343,322,1,0,518,522,3,0,446,840,7,0,511,746,7,0,383,227,4,0,704,82,7,0,596,691,9,0,525,677,3,0,925,391,6,0,323,858,7,0,749,275,6,0,689,365,4,0,31,464,7,0,168,773,6,0,123,196,9,0,147,158,7,0,929,279,9,0,456,924,9,0,282,841,4,0,742,492,5,0,713,516,5,0,214,479,9,0,964,384,6,0,15,546,6,0,620,672,8,0,211,143,8,0,208,202,5,0,194,877,9,0,435,844,5,0,802,232,4,0,359,845,7,0,279,498,2,0,754,522,4,0,749,604,9,0,170,805,6,0,273,219,3,0,195,140,4,0,357,352,1,0,448,747,6,0,178,424,4,0,201,736,5,0,37,464,6,0,823,232,8,0,524,27,6,0,52,661,9,0,569,168,9,0,317,572,5,0,471,790,6,0,534,51,6,0,415,800,7,0,160,605,2,0,647,52,7,0,634,390,3,0,779,422,7,0,464,603,4,0,265,573,8,0,914,453,5,0,463,756,9,0,229,484,6,0,539,693,2,0,413,891,9,0,946,316,4,0,837,206,7,0,343,635,6,0,919,436,5,0,50,602,5,0,561,257,9,0,469,447,6,0,116,739,5,0,695,460,3,0,206,132,6,0,64,680,9,0,232,720,4,0,185,432,8,0,406,903,9,0,287,122,6,0,933,279,9,0,537,703,7,0,293,211,4,0,721,589,6,0,428,546,6,0,13,390,8,0,560,42,4,0,676,319,2,0,130,754,5,0,214,324,6,0,377,46,9,0,454,913,6,0,720,253,4,0,751,228,8,0,541,709,8,0,137,308,9,0,222,158,5,0,671,363,3,0,342,685,5,0,909,239,6,0,527,46,9,0,37,352,9,0,308,89,9,0,646,40,6,0,304,500,6,0,20,475,6,0,559,363,9,0,192,130,8,0,86,707,4,0,52,642,6,0,553,151,9,0,214,568,8,0,919,245,6,0,339,160,4,0,405,621,3,0,790,232,5,0,592,585,6,0,297,521,5,0,230,354,8,0,556,714,7,0,527,717,9,0,405,38,9,0,459,825,6,0,165,687,7,0,490,338,9,0,346,850,9,0,954,413,6,0,610,435,7,0,512,30,6,0,41,354,9,0,441,112,9,0,486,688,9,0,198,121,5,0,264,545,5,0,349,444,4,0,58,267,6,0,319,48,8,0,63,288,8,0,447,826,6,0,930,437,8,0,445,650,6,0,641,674,6,0,213,862,2,0,521,319,9,0,951,423,7,0,305,133,6,0,50,635,5,0,243,875,5,0,907,319,4,0,175,678,5,0,712,536,6,0,20,496,6,0,350,152,9,0,394,543,6,0,316,522,3,0,232,276,6,0,357,832,7,0,420,832,4,0,217,737,9,0,597,658,7,0,323,284,2,0,186,151,6,0,554,39,7,0,928,449,7,0,46,472,4,0,361,810,7,0,39,617,9,0,615,621,6,0,752,218,4,0,871,482,4,0,330,49,9,0,140,229,1,0,389,790,4,0,373,455,8,0,663,659,6,0,243,382,5,0,213,196,6,0,402,30,6,0,40,655,8,0,467,69,5,0,565,262,8,0,406,462,1,0,798,322,5,0,870,388,6,0,415,25,6,0,532,330,4,0,968,344,6,0,531,592,4,0,138,648,4,0,719,142,8,0,328,854,6,0,791,118,9,0,409,106,4,0,296,882,6,0,900,202,9,0,494,692,9,0,229,872,4,0,332,444,4,0,185,851,4,0,682,328,5,0,706,530,6,0,256,865,3,0,96,232,3,0,819,407,8,0,401,655,2,0,613,429,8,0,200,257,7,0,778,110,9,0,238,888,8,0,303,878,6,0,638,334,3,0,214,581,5,0,458,659,1,0,163,765,6,0,354,679,7,0,101,195,6,0,617,655,4,0,567,721,9,0,675,336,4,0,247,855,3,0,198,133,5,0,6,393,6,0,353,559,7,0,888,207,7,0,195,656,9,0,565,156,5,0,202,271,7,0,549,503,6,0,584,659,7,0,63,281,9,0,447,754,8,0,260,77,9,0,57,633,6,0,218,298,8,0,196,848,3,0,247,152,5,0,309,712,3,0,505,651,5,0,367,454,8,0,660,50,6,0,600,595,6,0,465,35,6,0,35,424,4,0,638,668,8,0,876,186,8,0,405,990,6,0,540,50,7,0,950,362,3,0,106,762,7,0,57,647,7,0,802,128,8,0,51,671,9,0,164,852,6,0,369,529,2,0,398,197,5,0,494,756,9,0,158,686,3,0,452,818,5,0,172,284,3,0,824,409,7,0,671,631,5,0,483,22,6,0,290,847,5,0,335,55,4,0,701,595,9,0,557,501,4,0,458,102,6,0,906,493,6,0,100,366,5,0,578,659,8,0,393,70,8,0,116,755,8,0,324,791,3,0,262,847,2,0,605,85,6,0,281,443,5,0,777,380,8,0,759,136,7,0,290,659,5,0,210,428,2,0,883,194,8,0,545,342,6,0,253,840,3,0,219,294,7,0,478,38,9,0,586,154,5,0,201,686,3,0,42,586,9,0,484,318,3,0,206,895,6,0,481,168,9,0,103,756,7,0,527,323,4,0,542,134,8,0,370,467,7,0,906,300,6,0,63,532,5,0,475,404,4,0,377,58,4,0,94,740,8,0,483,38,4,0,366,305,3,0,491,641,9,0,424,822,9,0,554,359,9,0,184,647,4,0,453,76,2,0,128,445,5,0,556,652,5,0,701,74,6,0,370,272,5,0,135,182,6,0,74,253,6,0,425,92,2,0,915,276,9,0,580,239,4,0,459,745,9,0,758,283,5,0,909,342,3,0,499,530,3,0,521,50,5,0,787,123,9,0,305,659,2,0,266,591,5,0,19,568,6,0,194,891,6,0,430,959,6,0,506,638,5,0,877,377,6,0,454,750,9,0,179,784,9,0,905,203,9,0,79,234,5,0,182,134,6,0,598,86,7,0,237,820,4,0,567,360,6,0,148,255,4,0,45,374,7,0,780,115,9,0,256,127,0,0,540,29,6,0,447,310,4,0,265,888,8,0,507,582,5,0,449,833,6,0,535,34,6,0,403,367,7,0,947,428,9,0,87,617,1,0,448,26,7,0,956,363,3,0,874,449,6,0,191,808,2,0,126,747,6,0,211,291,8,0,570,184,5,0,369,39,8,0,656,415,4,0,932,221,6,0,113,601,7,0,153,522,8,0,721,459,5,0,236,364,3,0,126,765,9,0,159,589,5,0,674,135,6,0,171,816,7,0,627,629,6,0,234,266,7,0,867,419,6,0,126,200,6,0,454,953,9,0,505,149,2,0,729,499,8,0,232,183,6,0,115,768,6,0,418,533,7,0,613,651,6,0,668,437,5,0,428,825,9,0,80,319,6,0,621,625,7,0,581,52,5,0,514,749,9,0,356,444,6,0,630,265,9,0,939,236,6,0,622,261,5,0,215,288,9,0,577,701,9,0,256,490,1,0,346,845,9,0,836,297,6,0,488,754,7,0,915,214,7,0,97,537,5,0,120,182,9,0,609,500,2,0,136,532,8,0,43,306,6,0,922,360,5,0,56,674,9,0,586,81,7,0,510,450,3,0,296,867,9,0,227,81,7,0,293,435,7,0,919,403,4,0,541,296,7,0,22,578,6,0,234,826,4,0,493,353,8,0,42,531,8,0,446,954,9,0,80,245,9,0,230,894,9,0,347,854,9,0,215,107,6,0,782,498,4,0,716,366,8,0,475,43,9,0,896,215,7,0,276,317,6,0,96,201,6,0,285,780,6,0,743,343,4,0,601,272,2,0,472,761,9,0,442,242,2,0,623,494,7,0,299,256,3,0,248,882,5,0,754,127,7,0,118,644,5,0,136,754,5,0,42,331,6,0,503,765,9,0,33,557,4,0,279,532,5,0,797,446,4,0,604,317,7,0,169,864,6,0,239,167,9,0,902,324,4,0,149,525,9,0,56,669,9,0,593,564,4,0,236,542,3,0,212,224,5,0,54,689,9,0,381,251,4,0,194,886,9,0,769,519,9,0,17,518,6,0,713,217,5,0,666,444,4,0,560,221,2,0,350,845,9,0,130,173,9,0,486,532,4,0,751,248,4,0,819,135,7,0,796,120,9,0,523,331,4,0,288,881,8,0,778,457,5,0,188,142,5,0,293,863,9,0,136,314,8,0,372,720,3,0,440,639,8,0,815,513,6,0,516,320,5,0,827,143,9,0,922,418,4,0,163,479,3,0,460,647,2,0,142,506,4,0,311,583,5,0,591,673,3,0,529,647,3,0,45,619,4,0,594,320,5,0,422,670,5,0,25,598,7,0,663,511,5,0,711,336,9,0,752,611,6,0,116,411,4,0,419,960,9,0,23,540,9,0,247,69,9,0,690,309,6,0,918,240,7,0,486,339,7,0,469,668,1,0,54,274,6,0,650,662,9,0,572,536,3,0,29,421,9,0,689,497,2,0,519,754,6,0,381,212,5,0,136,263,3,0,631,502,4,0,327,438,4,0,613,300,6,0,276,75,8,0,800,439,5,0,924,378,6,0,760,521,4,0,141,529,7,0,356,42,9,0,311,577,8,0,74,716,6,0,34,470,9,0,34,477,6,0,376,812,6,0,252,607,2,0,792,123,9,0,463,682,5,0,454,848,7,0,28,551,8,0,103,708,4,0,375,582,5,0,800,123,9,0,796,426,5,0,133,221,3,0,295,95,4,0,77,225,6,0,544,561,5,0,39,661,7,0,552,55,5,0,519,26,6,0,231,144,6,0,344,841,6,0,597,63,4,0,62,254,6,0,914,240,8,0,573,367,6,0,687,333,7,0,608,254,5,0,472,747,4,0,691,573,5,0,604,142,0,0,957,289,6,0,828,134,9,0,633,270,5,0,889,180,6,0,156,752,7,0,319,56,9,0,455,424,4,0,104,766,6,0,412,390,9,0,500,652,6,0,220,888,7,0,418,891,9,0,318,461,6,0,221,273,5,0,935,440,7,0,506,714,8,0,397,239,2,0,835,283,6,0,604,300,9,0,208,210,5,0,127,516,2,0,540,579,5,0,481,767,9,0,344,149,6,0,729,291,6,0,566,88,5,0,713,332,9,0,69,691,4,0,542,503,5,0,761,408,2,0,202,649,4,0,188,654,9,0,908,216,8,0,663,173,4,0,734,285,5,0,960,372,5,0,50,327,8,0,90,238,3,0,171,785,8,0,707,91,9,0,169,848,8,0,722,311,6,0,421,889,9,0,266,246,2,0,202,127,5,0,917,233,6,0,409,552,2,0,805,124,9,0,317,92,6,0,931,286,6,0,681,144,5,0,133,302,5,0,450,949,9,0,464,421,5,0,442,769,7,0,499,95,3,0,746,92,9,0,260,572,5,0,480,195,9,0,708,327,4,0,268,583,4,0,676,230,7,0,271,82,4,0,75,278,7,0,63,693,5,0,360,826,7,0,449,700,6,0,350,420,6,0,168,417,6,0,746,304,3,0,143,273,5,0,572,656,7,0,383,304,9,0,126,168,6,0,460,583,5,0,522,741,6,0,150,351,5,0,644,413,4,0,53,298,9,0,289,335,9,0,162,162,6,0,174,780,9,0,138,340,5,0,429,971,6,0,655,661,8,0,763,425,7,0,285,847,6,0,232,889,9,0,354,565,8,0,812,477,4,0,432,566,4,0,300,870,9,0,108,711,6,0,394,598,5,0,69,280,9,0,566,369,8,0,537,337,3,0,742,85,6,0,849,159,7,0,354,157,8,0,144,261,8,0,292,444,9,0,505,319,3,0,564,538,4,0,157,746,6,0,695,136,7,0,324,142,5,0,685,609,7,0,509,693,4,0,75,335,3,0,42,451,4,0,102,688,4,0,747,86,6,0,225,347,8,0,329,449,7,0,25,588,7,0,881,491,9,0,643,237,9,0,450,861,6,0,149,765,6,0,654,57,6,0,423,542,9,0,369,179,6,0,922,441,9,0,446,775,5,0,435,561,6,0,287,445,6,0,382,261,5,0,319,245,1,0,599,303,9,0,493,767,9,0,194,440,7,0,437,823,8,0,569,173,7,0,925,437,9,0,824,240,7,0,122,739,6,0,534,719,9,0,36,327,6,0,909,285,6,0,794,420,5,0,882,481,7,0,571,276,3,0,766,526,6,0,288,73,8,0,800,153,5,0,515,311,5,0,670,645,8,0,670,618,6,0,115,422,6,0,54,572,3,0,558,478,4,0,445,899,2,0,452,466,5,0,109,742,4,0,53,588,6,0,444,703,5,0,74,238,8,0,199,241,4,0,47,537,5,0,141,758,5,0,119,720,4,0,289,314,9,0,288,438,8,0,447,800,4,0,895,200,8,0,445,637,4,0,26,631,6,0,655,170,4,0,446,469,5,0,490,775,6,0,538,715,9,0,592,451,6,0,576,476,7,0,86,248,4,0,439,778,4,0,582,36,6,0,699,535,6,0,316,469,4,0,106,363,3,0,372,107,3,0,479,61,5,0,672,53,6,0,538,44,7,0,452,447,3,0,755,90,6,0,565,34,6,0,421,23,9,0,88,219,7,0,918,207,6,0,244,65,6,0,310,473,5,0,760,528,6,0,532,714,9,0,224,878,5,0,542,73,0,0,420,826,8,0,489,165,8,0,303,210,2,0,817,424,4,0,723,561,6,0,292,82,7,0,761,307,5,0,682,535,3,0,525,34,7,0,121,586,3,0,407,72,2,0,598,586,5,0,730,441,4,0,260,71,9,0,103,210,9,0,266,777,1,0,480,598,3,0,240,67,6,0,439,220,1,0,516,724,9,0,528,735,6,0,777,122,8,0,544,583,5,0,344,647,4,0,42,661,9,0,17,533,6,0,583,356,6,0,426,27,8,0,701,135,5,0,571,260,5,0,617,283,5,0,267,440,3,0,126,188,9,0,636,248,7,0,99,266,2,0,188,872,8,0,721,369,8,0,448,68,3,0,143,158,9,0,388,44,6,0,200,893,8,0,110,752,6,0,266,412,6,0,351,313,3,0,711,77,8,0,503,130,2,0,899,225,3,0,163,319,4,0,420,105,5,0,146,486,5,0,924,277,9,0,521,325,7,0,343,861,6,0,420,815,7,0,130,768,9,0,119,772,6,0,633,258,5,0,378,829,6,0,443,667,7,0,166,858,7,0,36,361,9,0,240,893,9,0,639,537,4,0,91,715,8,0,700,527,6,0,494,335,7,0,210,489,7,0,266,565,7,0,321,687,4,0,60,714,6,0,489,764,9,0,196,127,9,0,415,321,3,0,260,887,8,0,143,338,5,0,812,506,8,0,549,41,8,0,173,726,5,0,240,802,3,0,50,668,9,0,161,392,9,0,83,700,2,0,44,338,6,0,248,73,9,0,613,555,6,0,121,758,9,0,783,376,9,0,150,591,5,0,406,82,2,0,36,443,5,0,119,600,7,0,231,72,6,0,550,497,6,0,40,458,5,0,817,254,2,0,700,342,5,0,454,36,3,0,865,499,6,0,797,195,4,0,784,239,5,0,461,750,9,0,551,46,8,0,904,465,9,0,345,463,1,0,647,672,6,0,373,819,8,0,734,582,6,0,189,369,4,0,255,69,9,0,64,707,6,0,616,676,9,0,175,685,5,0,777,432,6,0,491,160,4,0,835,234,3,0,566,257,9,0,559,200,2,0,468,204,6,0,451,599,2,0,441,673,8,0,197,264,8,0,439,22,9,0,241,405,5,0,54,703,6,0,440,176,3,0,828,297,6,0,642,595,5,0,226,714,4,0,443,326,5,0,598,353,9,0,151,138,6,0,297,80,9,0,33,610,6,0,28,356,6,0,743,275,9,0,439,817,8,0,706,502,3,0,476,184,7,0,149,509,4,0,595,348,8,0,180,419,6,0,424,960,8,0,707,193,7,0,191,567,7,0,852,180,4,0,170,407,5,0,260,894,6,0,268,570,6,0,463,266,4,0,717,73,6,0,564,162,9,0,682,629,6,0,214,756,4,0,318,860,7,0,758,515,4,0,338,790,3,0,598,558,6,0,39,376,6,0,326,867,6,0,67,261,8,0,681,132,5,0,322,58,9,0,25,479,9,0,413,911,8,0,870,192,7,0,413,299,5,0,792,129,9,0,273,191,1,0,523,720,9,0,371,319,5,0,532,506,5,0,374,671,5,0,235,894,9,0,883,175,6,0,210,743,7,0,55,657,7,0,420,486,2,0,539,128,8,0,44,665,9,0,947,299,9,0,702,580,4,0,40,410,4,0,253,748,5,0,197,362,5,0,662,551,5,0,498,322,6,0,398,75,6,0,91,750,6,0,223,420,3,0,581,152,8,0,115,191,9,0,216,102,6,0,427,521,6,0,39,675,6,0,829,269,4,0,99,376,3,0,906,330,5,0,714,564,4,0,277,329,9,0,938,448,6,0,754,494,3,0,278,670,7,0,513,515,3,0,216,145,8,0,316,657,1,0,308,438,1,0,861,161,6,0,457,20,8,0,449,868,6,0,339,826,1,0,40,666,6,0,910,305,7,0,288,866,9,0,425,954,4,0,717,78,9,0,483,334,7,0,343,796,2,0,369,474,5,0,814,124,6,0,312,93,6,0,46,399,5,0,396,675,9,0,348,548,5,0,262,235,4,0,488,323,7,0,475,523,5,0,494,58,4,0,714,120,4,0,415,918,6,0,302,335,7,0,116,179,6,0,46,668,9,0,455,896,9,0,388,318,7,0,762,510,7,0,442,523,2,0,906,210,8,0,871,380,8,0,937,295,6,0,604,560,8,0,506,283,3,0,280,877,9,0,686,624,6,0,43,466,6,0,34,458,9,0,471,602,6,0,406,721,1,0,459,89,2,0,701,563,7,0,207,305,6,0,498,353,8,0,234,552,7,0,41,359,9,0,189,442,8,0,144,732,3,0,713,226,6,0,450,693,7,0,443,951,4,0,444,793,6,0,482,683,7,0,134,252,4,0,458,755,9,0,636,266,5,0,576,246,4,0,350,840,9,0,653,643,9,0,900,491,9,0,723,523,7,0,90,541,5,0,601,450,6,0,221,328,7,0,183,665,6,0,521,457,4,0,315,455,6,0,427,788,6,0,408,764,6,0,329,561,2,0,357,815,9,0,643,72,6,0,787,504,6,0,739,603,8,0,179,753,6,0,231,673,3,0,732,516,6,0,142,294,3,0,778,375,9,0,684,228,4,0,191,434,7,0,460,273,6,0,587,361,7,0,177,855,7,0,300,865,9,0,198,250,7,0,872,427,8,0,360,746,4,0,201,395,3,0,765,516,7,0,906,196,6,0,175,577,8,0,118,195,9,0,458,798,3,0,367,675,7,0,489,268,4,0,374,706,3,0,353,46,8,0,686,547,4,0,599,316,6,0,453,697,5,0,834,395,6,0,88,720,9,0,352,834,5,0,629,84,9,0,24,549,9,0,732,201,6,0,730,298,6,0,403,667,5,0,305,517,4,0,320,274,4,0,762,193,2,0,183,427,5,0,660,449,5,0,705,339,9,0,362,166,6,0,636,191,5,0,871,497,6,0,470,416,5,0,287,667,9,0,46,599,9,0,486,60,4,0,926,445,9,0,527,712,7,0,400,403,3,0,770,108,4,0,576,469,7,0,627,377,5,0,163,376,3,0,393,128,6,0,441,70,2,0,342,856,9,0,367,536,3,0,400,891,6,0,388,51,5,0,31,445,9,0,961,359,6,0,744,400,3,0,601,694,6,0,657,118,5,0,504,752,9,0,163,751,7,0,360,835,9,0,846,457,3,0,226,279,9,0,666,611,6,0,294,135,9,0,57,288,9,0,498,760,9,0,465,761,9,0,886,479,8,0,235,616,4,0,39,370,9,0,625,189,8,0,812,203,3,0,451,964,6,0,743,431,4,0,898,254,3,0,67,493,4,0,38,672,6,0,814,489,4,0,690,67,8,0,323,461,5,0,706,142,7,0,720,516,6,0,694,101,4,0,574,564,4,0,683,541,4,0,431,307,7,0,298,702,3,0,535,574,4,0,261,67,9,0,283,624,3,0,408,376,8,0,315,779,2,0,570,557,4,0,141,324,8,0,476,387,4,0,488,334,9,0,235,219,0,0,815,138,7,0,40,647,7,0,377,70,5,0,290,706,4,0,482,32,7,0,167,241,6,0,271,879,7,0,134,193,4,0,605,196,3,0,404,984,7,0,344,400,6,0,615,187,5,0,607,178,3,0,24,521,8,0,143,344,9,0,836,156,6,0,332,671,4,0,511,760,9,0,472,327,5,0,40,591,9,0,585,392,1,0,174,748,7,0,23,554,9,0,958,311,8,0,217,548,4,0,16,584,4,0,440,285,2,0,124,185,9,0,737,441,6,0,681,387,3,0,409,798,5,0,108,425,6,0,669,126,7,0,460,766,8,0,364,834,8,0,395,182,6,0,574,234,5,0,702,497,4,0,736,101,6,0,258,737,4,0,842,505,6,0,384,828,6,0,263,599,3,0,428,561,6,0,621,173,4,0,363,97,6,0,289,131,7,0,772,524,7,0,155,374,5,0,694,530,6,0,388,107,6,0,555,155,9,0,330,682,6,0,44,676,9,0,848,494,9,0,30,475,9,0,342,59,2,0,221,145,9,0,368,819,9,0,83,224,6,0,855,157,6,0,635,677,6,0,244,899,6,0,300,236,2,0,113,429,7,0,679,517,3,0,355,820,7,0,336,282,3,0,916,350,4,0,293,515,9,0,831,213,3,0,840,142,6,0,230,122,4,0,362,255,4,0,340,34,6,0,318,63,7,0,186,118,6,0,29,615,7,0,737,205,4,0,13,584,6,0,145,515,6,0,29,395,4,0,462,361,2,0,488,636,5,0,198,651,8,0,359,153,5,0,25,493,8,0,164,565,8,0,20,454,6,0,469,762,9,0,337,387,8,0,25,454,9,0,697,557,5,0,52,464,2,0,484,310,3,0,826,278,7,0,545,129,8,0,71,611,5,0,30,416,8,0,298,142,5,0,208,138,7,0,239,73,9,0,349,564,9,0,352,203,4,0,592,650,5,0,927,223,9,0,960,410,6,0,420,546,9,0,474,421,7,0,212,621,4,0,403,42,7,0,86,316,5,0,489,80,4,0,29,402,5,0,898,472,7,0,387,64,7,0,21,468,6,0,810,330,8,0,185,875,9,0,510,551,1,0,79,268,6,0,55,485,3,0,471,484,2,0,413,897,8,0,586,698,9,0,209,281,9,0,316,547,5,0,17,513,6,0,637,213,7,0,31,565,5,0,664,410,6,0,635,68,5,0,386,677,6,0,156,368,7,0,818,481,6,0,455,689,7,0,476,532,3,0,790,426,6,0,99,222,5,0,883,402,3,0,289,887,6,0,452,378,6,0,585,449,4,0,440,644,7,0,400,887,6,0,61,686,9,0,431,965,9,0,168,832,7,0,803,184,4,0,36,646,7,0,418,840,3,0,266,759,3,0,665,431,9,0,560,157,9,0,634,663,5,0,309,48,6,0,290,860,9,0,54,546,5,0,746,244,2,0,132,509,1,0,534,512,6,0,305,541,2,0,507,726,7,0,833,275,8,0,386,519,5,0,561,359,6,0,640,85,7,0,429,238,4,0,272,425,5,0,326,59,8,0,124,180,9,0,943,259,6,0,693,143,6,0,838,221,6,0,578,695,9,0,625,265,9,0,33,495,5,0,874,192,8,0,413,887,9,0,804,445,3,0,923,211,6,0,499,628,3,0,452,823,7,0,556,257,5,0,163,150,6,0,328,572,4,0,797,517,6,0,292,333,9,0,263,80,6,0,655,297,1,0,664,665,6,0,650,637,7,0,826,504,6,0,58,294,9,0,239,684,2,0,291,234,5,0,498,328,5,0,437,962,9,0,481,763,9,0,239,550,6,0,470,307,1,0,471,95,3,0,898,347,6,0,572,544,5,0,493,597,3,0,360,669,5,0,427,117,4,0,247,84,4,0,661,438,7,0,355,838,9,0,418,357,3,0,218,94,6,0,869,310,0,0,474,65,6,0,392,834,0,0,212,329,5,0,705,475,4,0,173,487,4,0,456,889,9,0,574,179,4,0,96,337,6,0,151,748,9,0,346,657,3,0,278,883,9,0,501,748,9,0,400,514,1,0,658,517,3,0,916,281,9,0,866,384,9,0,421,966,9,0,38,317,6,0,508,646,7,0,224,87,8,0,494,340,8,0,45,582,8,0,378,41,7,0,227,168,5,0,753,254,6,0,690,612,9,0,811,463,4,0,448,319,5,0,214,309,7,0,120,651,6,0,318,346,8,0,285,853,7,0,379,470,5,0,684,461,6,0,541,570,5,0,393,50,6,0,394,842,6,0,168,694,6,0,17,527,6,0,130,665,6,0,39,342,7,0,802,423,5,0,324,585,8,0,223,256,4,0,606,651,6,0,364,639,2,0,690,606,8,0,471,766,9,0,291,664,9,0,752,324,4,0,461,573,3,0,721,188,7,0,346,818,4,0,808,322,8,0,614,420,4,0,82,509,5,0,399,68,5,0,819,128,6,0,847,503,7,0,155,141,7,0,67,478,2,0,963,389,6,0,960,333,8,0,417,968,9,0,713,139,9,0,252,82,4,0,957,385,5,0,441,106,8,0,638,568,0,0,417,549,4,0,849,488,6,0,358,46,6,0,658,529,4,0,832,250,6,0,58,698,9,0,120,444,6,0,528,75,3,0,488,33,6,0,454,474,4,0,263,332,3,0,206,889,9,0,129,460,7,0,702,519,6,0,264,394,5,0,406,305,3,0,583,473,7,0,733,293,8,0,668,230,7,0,147,366,7,0,888,484,9,0,251,822,4,0,650,425,4,0,963,338,9,0,38,565,4,0,624,90,7,0,636,46,6,0,460,34,7,0,409,27,6,0,604,335,6,0,343,38,8,0,655,551,5,0,811,191,1,0,737,267,8,0,497,747,8,0,409,895,9,0,421,894,5,0,143,183,5,0,215,84,6,0,410,816,5,0,683,618,9,0,403,852,6,0,410,936,8,0,520,314,8,0,921,280,9,0,813,499,7,0,364,442,6,0,459,888,6,0,56,663,5,0,330,56,8,0,309,296,5,0,280,313,6,0,347,41,9,0,676,650,6,0,93,223,5,0,130,541,5,0,371,814,9,0,504,395,4,0,266,894,6,0,920,395,5,0,451,676,5,0,648,277,5,0,627,202,6,0,270,679,4,0,432,67,3,0,226,899,6,0,271,891,6,0,899,196,7,0,469,739,3,0,452,756,9,0,556,720,6,0,27,363,6,0,51,582,6,0,174,795,8,0,803,516,6,0,435,636,8,0,529,353,4,0,853,492,6,0,129,760,9,0,789,446,6,0,555,555,8,0,463,770,5,0,641,220,6,0,298,841,3,0,618,427,7,0,351,227,0,0,455,961,6,0,244,157,6,0,25,625,6,0,844,211,6,0,573,697,8,0,302,508,5,0,300,855,4,0,622,284,6,0,248,161,4,0,605,323,8,0,785,431,5,0,689,541,7,0,343,366,3,0,861,374,8,0,493,326,8,0,49,592,8,0,906,222,7,0,336,42,9,0,596,686,9,0,305,846,3,0,526,315,6,0,944,286,7,0,297,287,7,0,930,232,6,0,962,395,6,0,643,404,2,0,455,883,7,0,360,568,5,0,179,246,8,0,605,657,7,0,672,90,4,0,117,760,8,0,913,359,4,0,922,446,9,0,104,390,7,0,485,159,6,0,50,376,8,0,362,273,4,0,268,419,4,0,96,714,8,0,743,527,6,0,622,76,4,0,196,569,8,0,680,638,5,0,633,440,2,0,646,527,4,0,948,261,6,0,242,563,4,0,704,558,6,0,750,268,3,0,914,302,5,0,742,499,4,0,770,514,9,0,446,679,7,0,116,750,9,0,459,894,6,0,489,769,9,0,306,693,3,0,99,429,3,0,398,42,7,0,425,817,9,0,516,532,5,0,545,364,6,0,168,145,4,0,60,299,7,0,690,580,5,0,563,243,5,0,295,293,8,0,221,542,4,0,555,97,6,0,33,502,4,0,362,830,9,0,127,733,5,0,129,453,6,0,285,861,4,0,18,402,6,0,50,303,8,0,519,576,3,0,298,69,7,0,700,482,5,0,447,662,7,0,323,376,7,0,388,804,4,0,344,406,8,0,20,481,6,0,425,801,6,0,442,962,9,0,291,267,5,0,462,328,3,0,498,397,4,0,87,651,2,0,496,575,4,0,760,259,1,0,165,387,6,0,733,448,6,0,294,851,5,0,687,134,6,0,380,195,8,0,451,687,7,0,561,732,6,0,233,165,9,0,699,221,5,0,199,888,9,0,257,62,6,0,182,141,5,0,830,147,8,0,904,442,5,0,590,150,5,0,692,478,4,0,437,806,8,0,405,952,6,0,53,337,6,0,548,142,7,0,546,575,5,0,806,380,6,0,356,96,4,0,941,299,7,0,498,518,5,0,493,480,4,0,168,134,9,0,865,490,6,0,731,148,5,0,472,27,8,0,39,472,7,0,586,269,4,0,70,680,9,0,740,262,5,0,470,752,9,0,405,680,4,0,338,560,3,0,435,770,6,0,599,360,9,0,18,597,6,0,545,292,7,0,21,545,8,0,718,451,3,0,682,396,5,0,279,850,4,0,173,860,9,0,563,296,2,0,417,863,3,0,821,512,6,0,361,582,7,0,912,290,9,0,465,752,9,0,493,652,5,0,374,472,9,0,138,177,8,0,220,151,5,0,226,285,6,0,286,531,4,0,187,252,7,0,351,31,6,0,22,573,7,0,361,200,6,0,583,86,7,0,950,268,6,0,335,743,4,0,400,875,6,0,558,32,6,0,408,869,3,0,683,58,6,0,954,282,6,0,641,292,3,0,376,357,3,0,601,370,4,0,727,579,6,0,302,417,2,0,831,140,9,0,270,407,5,0,409,359,5,0,823,493,9,0,218,813,1,0,453,99,9,0,287,876,9,0,134,164,9,0,645,438,3,0,133,320,7,0,693,333,5,0,471,135,4,0,268,577,5,0,22,593,7,0,208,841,3,0,17,522,6,0,331,203,2,0,576,723,6,0,707,483,6,0,763,186,3,0,20,407,6,0,284,65,6,0,746,217,7,0,702,509,4,0,705,450,4,0,892,468,6,0,400,678,8,0,836,372,5,0,866,403,6,0,321,41,6,0,214,765,5,0,673,641,6,0,388,186,6,0,877,455,6,0,206,739,7,0,591,247,2,0,638,241,9,0,217,684,4,0,381,558,1,0,88,229,3,0,45,592,9,0,956,328,5,0,867,166,6,0,254,392,8,0,100,763,6,0,558,562,5,0,517,472,3,0,353,105,5,0,577,87,8,0,214,297,8,0,794,185,6,0,461,445,7,0,312,689,4,0,946,254,6,0,388,70,8,0,449,298,2,0,887,340,5,0,38,597,5,0,501,403,4,0,412,523,3,0,249,539,5,0,435,100,3,0,89,733,7,0,284,136,4,0,450,852,6,0,436,108,9,0,37,417,5,0,647,107,3,0,664,417,6,0,348,556,7,0,51,648,8,0,898,465,7,0,624,83,8,0,432,409,5,0,496,144,2,0,132,168,9,0,110,418,5,0,277,336,9,0,481,587,4,0,231,78,9,0,48,333,8,0,719,357,7,0,49,391,8,0,727,568,6,0,769,427,9,0,174,147,6,0,226,687,3,0,296,272,7,0,598,652,5,0,636,672,7,0,452,829,7,0,288,798,2,0,884,380,4,0,36,664,6,0,511,586,4,0,668,625,6,0,727,537,6,0,814,216,5,0,713,327,5,0,507,590,6,0,65,686,9,0,749,211,8,0,507,749,9,0,534,732,6,0,852,503,6,0,118,764,8,0,679,65,7,0,418,780,4,0,710,176,5,0,19,380,6,0,512,53,4,0,724,413,3,0,145,743,7,0,288,200,1,0,435,237,5,0,734,94,9,0,646,644,6,0,955,427,6,0,282,99,2,0,179,869,9,0,815,292,2,0,128,523,4,0,397,683,5,0,45,662,9,0,442,835,4,0,368,34,6,0,395,366,7,0,966,332,7,0,493,318,4,0,416,896,7,0,282,73,7,0,170,752,6,0,424,619,4,0,461,18,6,0,486,592,4,0,277,70,9,0,754,143,3,0,168,793,9,0,603,436,6,0,250,898,6,0,901,209,9,0,774,162,7,0,180,831,3,0,896,207,9,0,77,688,7,0,943,323,5,0,344,414,6,0,515,758,9,0,306,339,9,0,603,376,5,0,420,802,7,0,519,761,6,0,462,909,6,0,872,169,6,0,337,859,8,0,494,122,1,0,426,33,6,0,598,670,4,0,43,681,7,0,605,444,8,0,442,18,6,0,374,479,6,0,601,580,4,0,267,616,2,0,622,632,9,0,679,613,8,0,225,151,9,0,254,850,4,0,277,873,6,0,220,472,9,0,567,563,6,0,762,385,4,0,883,244,1,0,429,674,6,0,44,382,6,0,924,465,6,0,403,931,6,0,256,228,1,0,520,185,6,0,398,863,6,0,677,56,6,0,378,589,5,0,269,68,9,0,679,454,4,0,11,386,9,0,592,700,6,0,529,243,4,0,881,455,7,0,726,512,8,0,268,884,8,0,371,679,8,0,68,273,9,0,132,726,5,0,352,576,9,0,920,388,8,0,502,695,6,0,297,765,2,0,114,630,7,0,251,735,3,0,350,97,5,0,844,159,5,0,743,269,7,0,189,720,2,0,695,71,8,0,352,778,3,0,597,676,7,0,526,505,2,0,913,285,9,0,240,767,2,0,125,439,5,0,499,32,4,0,827,376,4,0,882,474,5,0,481,175,9,0,458,172,3,0,337,854,9,0,547,149,6,0,403,105,3,0,135,771,6,0,92,320,6,0,866,427,7,0,682,623,9,0,177,800,3,0,470,36,9,0,549,134,8,0,722,82,9,0,438,31,7,0,229,281,5,0,553,30,6,0,445,784,4,0,867,376,8,0,450,895,8,0,33,536,8,0,355,727,5,0,500,357,7,0,887,459,4,0,919,451,5,0,476,48,6,0,48,318,4,0,160,247,5,0,628,260,7,0,539,608,5,0,344,812,5,0,809,256,5,0,328,861,9,0,50,346,4,0,514,538,4,0,825,488,6,0,161,580,8,0,491,310,3,0,467,797,6,0,928,422,5,0,88,370,2,0,376,227,4,0,303,184,6,0,390,330,5,0,315,741,0,0,322,52,9,0,706,492,7,0,409,884,9,0,420,36,7,0,54,517,5,0,599,297,9,0,499,634,7,0,316,291,6,0,118,563,3,0,12,580,6,0,75,704,2,0,239,78,9,0,613,306,7,0,117,659,6,0,526,158,7,0,949,418,7,0,68,602,2,0,200,234,3,0,19,507,6,0,707,596,9,0,542,141,5,0,932,251,3,0,674,623,9,0,616,80,6,0,477,170,8,0,44,659,9,0,722,75,6,0,727,454,4,0,446,689,5,0,776,363,5,0,673,655,6,0,956,352,7,0,478,33,9,0,47,354,9,0,679,91,6,0,42,686,6,0,833,492,4,0,755,607,6,0,605,691,6,0,499,689,5,0,484,409,4,0,477,767,9,0,539,290,8,0,132,200,4,0,129,163,6,0,860,412,8,0,50,700,6,0,829,400,5,0,720,363,9,0,529,37,6,0,166,585,8,0,115,623,8,0,409,672,4,0,323,842,1,0,98,726,7,0,321,668,2,0,641,659,6,0,892,204,8,0,77,309,4,0,301,459,3,0,181,433,5,0,539,439,5,0,187,669,7,0,125,726,6,0,420,796,7,0,963,306,6,0,507,25,6,0,207,273,6,0,572,85,9,0,184,745,7,0,192,397,2,0,405,945,6,0,692,228,4,0,772,298,2,0,677,608,4,0,454,17,6,0,586,582,5,0,524,310,7,0,551,379,5,0,114,746,7,0,340,431,4,0,622,108,4,0,433,816,9,0,68,713,5,0,427,539,7,0,100,207,8,0,415,307,4,0,26,443,8,0,343,154,7,0,283,882,9,0,23,614,6,0,838,498,4,0,941,241,6,0,589,344,3,0,649,80,6,0,175,570,9,0,220,625,4,0,75,512,4,0,409,920,9,0,928,342,3,0,708,513,6,0,441,967,6,0,44,691,6,0,439,661,5,0,614,545,5,0,351,36,9,0,716,551,6,0,836,335,2,0,211,555,4,0,72,710,6,0,819,504,6,0,580,145,8,0,662,390,1,0,377,327,3,0,404,938,6,0,637,205,9,0,710,209,5,0,520,159,5,0,774,107,8,0,454,856,7,0,380,108,2,0,966,365,6,0,732,524,4,0,433,334,3,0,684,304,5,0,501,756,9,0,193,122,8,0,663,118,7,0,264,74,9,0,137,503,5,0,454,843,7,0,455,939,8,0,594,80,6,0,30,579,2,0,586,569,7,0,249,297,5,0,386,627,3,0,267,724,3,0,299,75,9,0,29,427,8,0,533,541,5,0,917,368,5,0,183,606,0,0,658,469,4,0,454,105,8,0,249,888,9,0,624,669,7,0,180,792,3,0,416,940,7,0,810,134,7,0,757,426,4,0,961,353,9,0,559,263,8,0,131,308,8,0,625,643,4,0,432,245,3,0,262,608,4,0,310,844,3,0,571,435,2,0,689,100,5,0,422,568,3,0,555,161,7,0,258,880,5,0,278,342,5,0,472,757,9,0,223,353,7,0,506,326,4,0,751,88,7,0,410,381,8,0,125,236,5,0,205,767,5,0,427,625,5,0,608,347,7,0,960,347,9,0,871,490,8,0,152,242,5,0,305,804,3,0,207,97,6,0,139,168,9,0,643,79,7,0,224,242,4,0,954,405,7,0,406,959,6,0,706,69,6,0,433,37,3,0,356,855,6,0,717,523,6,0,452,681,6,0,518,694,4,0,29,521,3,0,419,390,8,0,352,145,5,0,498,361,6,0,87,714,7,0,936,332,4,0,708,186,9,0,381,64,7,0,307,876,6,0,188,879,8,0,294,313,7,0,542,494,4,0,878,288,0,0,192,671,5,0,337,402,4,0,508,90,4,0,726,365,6,0,112,194,9,0,296,873,9,0,741,357,3,0,105,270,3,0,579,81,9,0,786,116,9,0,536,709,9,0,38,336,4,0,305,871,9,0,135,457,8,0,454,833,6,0,297,158,5,0,477,451,3,0,862,388,6,0,386,311,9,0,728,505,6,0,572,46,9,0,962,328,9,0,99,592,1,0,348,578,7,0,847,302,4,0,693,609,8,0,925,384,8,0,826,173,4,0,715,347,6,0,776,129,7,0,12,574,6,0,570,253,7,0,281,868,5,0,480,759,9,0,456,957,8,0,523,728,6,0,410,396,5,0,333,148,5,0,28,538,9,0,546,36,7,0,901,342,5,0,699,589,9,0,293,63,6,0,160,640,4,0,492,349,8,0,920,267,6,0,62,274,9,0,449,656,5,0,490,759,9,0,347,571,9,0,535,388,2,0,360,659,3,0,322,564,3,0,288,329,9,0,479,753,6,0,594,146,4,0,362,532,5,0,33,431,6,0,584,466,5,0,856,368,4,0,192,659,9,0,90,700,5,0,604,227,3,0,426,966,9,0,312,145,6,0,154,596,5,0,21,518,7,0,569,364,9,0,896,375,2,0,148,611,7,0,476,145,6,0,323,580,9,0,553,352,5,0,604,306,9,0,347,835,4,0,614,106,4,0,405,808,8,0,390,673,7,0,670,421,5,0,305,866,9,0,578,219,3,0,679,137,6,0,118,426,6,0,294,226,5,0,605,483,3,0,391,757,2,0,257,73,9,0,260,535,6,0,746,281,8,0,251,398,7,0,582,576,6,0,360,573,9,0,232,881,5,0,94,732,7,0,300,880,6,0,577,154,7,0,249,665,2,0,664,632,5,0,524,562,2,0,348,859,6,0,460,23,9,0,570,245,8,0,392,102,4,0,782,131,6,0,459,914,7,0,466,766,8,0,371,449,8,0,125,761,9,0,438,668,8,0,414,189,4,0,512,643,5,0,209,584,5,0,604,223,3,0,216,293,9,0,18,573,7,0,551,723,5,0,83,718,8,0,890,347,7,0,558,396,4,0,45,672,9,0,285,887,6,0,235,157,9,0,391,200,4,0,171,854,9,0,108,197,9,0,36,391,4,0,699,95,5,0,901,317,5,0,216,334,6,0,260,541,8,0,626,68,3,0,382,671,5,0,464,30,9,0,564,725,9,0,186,737,4,0,532,303,8,0,426,258,2,0,468,590,4,0,371,74,4,0,402,914,6,0,968,338,6,0,782,120,9,0,348,48,5,0,450,902,4,0,69,699,2,0,547,29,6,0,490,648,7,0,877,496,6,0,475,516,8,0,273,627,2,0,426,457,3,0,637,198,8,0,92,216,7,0,611,675,7,0,148,168,6,0,431,804,7,0,658,637,6,0,745,533,6,0,519,32,5,0,494,761,9,0,110,219,3,0,794,441,6,0,73,683,8,0,794,177,6,0,204,279,5,0,472,428,4,0,278,79,4,0,286,655,3,0,574,692,5,0,593,517,3,0,259,561,5,0,138,497,4,0,447,761,9,0,449,890,6,0,223,286,9,0,658,596,3,0,202,745,4,0,122,763,9,0,840,491,6,0,438,829,6,0,42,667,9,0,784,108,6,0,498,546,4,0,287,516,6,0,144,165,9,0,412,988,6,0,738,277,7,0,194,245,7,0,151,300,5,0,460,428,6,0,596,49,5,0,454,743,6,0,364,815,7,0,84,723,7,0,404,613,5,0,661,123,8,0,249,64,6,0,20,461,6,0,21,446,6,0,220,83,8,0,30,644,6,0,919,253,6,0,322,554,4,0,552,703,6,0,442,28,8,0,399,362,9,0,923,220,6,0,530,626,6,0,419,772,4,0,900,478,5,0,224,275,8,0,602,346,9,0,383,118,5,0,140,749,7,0,687,146,6,0,167,128,6,0,369,810,4,0,236,563,6,0,323,66,5,0,425,532,7,0,424,69,3,0,886,213,5,0,475,194,7,0,436,322,3,0,594,306,9,0,362,839,9,0,923,284,7,0,879,444,7,0,394,111,4,0,47,680,9,0,789,360,5,0,221,290,8,0,40,521,3,0,292,878,7,0,605,66,2,0,148,531,7,0,212,471,9,0,910,206,8,0,870,223,1,0,395,38,5,0,331,388,7,0,560,694,3,0,169,700,6,0,708,523,7,0,787,129,9,0,163,845,6,0,272,413,7,0,595,592,4,0,596,697,6,0,874,179,4,0,734,141,5,0,605,595,5,0,466,500,2,0,725,193,6,0,831,153,6,0,82,281,5,0,180,777,8,0,352,857,6,0,158,518,3,0,705,214,5,0,907,296,8,0,437,510,6,0,292,885,6,0,386,220,4,0,273,607,8,0,964,378,6,0,732,574,6,0,218,286,9,0,322,363,7,0,120,745,8,0,103,531,5,0,720,136,7,0,488,681,6,0,736,298,3,0,452,886,7,0,163,134,9,0,92,710,7,0,911,280,8,0,468,757,9,0,234,656,2,0,279,604,9,0,825,259,6,0,276,432,4,0,284,702,6,0,820,212,4,0,623,652,3,0,139,522,7,0,767,510,8,0,294,248,9,0,453,286,2,0,869,433,9,0,667,239,5,0,441,678,8,0,30,348,6,0,13,569,6,0,366,842,6,0,64,267,7,0,290,855,8,0,101,748,9,0,742,522,6,0,44,669,9,0,388,606,4,0,428,556,8,0,414,792,5,0,244,747,3,0,666,605,5,0,136,463,9,0,311,873,6,0,387,240,2,0,832,381,8,0,385,290,7,0,365,41,7,0,61,485,6,0,227,147,9,0,594,655,8,0,524,291,5,0,115,199,9,0,935,289,7,0,116,616,5,0,183,816,2,0,273,326,6,0,74,272,9,0,147,347,9,0,541,285,7,0,308,666,5,0,452,495,6,0,524,297,6,0,367,142,2,0,168,160,5,0,26,370,6,0,21,437,6,0,177,409,5,0,574,252,4,0,320,869,6,0,387,572,2,0,843,433,3,0,279,424,6,0,152,152,7,0,595,664,5,0,375,509,5,0,48,290,6,0,221,167,4,0,452,944,8,0,845,375,7,0,256,549,8,0,212,97,6,0,85,503,5,0,145,306,5,0,65,730,6,0,783,520,6,0,370,211,2,0,240,84,4,0,458,908,9,0,327,43,9,0,496,639,9,0,336,814,2,0,718,83,9,0,596,457,7,0,405,33,9,0,420,112,5,0,434,642,5,0,60,385,5,0,532,637,4,0,459,838,6,0,36,453,9,0,636,80,9,0,906,312,6,0,96,345,7,0,281,664,7,0,481,516,3,0,730,370,6,0,793,508,3,0,186,131,7,0,912,296,7,0,499,701,8,0,400,117,4,0,907,445,8,0,615,180,6,0,358,841,9,0,183,681,4,0,290,324,9,0,454,863,9,0,414,958,7,0,409,406,5,0,295,694,4,0,73,233,6,0,440,355,1,0,93,704,6,0,332,845,4,0,435,800,7,0,98,692,5,0,242,162,7,0,459,465,5,0,238,394,3,0,726,140,6,0,47,587,8,0,33,378,6,0,68,254,7,0,470,517,6,0,283,774,6,0,132,748,6,0,450,396,5,0,770,423,5,0,153,502,4,0,414,925,7,0,172,125,6,0,192,882,9,0,379,36,6,0,255,886,6,0,478,763,9,0,234,271,7,0,606,341,8,0,788,373,9,0,924,426,7,0,183,781,6,0,472,238,4,0,916,287,9,0,111,610,6,0,15,559,6,0,282,520,8,0,549,552,6,0,748,160,5,0,39,611,8,0,286,78,7,0,129,181,9,0,811,422,8,0,650,133,3,0,664,127,8,0,597,55,6,0,773,169,6,0,430,508,5,0,412,945,7,0,672,611,7,0,516,254,6,0,425,812,7,0,712,448,7,0,469,684,5,0,109,644,3,0,289,243,4,0,372,48,6,0,265,877,4,0,620,64,4,0,560,369,9,0,429,820,9,0,744,510,5,0,390,298,5,0,42,664,9,0,81,540,4,0,500,741,5,0,485,378,4,0,42,615,7,0,723,375,4,0,676,462,5,0,343,576,9,0,595,311,8,0,898,501,6,0,235,709,2,0,148,502,7,0,231,409,2,0,392,722,3,0,168,412,5,0,456,26,9,0,442,762,7,0,219,568,9,0,420,820,9,0,300,247,5,0,611,83,7,0,432,831,5,0,918,224,5,0,223,572,8,0,183,242,8,0,33,371,7,0,458,498,5,0,50,353,5,0,679,619,9,0,612,362,4,0,192,681,3,0,631,422,1,0,285,662,9,0,148,178,5,0,311,138,8,0,121,768,9,0,23,375,6,0,556,725,7,0,513,504,5,0,944,441,6,0,355,428,5,0,310,341,9,0,525,60,4,0,316,297,6,0,304,446,7,0,159,536,7,0,480,362,2,0,138,450,2,0,73,689,7,0,551,575,5,0,647,183,3,0,396,346,5,0,134,242,6,0,474,764,9,0,62,446,3,0,134,293,6,0,20,583,7,0,489,694,7,0,861,419,6,0,28,572,5,0,287,522,9,0,149,343,6,0,446,108,9,0,249,894,9,0,25,473,9,0,419,555,6,0,788,303,5,0,509,770,6,0,805,328,6,0,402,181,4,0,518,505,5,0,322,863,9,0,33,641,9,0,778,237,5,0,456,762,9,0,395,767,4,0,519,719,9,0,158,527,5,0,537,304,5,0,952,294,9,0,225,99,2,0,401,137,4,0,655,434,4,0,506,762,9,0,751,237,5,0,198,634,4,0,261,565,7,0,259,386,6,0,658,559,5,0,220,898,6,0,735,365,4,0,133,468,7,0,552,141,6,0,668,138,6,0,381,297,7,0,615,610,7,0,310,133,6,0,18,578,7,0,473,32,9,0,517,329,5,0,452,618,2,0,422,973,6,0,291,319,7,0,359,766,4,0,911,199,6,0,928,216,6,0,183,127,9,0,175,246,8,0,525,697,5,0,671,414,4,0,52,280,6,0,927,366,6,0,215,729,4,0,896,278,4,0,808,234,4,0,314,58,9,0,722,435,5,0,602,59,6,0,455,904,8,0,95,288,2,0,430,809,8,0,531,125,3,0,851,268,3,0,316,341,8,0,469,422,9,0,198,451,6,0,482,200,7,0,621,99,4,0,51,286,5,0,748,437,6,0,223,135,6,0,577,34,6,0,60,680,9,0,610,616,7,0,826,305,5,0,335,36,6,0,629,678,6,0,621,183,5,0,116,186,7,0,359,422,5,0,69,517,3,0,180,672,6,0,562,721,9,0,473,151,5,0,454,811,5,0,92,719,9,0,446,22,8,0,589,681,5,0,667,638,5,0,445,696,5,0,44,325,7,0,170,683,7,0,919,459,3,0,584,686,5,0,55,389,9,0,477,772,8,0,71,405,4,0,662,58,9,0,491,588,4,0,778,370,9,0,723,360,7,0,548,567,6,0,319,145,7,0,497,347,6,0,540,731,6,0,472,321,8,0,416,406,9,0,509,103,4,0,342,571,6,0,161,815,6,0,325,95,5,0,360,38,9,0,863,379,9,0,728,588,8,0,72,293,7,0,514,754,9,0,442,824,6,0,77,434,3,0,226,75,6,0,895,480,9,0,181,121,6,0,504,734,2,0,462,921,6,0,464,25,9,0,374,35,6,0,382,48,5,0,265,405,4,0,567,178,6,0,164,558,6,0,664,424,7,0,274,444,5,0,176,713,4,0,252,552,5,0,486,175,8,0,197,643,5,0,23,584,6,0,409,901,9,0,569,234,5,0,332,52,9,0,288,85,4,0,717,373,5,0,667,315,3,0,82,305,4,0,449,844,8,0,819,309,8,0,50,656,9,0,521,714,8,0,510,756,9,0,532,698,5,0,913,229,9,0,547,49,7,0,339,101,4,0,731,195,5,0,604,674,6,0,457,321,4,0,670,408,4,0,331,89,3,0,195,371,4,0,774,511,4,0,432,630,6,0,406,388,6,0,568,163,9,0,827,391,6,0,67,682,9,0,387,666,4,0,807,508,9,0,952,275,6,0,400,37,9,0,170,245,6,0,13,382,7,0,609,319,6,0,570,71,3,0,41,601,8,0,784,424,8,0,456,919,7,0,873,371,2,0,871,203,4,0,175,812,3,0,258,66,8,0,660,431,9,0,285,314,9,0,394,551,5,0,380,309,8,0,577,653,8,0,63,675,7,0,403,382,6,0,136,152,6,0,273,68,9,0,481,186,9,0,608,302,9,0,712,71,6,0,298,445,9,0,557,109,4,0,815,417,6,0,849,204,5,0,69,286,8,0,491,437,4,0,827,494,8,0,362,577,9,0,465,512,6,0,348,270,3,0,474,73,6,0,865,483,4,0,609,307,9,0,282,85,2,0,789,111,6,0,643,230,4,0,825,250,6,0,29,439,8,0,47,671,9,0,86,340,9,0,217,486,9,0,894,341,7,0,149,518,9,0,693,546,5,0,321,294,6,0,215,127,5,0,737,82,6,0,551,156,6,0,432,105,9,0,484,325,8,0,754,466,1,0,332,786,4,0,396,33,6,0,887,194,7,0,801,343,5,0,460,948,6,0,932,454,6,0,204,218,3,0,694,348,2,0,477,782,6,0,78,500,3,0,295,439,9,0,585,417,3,0,24,419,9,0,136,375,2,0,279,676,6,0,486,273,4,0,460,942,7,0,580,689,5,0,383,282,6,0,671,428,4,0,731,268,5,0,351,569,9,0,421,431,3,0,222,551,6,0,388,424,3,0,149,371,9,0,450,955,9,0,645,166,3,0,492,344,9,0,569,82,6,0,882,347,3,0,601,686,8,0,129,773,6,0,125,594,5,0,219,89,9,0,715,353,6,0,298,86,6,0,32,364,7,0,172,420,8,0,783,231,5,0,466,427,7,0,274,382,5,0,353,40,9,0,354,115,3,0,784,456,3,0,349,412,8,0,186,866,6,0,935,226,6,0,610,164,3,0,574,146,5,0,301,56,6,0,253,64,6,0,166,781,6,0,187,571,7,0,924,228,6,0,222,741,8,0,601,80,7,0,210,883,7,0,571,723,9,0,875,444,9,0,469,317,5,0,497,648,9,0,129,567,2,0,464,436,4,0,32,353,7,0,251,387,3,0,335,639,4,0,306,454,5,0,288,250,6,0,831,508,6,0,194,226,2,0,174,415,9,0,54,694,7,0,816,342,2,0,505,745,7,0,796,377,6,0,391,57,4,0,109,621,4,0,352,811,9,0,275,600,9,0,231,88,3,0,394,119,5,0,120,201,8,0,56,640,8,0,296,664,6,0,138,279,7,0,40,631,5,0,547,372,6,0,328,154,5,0,413,881,8,0,94,371,5,0,747,425,5,0,384,274,6,0,213,532,3,0,374,191,7,0,241,882,7,0,293,328,9,0,189,469,3,0,123,544,3,0,155,147,9,0,481,48,6,0,257,242,5,0,33,633,9,0,893,474,8,0,296,510,7,0,923,409,5,0,671,453,5,0,501,580,6,0,90,345,9,0,27,609,6,0,933,370,7,0,59,492,5,0,208,751,5,0,473,689,6,0,333,853,7,0,910,465,8,0,683,602,4,0,548,357,6,0,271,801,4,0,383,58,5,0,902,469,9,0,528,306,8,0,839,379,7,0,37,621,8,0,564,268,6,0,510,312,4,0,236,382,3,0,588,560,6,0,139,350,6,0,615,575,1,0,738,289,5,0,377,100,5,0,463,915,6,0,611,440,6,0,808,502,9,0,376,805,6,0,844,485,5,0,654,655,9,0,231,347,5,0,902,354,5,0,834,144,9,0,29,621,8,0,210,462,7,0,454,892,9,0,563,183,2,0,332,100,3,0,170,565,8,0,656,630,3,0,879,217,3,0,966,357,6,0,35,627,7,0,832,387,9,0,189,428,4,0,559,487,7,0,410,33,7,0,364,846,6,0,530,28,6,0,641,207,6,0,922,236,3,0,291,526,7,0,704,205,5,0,809,127,9,0,702,571,5,0,694,618,6,0,213,775,5,0,532,44,6,0,533,724,8,0,953,309,6,0,561,710,9,0,245,282,3,0,607,188,4,0,647,418,7,0,574,240,6,0,399,644,1,0,146,299,7,0,781,504,6,0,274,467,2,0,347,680,6,0,501,638,8,0,882,187,8,0,927,273,5,0,55,678,9,0,753,434,5,0,738,89,9,0,98,700,5,0,202,658,7,0,256,79,7,0,564,152,9,0,463,579,6,0,593,356,9,0,553,263,7,0,27,545,9,0,449,233,4,0,814,324,9,0,40,350,9,0,58,277,9,0,322,697,4,0,374,595,5,0,355,673,7,0,409,980,8,0,325,38,6,0,242,275,3,0,49,384,8,0,39,433,3,0,457,877,7,0,491,23,6,0,421,561,5,0,385,205,6,0,506,32,5,0,127,624,3,0,466,249,3,0,694,591,6,0,220,283,9,0,304,493,5,0,263,883,7,0,317,139,6,0,748,334,3,0,161,826,6,0,231,261,6,0,262,684,3,0,767,97,6,0,710,468,3,0,172,790,9,0,34,655,6,0,20,413,6,0,131,187,8,0,738,198,3,0,33,637,9,0,408,913,9,0,84,347,6,0,475,506,5,0,630,192,8,0,696,584,7,0,755,349,3,0,446,114,9,0,712,187,9,0,292,839,3,0,131,480,7,0,446,847,5,0,397,307,5,0,514,428,4,0,589,458,7,0,27,432,5,0,845,146,6,0,267,77,9,0,623,483,3,0,498,554,4,0,243,887,9,0,186,235,5,0,330,37,6,0,347,37,9,0,123,773,6,0,583,694,9,0,856,495,4,0,373,833,6,0,26,414,7,0,147,324,5,0,747,263,4,0,300,874,8,0,426,102,6,0,212,215,5,0,271,566,2,0,629,538,4,0,459,872,6,0,492,687,8,0,357,578,8,0,329,374,6,0,774,101,6,0,531,298,9,0,14,398,6,0,401,902,6,0,465,19,6,0,25,567,4,0,786,380,9,0,373,502,5,0,684,481,2,0,174,404,4,0,312,346,9,0,467,775,4,0,905,306,5,0,881,181,8,0,40,680,6,0,573,707,8,0,658,667,6,0,942,418,6,0,455,769,6,0,523,41,7,0,180,150,7,0,201,422,5,0,410,810,7,0,300,134,7,0,912,311,4,0,219,317,5,0,145,143,6,0,309,350,9,0,121,173,6,0,458,692,5,0,378,205,5,0,356,36,9,0,177,347,5,0,60,261,6,0,434,763,5,0,352,806,8,0,298,861,9,0,325,354,4,0,537,487,3,0,938,286,8,0,303,532,3,0,651,605,3,0,904,361,4,0,54,381,6,0,220,249,5,0,377,51,5,0,162,809,6,0,134,474,8,0,302,92,7,0,923,432,5,0,899,189,6,0,404,814,6,0,446,959,9,0,429,815,8,0,298,791,5,0,248,366,3,0,826,166,6,0,808,430,5,0,567,58,1,0,306,73,5,0,175,866,8,0,344,43,8,0,459,831,6,0,881,209,5,0,197,149,5,0,293,88,4,0,34,604,6,0,867,198,4,0,293,340,5,0,391,590,3,0,161,820,6,0,407,878,4,0,501,238,4,0,493,208,6,0,312,80,4,0,43,315,7,0,202,567,9,0,712,181,8,0,442,957,8,0,204,250,4,0,877,477,5,0,27,593,6,0,139,162,9,0,648,315,5,0,279,526,8,0,355,810,9,0,717,467,4,0,272,873,5,0,646,658,9,0,645,88,5,0,305,263,4,0,403,190,3,0,551,560,7,0,303,862,7,0,617,434,8,0,857,198,4,0,291,873,8,0,932,360,4,0,509,764,9,0,30,457,9,0,371,589,6,0,450,667,3,0,598,41,6,0,205,636,2,0,207,799,2,0,341,848,9,0,425,794,7,0,214,138,9,0,634,87,7,0,140,485,7,0,924,454,5,0,114,713,5,0,216,496,9,0,238,669,3,0,609,654,8,0,546,730,6,0,422,525,6,0,107,190,6,0,275,419,5,0,836,137,6,0,629,79,7,0,657,421,7,0,281,890,6,0,502,761,9,0,509,532,3,0,278,323,9,0,271,318,5,0,87,212,5,0,780,416,4,0,682,100,4,0,576,76,7,0,263,569,9,0,295,362,1,0,618,86,6,0,9,383,9,0,638,74,8,0,642,421,3,0,432,595,3,0,656,649,7,0,426,891,4,0,174,411,9,0,740,423,6,0,574,51,6,0,802,158,5,0,696,566,4,0,432,26,9,0,966,372,6,0,454,869,8,0,174,141,7,0,433,785,5,0,542,655,5,0,924,249,5,0,561,148,9,0,819,244,4,0,501,706,6,0,823,402,5,0,459,865,6,0,583,201,1,0,215,877,4,0,388,122,6,0,281,360,2,0,226,161,7,0,331,61,5,0,611,658,6,0,582,564,8,0,246,291,3,0,37,632,9,0,281,128,5,0,273,528,5,0,960,323,8,0,144,171,9,0,165,820,8,0,434,128,2,0,400,881,6,0,354,415,6,0,135,485,6,0,102,339,3,0,111,202,9,0,720,542,6,0,142,768,6,0,830,257,7,0,284,608,8,0,98,720,8,0,254,714,4,0,305,345,9,0,237,96,5,0,370,492,4,0,278,612,9,0,573,165,6,0,152,683,6,0,48,696,6,0,459,882,6,0,691,117,3,0,482,692,7,0,310,868,9,0,262,799,4,0,283,875,9,0,653,669,6,0,112,763,6,0,506,719,7,0,134,760,6,0,485,181,9,0,958,418,6,0,268,72,9,0,591,61,3,0,708,113,3,0,479,69,6,0,790,436,4,0,433,826,9,0,584,149,9,0,442,805,7,0,298,834,4,0,442,183,4,0,348,159,6,0,780,314,4,0,140,303,5,0,425,412,6,0,382,801,4,0,565,716,9,0,168,578,9,0,350,850,9,0,622,269,5,0,366,86,5,0,392,313,7,0,84,241,5,0,496,697,8,0,307,83,8,0,464,597,4,0,731,237,2,0,658,361,6,0,418,284,3,0,851,166,5,0,487,521,3,0,392,782,3,0,824,499,8,0,176,155,4,0,315,351,9,0,316,476,4,0,410,804,7,0,221,78,6,0,914,266,5,0,907,460,8,0,404,860,7,0,898,485,9,0,495,681,4,0,757,290,3,0,791,451,5,0,456,804,4,0,131,534,9,0,79,734,6,0,214,631,4,0,223,491,7,0,487,54,5,0,150,261,5,0,282,337,9,0,24,425,9,0,15,552,6,0,754,134,8,0,37,637,9,0,480,181,9,0,739,447,6,0,454,899,7,0,901,460,7,0,402,256,2,0,316,448,6,0,399,691,2,0,310,571,5,0,384,102,6,0,506,700,6,0,551,274,6,0,336,568,3,0,580,559,5,0,529,511,5,0,151,467,2,0,427,185,6,0,309,487,6,0,48,659,9,0,701,66,6,0,483,777,6,0,413,179,3,0,34,333,6,0,696,603,8,0,493,751,6,0,474,585,5,0,277,701,5,0,113,771,6,0,52,308,8,0,584,532,4,0,146,266,7,0,47,652,8,0,502,646,9,0,553,146,9,0,402,908,6,0,469,402,4,0,620,371,3,0,929,242,1,0,474,594,4,0,875,433,9,0,357,806,7,0,462,506,5,0,115,206,7,0,401,896,6,0,447,17,6,0,696,63,6,0,266,359,5,0,103,724,5,0,45,358,9,0,560,726,9,0,282,318,8,0,441,565,5,0,371,55,4,0,30,451,9,0,564,703,9,0,589,304,9,0,326,686,7,0,741,94,7,0,912,219,7,0,202,103,6,0,759,99,5,0,607,682,9,0,601,46,7,0,283,695,5,0,122,553,2,0,700,141,9,0,145,751,9,0,551,35,8,0,217,323,9,0,317,84,5,0,146,151,9,0,624,681,6,0,666,403,4,0,910,449,8,0,478,293,1,0,544,43,8,0,903,192,6,0,741,516,5,0,715,458,3,0,334,614,5,0,430,636,6,0,851,321,3,0,397,668,5,0,45,647,5,0,339,845,9,0,663,653,5,0,452,763,9,0,84,401,3,0,445,818,4,0,34,547,5,0,522,103,5,0,934,237,6,0,293,610,5,0,370,99,4,0,630,114,3,0,300,451,6,0,435,837,5,0,551,695,3,0,554,709,8,0,447,683,7,0,744,205,4,0,498,766,9,0,110,595,4,0,139,258,5,0,413,412,6,0,145,354,5,0,406,972,6,0,482,392,1,0,266,386,4,0,619,47,6,0,747,517,6,0,685,595,2,0,317,51,9,0,298,265,7,0,796,434,5,0,288,65,6,0,104,383,6,0,212,149,5,0,275,64,6,0,122,457,6,0,231,160,9,0,61,720,6,0,582,654,7,0,800,314,4,0,490,514,4,0,350,42,9,0,307,857,3,0,602,654,7,0,245,374,8,0,530,452,2,0,451,209,5,0,178,240,6,0,270,128,3,0,690,60,6,0,488,344,7,0,516,714,9,0,303,86,9,0,950,304,9,0,27,498,9,0,284,211,4,0,52,314,6,0,505,642,8,0,184,187,2,0,152,515,5,0,519,514,5,0,460,687,8,0,579,570,6,0,440,757,6,0,594,301,9,0,104,353,3,0,419,906,5,0,465,689,6,0,473,770,9,0,316,363,6,0,372,614,4,0,459,639,3,0,416,395,9,0,903,446,4,0,498,587,6,0,34,437,6,0,280,881,9,0,346,101,3,0,144,399,3,0,892,495,9,0,302,80,8,0,667,132,7,0,763,102,6,0,447,810,4,0,170,415,9,0,304,66,4,0,662,643,2,0,962,300,6,0,15,386,7,0,378,271,5,0,44,611,5,0,13,578,6,0,464,785,3,0,491,261,2,0,486,197,5,0,708,128,3,0,197,109,6,0,61,541,4,0,699,551,6,0,322,313,2,0,670,58,9,0,226,830,2,0,193,447,7,0,165,394,6,0,520,307,5,0,856,358,1,0,208,388,4,0,871,439,9,0,203,885,8,0,807,418,6,0,237,697,4,0,219,278,7,0,59,676,9,0,117,607,5,0,247,78,8,0,490,407,2,0,295,127,6,0,845,384,6,0,316,578,9,0,154,677,5,0,28,558,7,0,420,808,7,0,383,322,6,0,482,76,5,0,413,533,4,0,605,328,6,0,807,425,8,0,940,291,9,0,128,241,8,0,718,316,7,0,589,695,9,0,933,434,6,0,101,742,8,0,893,192,5,0,908,487,6,0,536,58,5,0,226,725,5,0,690,586,4,0,294,71,9,0,321,72,4,0,52,652,9,0,422,714,1,0,265,453,1,0,255,539,8,0,92,681,2,0,706,77,8,0,342,552,4,0,207,566,9,0,197,504,3,0,476,681,4,0,550,716,5,0,732,493,7,0,753,261,4,0,930,227,8,0,599,309,9,0,287,431,6,0,221,563,9,0,347,192,3,0,176,419,8,0,939,437,7,0,944,356,2,0,53,292,9,0,170,138,9,0,206,453,5,0,569,149,6,0,748,524,7,0,297,332,6,0,814,131,8,0,855,376,6,0,409,39,6,0,75,286,6,0,339,95,4,0,340,41,8,0,279,856,4,0,221,749,4,0,572,202,4,0,435,969,6,0,717,114,5,0,685,315,3,0,619,538,4,0,203,141,3,0,452,314,4,0,656,79,3,0,520,701,7,0,533,269,4,0,334,392,7,0,342,852,9,0,291,308,8,0,360,678,6,0,545,56,4,0,403,245,2,0,673,131,5,0,565,253,9,0,175,820,4,0,625,196,8,0,614,685,6,0,501,52,4,0,546,649,5,0,807,226,3,0,186,675,6,0,607,677,9,0,459,851,6,0,452,874,8,0,831,289,5,0,483,756,7,0,431,735,2,0,172,870,6,0,211,675,2,0,192,238,5,0,481,54,5,0,259,392,9,0,416,506,3,0,360,213,4,0,128,194,9,0,425,780,5,0,365,826,9,0,573,728,6,0,600,113,0,0,402,768,5,0,455,578,4,0,915,292,5,0,714,600,6,0,231,730,3,0,911,224,9,0,142,175,9,0,459,844,6,0,916,259,5,0,272,588,5,0,261,399,6,0,367,423,4,0,788,420,5,0,664,557,6,0,301,667,5,0,29,409,7,0,704,486,8,0,407,966,6,0,46,567,4,0,517,236,5,0,140,155,9,0,715,360,7,0,678,595,3,0,757,438,6,0,198,874,7,0,477,511,7,0,79,716,8,0,523,707,6,0,269,602,8,0,28,462,9,0,559,164,8,0,292,520,9,0,258,703,3,0,48,416,3,0,102,715,6,0,110,385,7,0,170,689,9,0,937,410,3,0,98,244,5,0,750,257,7,0,186,337,5,0,371,800,2,0,866,410,6,0,244,79,9,0,740,588,6,0,730,387,3,0,418,886,9,0,928,432,7,0,391,681,6,0,407,415,5,0,514,762,6,0,674,62,8,0,885,204,8,0,761,131,7,0,239,173,8,0,361,429,7,0,961,402,6,0,875,232,4,0,654,45,6,0,831,168,5,0,104,696,5,0,132,157,6,0,566,710,9,0,241,369,8,0,90,206,6,0,98,383,5,0,685,94,5,0,443,657,7,0,48,341,6,0,223,733,6,0,143,349,9,0,224,792,4,0,864,188,3,0,160,138,8,0,215,562,9,0,229,176,5,0,815,226,4,0,724,90,7,0,702,86,9,0,806,130,8,0,605,553,6,0,460,490,6,0,486,170,9,0,402,673,8,0,180,769,6,0,859,381,8,0,345,388,2,0,354,849,9,0,493,630,5,0,226,156,9,0,310,448,6,0,748,224,7,0,755,153,7,0,74,243,8,0,759,431,7,0,246,394,4,0,658,555,7,0,291,510,6,0,385,327,7,0,447,713,2,0,260,872,3,0,35,347,5,0,894,353,6,0,675,101,4,0,237,161,9,0,123,527,4,0,79,240,7,0,399,869,6,0,889,500,6,0,228,741,3,0,95,209,7,0,415,401,9,0,457,683,6,0,178,414,8,0,704,589,8,0,545,527,2,0,176,875,6,0,61,726,6,0,119,188,9,0,919,284,9,0,28,469,9,0,511,722,9,0,225,263,7,0,19,501,6,0,650,649,9,0,276,879,8,0,219,140,9,0,839,148,9,0,352,259,3,0,362,850,6,0,539,542,5,0,24,620,6,0,282,434,5,0,617,303,4,0,802,431,4,0,317,693,5,0,668,650,7,0,448,707,5,0,716,307,3,0,137,172,9,0,498,753,9,0,55,533,5,0,622,277,3,0,272,72,9,0,798,116,6,0,421,924,6,0,685,641,6,0,340,498,3,0,73,678,5,0,319,506,4,0,748,529,8,0,352,437,5,0,53,666,9,0,765,431,8,0,126,176,9,0,378,290,7,0,609,312,5,0,345,68,2,0,415,762,4,0,445,721,4,0,490,204,8,0,389,707,4,0,286,341,3,0,573,648,4,0,281,747,2,0,657,426,7,0,485,770,8,0,907,403,1,0,267,531,5,0,183,568,7,0,476,759,9,0,291,301,3,0,371,485,8,0,326,454,8,0,435,312,6,0,441,811,8,0,789,169,6,0,942,426,8,0,892,484,9,0,280,121,6,0,602,679,9,0,933,275,6,0,58,524,5,0,426,762,4,0,313,46,6,0,320,578,9,0,376,117,4,0,235,631,6,0,851,380,7,0,443,684,6,0,515,705,6,0,135,327,7,0,518,709,7,0,840,454,2,0,911,481,6,0,169,154,4,0,668,660,6,0,953,319,3,0,113,212,6,0,564,168,9,0,401,374,5,0,787,267,3,0,110,706,5,0,139,516,4,0,687,380,3,0,142,535,3,0,104,397,4,0,582,700,8,0,729,94,8,0,215,896,6,0,40,365,9,0,403,803,6,0,507,469,2,0,41,311,6,0,713,593,5,0,566,47,5,0,813,428,7,0,325,149,6,0,752,283,5,0,88,727,8,0,348,809,9,0,938,280,5,0,59,476,3,0,137,159,9,0,521,724,9,0,342,439,5,0,235,69,6,0,337,108,4,0,91,351,6,0,566,248,8,0,156,133,6,0,569,716,9,0,359,437,4,0,656,280,4,0,133,523,6,0,458,453,4,0,277,887,7,0,847,452,3,0,260,548,8,0,858,502,6,0,517,93,7,0,620,192,7,0,565,733,6,0,47,684,9,0,431,112,8,0,447,120,4,0,405,897,8,0,902,473,9,0,455,114,6,0,419,412,8,0,168,810,8,0,242,147,4,0,301,569,1,0,440,117,7,0,181,547,4,0,258,555,6,0,912,210,9,0,919,381,5,0,389,798,5,0,686,636,6,0,415,806,7,0,876,384,5,0,420,749,2,0,625,286,4,0,173,240,8,0,680,523,2,0,20,551,7,0,937,245,5,0,402,761,5,0,222,480,9,0,342,678,8,0,81,335,6,0,583,708,6,0,88,536,5,0,337,849,9,0,251,76,8,0,752,596,9,0,227,886,8,0,632,197,9,0,263,577,6,0,572,33,6,0,561,716,9,0,587,691,9,0,129,741,5,0,142,461,5,0,709,82,9,0,547,348,7,0,365,572,6,0,534,293,7,0,554,373,8,0,308,466,3,0,423,556,8,0,803,118,6,0,573,151,7,0,255,421,2,0,429,21,6,0,40,572,4,0,446,965,6,0,385,334,5,0,921,274,9,0,570,76,5,0,82,711,6,0,232,558,9,0,410,606,4,0,909,440,5,0,413,905,9,0,109,459,4,0,34,411,7,0,57,283,9,0,54,331,7,0,701,601,8,0,574,81,9,0,316,199,3,0,537,376,4,0,122,191,9,0,437,955,5,0,300,293,5,0,759,93,6,0,212,132,7,0,527,460,4,0,109,769,6,0,513,727,9,0,650,656,9,0,110,391,7,0,552,418,3,0,229,267,9,0,359,109,3,0,556,46,7,0,332,865,6,0,478,164,9,0,724,318,5,0,58,688,9,0,187,886,6,0,467,84,1,0,183,857,4,0,560,50,4,0,565,548,5,0,33,358,8,0,499,24,6,0,442,633,5,0,515,649,5,0,72,259,7,0,347,535,4,0,368,481,4,0,120,628,5,0,568,727,9,0,598,431,5,0,544,617,2,0,391,77,5,0,683,369,4,0,49,359,6,0,297,337,8,0,957,304,9,0,629,95,3,0,945,305,5,0,796,127,8,0,238,557,8,0,485,765,9,0,29,481,6,0,354,800,4,0,459,899,6,0,149,496,6,0,763,437,6,0,435,163,5,0,949,289,8,0,353,553,7,0,140,470,5,0,706,230,3,0,72,730,6,0,966,322,7,0,8,389,7,0,103,217,6,0,315,556,4,0,882,460,5,0,480,43,8,0,186,753,5,0,609,688,6,0,728,597,6,0,244,893,9,0,468,582,5,0,147,681,5,0,238,899,6,0,588,704,6,0,36,530,7,0,627,636,6,0,60,671,6,0,312,87,9,0,493,358,7,0,233,171,9,0,305,140,6,0,590,687,9,0,626,435,4,0,674,446,5,0,510,705,6,0,150,742,7,0,963,343,9,0,272,333,8,0,350,823,3,0,575,170,4,0,671,388,4,0,878,449,8,0,505,709,7,0,955,345,7,0,256,398,8,0,150,146,8,0,74,229,6,0,919,470,6,0,361,43,8,0,298,503,5,0,185,764,4,0,838,214,7,0,603,401,2,0,153,530,8,0,552,103,6,0,189,662,9,0,697,614,6,0,436,674,8,0,498,104,5,0,328,47,9,0,155,541,8,0,328,674,4,0,404,978,6,0,714,340,5,0,374,254,6,0,78,344,4,0,557,733,6,0,492,331,9,0,515,767,6,0,612,680,9,0,627,271,7,0,461,761,9,0,416,666,4,0,476,317,4,0,796,345,6,0,424,310,5,0,285,147,3,0,79,720,6,0,472,774,6,0,120,535,4,0,698,90,6,0,408,124,3,0,338,840,5,0,425,631,6,0,467,324,6,0,338,576,7,0,35,660,6,0,230,564,7,0,243,70,9,0,912,234,8,0,545,499,8,0,389,343,5,0,599,340,6,0,717,190,9,0,666,122,8,0,446,673,5,0,540,37,6,0,468,168,3,0,426,109,8,0,293,254,8,0,602,52,7,0,693,468,5,0,457,209,6,0,254,891,9,0,507,382,1,0,698,474,5,0,121,247,3,0,371,81,4,0,58,693,9,0,295,150,4,0,162,156,8,0,182,372,4,0,188,437,9,0,65,249,6,0,485,645,3,0,666,63,8,0,324,692,6,0,171,235,4,0,182,249,7,0,477,331,5,0,377,319,7,0,319,372,5,0,461,928,6,0,193,870,6,0,368,45,4,0,589,665,3,0,682,337,6,0,99,360,6,0,390,36,6,0,535,27,6,0,307,95,5,0,430,919,3,0,512,699,6,0,577,96,3,0,57,683,9,0,44,368,7,0,888,472,7,0,453,837,7,0,379,452,6,0,433,792,7,0,908,292,6,0,728,529,6,0,456,932,7,0,737,149,6,0,450,21,8,0,378,679,5,0,228,273,9,0,226,185,4,0,180,728,3,0,499,642,9,0,389,350,6,0,208,438,3,0,528,704,6,0,337,581,6,0,703,92,9,0,147,630,1,0,219,191,4,0,217,557,8,0,105,539,5,0,455,506,4,0,364,38,8,0,483,191,9,0,359,853,6,0,47,576,4,0,109,718,4,0,376,492,5,0,560,250,7,0,473,164,5,0,74,248,7,0,263,552,6,0,461,936,8,0,139,320,7,0,808,496,7,0,418,949,4,0,136,526,7,0,449,769,7,0,598,682,9,0,712,529,7,0,281,331,9,0,193,528,3,0,574,361,6,0,245,618,4,0,732,87,9,0,770,126,5,0,143,479,6,0,919,217,5,0,423,405,9,0,191,114,6,0,553,568,5,0,401,844,5,0,434,20,6,0,320,452,9,0,875,361,3,0,891,489,9,0,548,709,6,0,354,50,4,0,786,366,7,0,176,769,6,0,476,21,6,0,235,81,8,0,174,693,7,0,585,298,4,0,300,342,8,0,743,211,6,0,496,773,6,0,599,74,3,0,706,335,9,0,909,469,9,0,522,648,5,0,327,52,9,0,683,403,4,0,429,322,3,0,302,486,3,0,762,503,3,0,117,594,8,0,769,102,6,0,84,255,5,0,494,581,5,0,298,309,5,0,80,220,6,0,157,389,7,0,599,324,6,0,47,666,9,0,28,603,6,0,102,495,1,0,205,878,4,0,623,676,9,0,367,93,4,0,469,349,2,0,376,486,7,0,731,80,6,0,166,196,4,0,295,219,6,0,162,130,6,0,341,764,2,0,409,889,9,0,24,513,3,0,25,534,7,0,813,382,5,0,878,172,6,0,333,576,6,0,707,564,6,0,591,309,7,0,206,148,3,0,642,105,3,0,240,375,9,0,47,296,6,0,409,928,8,0,285,334,9,0,338,522,2,0,961,366,6,0,450,482,6,0,469,380,2,0,284,526,9,0,409,993,6,0,650,72,5,0,915,475,6,0,168,837,9,0,232,900,6,0,536,587,4,0,765,162,5,0,836,506,6,0,14,588,6,0,369,824,8,0,588,654,8,0,610,355,6,0,272,77,8,0,463,319,5,0,874,397,2,0,530,309,5,0,666,52,6,0,676,302,3,0,668,340,4,0,283,427,7,0,842,203,7,0,451,647,3,0,96,746,9,0,669,114,4,0,746,593,9,0,37,585,9,0,181,574,8,0,30,626,8,0,32,597,5,0,914,447,7,0,848,234,3,0,86,466,3,0,166,541,4,0,714,86,9,0,503,587,8,0,686,454,4,0,839,153,9,0,445,580,2,0,322,448,9,0,301,226,6,0,46,640,4,0,874,198,7,0,405,568,1,0,342,580,6,0,455,948,9,0,35,448,9,0,240,266,4,0,270,228,3,0,658,658,7,0,303,152,4,0,781,382,8,0,544,722,5,0,461,812,6,0,294,857,8,0,556,268,7,0,538,508,4,0,386,129,4,0,376,660,4,0,92,340,9,0,562,641,3,0,42,673,9,0,31,630,8,0,164,789,6,0,346,108,2,0,37,384,6,0,945,423,9,0,415,32,8,0,39,538,7,0,574,718,9,0,179,745,8,0,606,508,4,0,688,632,6,0,550,364,9,0,274,709,6,0,957,392,7,0,421,537,9,0,751,204,4,0,291,140,6,0,412,952,7,0,734,600,6,0,604,352,9,0,815,403,6,0,375,465,7,0,879,193,7,0,645,248,4,0,311,697,4,0,169,720,4,0,217,574,6,0,215,230,6,0,652,527,4,0,52,682,9,0,712,345,9,0,694,487,3,0,523,585,4,0,740,144,6,0,36,668,6,0,964,312,6,0,140,266,8,0,137,742,4,0,496,47,5,0,229,621,5,0,152,364,8,0,62,635,7,0,572,487,5,0,416,813,6,0,296,303,4,0,319,358,9,0,744,604,9,0,912,444,8,0,217,465,8,0,658,607,4,0,783,370,9,0,447,333,3,0,478,28,7,0,717,184,8,0,190,247,9,0,155,345,3,0,266,821,3,0,416,933,6,0,440,800,8,0,375,396,2,0,472,471,2,0,245,553,5,0,593,40,6,0,529,480,5,0,487,574,4,0,452,28,6,0]};
+
+  var PORTRAIT_LIGHT = {"aspect":1.1148,"stride":4,"p":[831,499,5,0,599,442,5,0,307,189,4,0,362,160,5,0,591,86,5,0,400,633,3,0,365,58,2,0,813,274,3,0,902,216,7,0,524,303,6,0,79,683,5,0,83,688,4,0,373,42,8,0,78,258,6,0,369,510,5,0,676,629,5,0,464,126,2,0,142,493,4,0,56,303,6,0,480,771,8,0,646,665,9,0,641,665,9,0,127,536,8,0,170,799,9,0,662,85,4,0,132,234,6,0,330,381,4,0,783,511,3,0,225,141,8,0,293,670,6,0,40,651,8,0,330,689,6,0,568,459,3,0,184,446,4,0,146,758,6,0,191,745,3,0,301,617,4,0,632,203,8,0,356,163,5,0,694,538,9,0,424,550,7,0,832,134,8,0,372,286,4,0,457,676,3,0,33,542,8,0,804,240,3,0,236,178,7,0,528,52,7,0,755,601,8,0,207,394,4,0,374,64,4,0,419,628,5,0,469,770,8,0,32,650,6,0,716,428,2,0,244,75,9,0,504,757,9,0,938,431,6,0,944,433,8,0,592,693,9,0,605,526,2,0,367,169,4,0,408,115,2,0,332,187,5,0,538,722,9,0,920,261,7,0,733,507,5,0,203,265,6,0,824,130,6,0,783,360,6,0,367,581,4,0,822,227,6,0,830,244,5,0,477,177,6,0,166,815,9,0,127,719,5,0,376,177,4,0,526,724,8,0,322,89,5,0,68,244,6,0,855,387,5,0,711,572,3,0,129,247,5,0,918,444,7,0,713,144,6,0,734,124,3,0,708,442,6,0,611,45,6,0,925,265,4,0,445,644,6,0,780,365,9,0,221,336,3,0,246,402,7,0,453,23,9,0,238,259,3,0,675,222,4,0,775,427,7,0,35,579,6,0,261,62,6,0,240,722,3,0,525,112,6,0,107,213,8,0,745,258,4,0,741,282,8,0,499,40,4,0,356,273,3,0,907,474,9,0,829,229,4,0,405,887,9,0,618,289,5,0,94,364,5,0,431,553,6,0,437,26,9,0,519,67,3,0,568,239,7,0,536,298,8,0,136,672,5,0,562,655,6,0,106,748,7,0,216,302,7,0,438,569,6,0,549,268,6,0,33,571,5,0,58,310,6,0,887,490,9,0,290,291,7,0,709,347,9,0,253,73,9,0,363,801,2,0,586,144,5,0,515,509,7,0,198,868,4,0,652,419,7,0,755,529,6,0,98,752,8,0,591,659,7,0,110,758,6,0,660,488,3,0,573,702,9,0,227,561,9,0,54,685,9,0,131,528,8,0,397,355,5,0,85,742,6,0,817,315,5,0,451,159,2,0,228,555,9,0,308,556,4,0,363,448,7,0,593,681,8,0,502,113,4,0,78,710,5,0,89,275,5,0,779,104,6,0,441,316,4,0,102,251,5,0,573,158,4,0,127,531,8,0,351,331,5,0,777,523,6,0,41,641,6,0,403,918,6,0,823,384,5,0,578,45,8,0,650,308,4,0,204,559,7,0,398,591,4,0,384,77,6,0,205,759,5,0,559,152,9,0,367,829,6,0,475,753,7,0,449,103,7,0,41,623,5,0,575,39,9,0,931,443,8,0,16,592,6,0,215,745,7,0,396,850,6,0,347,804,4,0,546,285,4,0,97,708,7,0,315,70,5,0,796,383,6,0,328,580,6,0,228,547,5,0,60,703,6,0,36,366,9,0,42,635,6,0,111,184,6,0,207,627,4,0,465,240,4,0,658,64,4,0,707,181,8,0,233,150,6,0,432,903,2,0,276,891,6,0,686,247,4,0,286,309,7,0,149,190,4,0,580,162,3,0,439,651,3,0,300,97,5,0,179,836,7,0,120,732,4,0,904,451,5,0,150,292,5,0,179,130,9,0,470,510,7,0,260,263,3,0,372,434,2,0,702,609,6,0,414,964,9,0,160,145,7,0,270,63,6,0,710,341,9,0,156,762,6,0,475,36,9,0,451,959,9,0,892,211,7,0,381,808,6,0,358,292,1,0,617,629,7,0,359,101,5,0,694,339,6,0,831,161,5,0,125,756,7,0,305,52,6,0,539,632,4,0,266,538,6,0,16,539,6,0,323,575,6,0,214,888,9,0,80,250,8,0,49,663,9,0,265,63,6,0,47,310,9,0,23,527,6,0,213,205,5,0,321,589,6,0,104,203,8,0,537,114,5,0,267,142,3,0,512,223,2,0,721,597,6,0,478,324,7,0,564,144,5,0,175,516,2,0,503,515,7,0,472,40,8,0,576,528,3,0,69,705,5,0,112,538,3,0,381,187,8,0,257,724,3,0,824,138,9,0,70,267,9,0,437,255,1,0,739,533,6,0,572,712,9,0,39,606,8,0,690,139,8,0,557,146,9,0,780,427,8,0,885,466,5,0,705,347,5,0,468,25,9,0,819,488,7,0,771,432,7,0,138,478,9,0,461,904,6,0,122,256,1,0,519,291,4,0,45,300,6,0,334,47,8,0,254,448,2,0,460,819,6,0,529,406,2,0,255,897,6,0,174,837,9,0,493,635,9,0,927,373,6,0,405,606,4,0,94,357,6,0,429,797,6,0,511,731,7,0,515,719,9,0,453,95,6,0,98,214,7,0,31,384,7,0,245,545,5,0,177,124,6,0,634,308,1,0,885,199,9,0,554,280,3,0,504,220,7,0,364,822,9,0,70,238,6,0,170,842,8,0,283,670,9,0,119,433,4,0,328,811,3,0,579,715,6,0,463,805,6,0,773,115,6,0,75,265,9,0,711,352,6,0,626,547,7,0,178,145,8,0,416,72,4,0,936,419,3,0,718,209,3,0,184,494,3,0,159,384,6,0,400,809,6,0,50,370,5,0,41,658,9,0,43,596,9,0,171,133,9,0,165,140,7,0,192,649,7,0,52,674,9,0,186,246,9,0,362,33,6,0,156,196,4,0,676,394,5,0,179,761,5,0,184,869,9,0,462,740,6,0,148,201,3,0,415,386,8,0,183,439,8,0,437,679,6,0,200,443,5,0,309,495,5,0,828,236,6,0,333,837,2,0,802,499,8,0,239,434,3,0,605,359,7,0,175,130,8,0,124,660,7,0,62,407,3,0,421,30,9,0,458,953,7,0,33,621,9,0,145,521,9,0,169,399,2,0,162,833,8,0,195,738,4,0,560,273,4,0,178,140,6,0,883,486,9,0,685,614,9,0,286,321,9,0,228,453,3,0,416,980,6,0,907,276,6,0,746,198,3,0,263,559,6,0,564,490,7,0,895,489,9,0,706,343,9,0,711,134,6,0,190,148,6,0,712,90,7,0,559,704,6,0,870,347,2,0,926,441,9,0,219,782,4,0,313,357,6,0,818,373,4,0,674,140,4,0,99,676,2,0,188,125,9,0,210,562,8,0,727,519,8,0,633,74,7,0,309,863,9,0,685,140,8,0,337,421,3,0,746,599,9,0,293,620,4,0,20,602,6,0,622,637,6,0,741,597,9,0,375,302,6,0,536,465,2,0,853,192,2,0,755,314,4,0,951,434,6,0,741,608,6,0,924,256,4,0,716,442,6,0,203,458,6,0,594,581,8,0,894,184,6,0,784,265,3,0,945,293,9,0,609,608,6,0,383,786,3,0,174,831,5,0,552,731,6,0,125,769,9,0,746,129,4,0,871,444,6,0,651,508,4,0,628,516,2,0,570,40,7,0,675,617,9,0,727,78,6,0,867,395,4,0,565,730,9,0,535,599,3,0,943,247,6,0,903,335,5,0,390,306,8,0,587,39,6,0,349,814,9,0,24,503,8,0,480,428,3,0,33,615,9,0,949,411,3,0,442,414,2,0,460,109,2,0,572,91,5,0,310,723,4,0,176,774,9,0,915,203,6,0,393,64,6,0,80,327,7,0,181,875,9,0,431,776,4,0,912,246,4,0,518,498,4,0,240,827,3,0,384,37,6,0,744,441,7,0,268,432,4,0,528,301,9,0,687,269,0,0,98,461,4,0,108,207,9,0,544,703,4,0,903,499,6,0,340,47,3,0,341,671,7,0,515,527,5,0,137,606,4,0,401,447,1,0,292,77,9,0,31,489,4,0,225,836,2,0,668,288,3,0,4,389,6,0,144,525,8,0,957,399,8,0,316,165,1,0,305,836,3,0,112,368,3,0,466,75,5,0,144,429,4,0,379,77,5,0,437,632,6,0,453,328,3,0,212,736,7,0,112,398,4,0,387,598,4,0,536,566,3,0,138,666,6,0,193,252,8,0,66,294,7,0,543,716,7,0,150,754,8,0,55,563,3,0,271,596,7,0,285,615,7,0,240,154,6,0,870,186,7,0,67,677,7,0,292,869,9,0,880,200,5,0,225,892,9,0,138,346,8,0,517,729,9,0,877,438,9,0,158,152,8,0,393,44,7,0,420,789,5,0,511,711,8,0,755,197,3,0,485,28,8,0,620,551,7,0,589,576,4,0,207,286,8,0,5,385,6,0,312,64,5,0,715,474,4,0,294,242,6,0,40,670,7,0,705,186,6,0,378,647,3,0,699,467,5,0,242,531,1,0,806,212,2,0,701,335,5,0,211,90,6,0,567,697,6,0,415,821,5,0,653,237,7,0,63,699,6,0,768,134,4,0,719,88,9,0,931,427,5,0,80,229,6,0,51,596,6,0,530,721,9,0,844,153,8,0,304,302,2,0,83,216,6,0,451,116,7,0,448,489,8,0,439,787,6,0,86,325,8,0,853,455,3,0,403,924,6,0,820,414,7,0,494,644,9,0,801,506,7,0,37,641,9,0,498,417,3,0,312,861,7,0,684,65,7,0,405,892,9,0,339,394,7,0,485,760,9,0,273,672,5,0,465,746,9,0,548,261,5,0,689,534,6,0,204,777,4,0,325,681,5,0,633,482,4,0,286,639,4,0,382,581,4,0,688,341,5,0,511,717,9,0,644,359,3,0,810,514,7,0,410,756,5,0,425,21,7,0,894,500,6,0,279,65,6,0,152,536,7,0,588,353,6,0,890,478,9,0,131,764,9,0,580,363,5,0,408,908,9,0,426,770,4,0,611,325,5,0,177,738,5,0,593,363,5,0,409,985,9,0,920,287,6,0,687,617,7,0,733,535,6,0,887,494,9,0,338,864,6,0,424,179,5,0,632,670,8,0,698,543,7,0,287,93,3,0,599,603,3,0,838,387,6,0,889,199,8,0,508,509,3,0,336,677,5,0,76,299,5,0,179,862,5,0,968,328,6,0,339,780,3,0,960,318,7,0,441,842,5,0,353,100,7,0,382,43,8,0,451,109,8,0,844,497,9,0,309,58,5,0,319,352,8,0,215,282,9,0,714,234,4,0,751,94,6,0,682,294,4,0,446,572,3,0,423,885,5,0,595,577,6,0,478,158,5,0,142,330,6,0,240,124,4,0,658,232,7,0,57,708,6,0,310,394,1,0,751,532,6,0,55,323,4,0,388,114,4,0,175,849,5,0,283,113,4,0,430,527,6,0,775,518,6,0,698,415,2,0,261,711,4,0,319,827,1,0,910,300,8,0,163,455,2,0,601,661,4,0,695,378,3,0,211,300,7,0,460,28,9,0,409,613,5,0,43,391,6,0,203,481,3,0,915,440,6,0,332,42,9,0,165,826,6,0,748,252,5,0,404,359,9,0,440,464,4,0,193,305,1,0,850,499,9,0,604,42,6,0,782,469,2,0,212,305,9,0,317,42,6,0,26,448,9,0,420,399,9,0,612,91,4,0,19,420,6,0,70,539,5,0,37,356,9,0,251,69,9,0,511,751,9,0,510,365,3,0,826,510,6,0,738,271,8,0,340,178,3,0,434,821,9,0,433,30,8,0,549,636,3,0,460,96,4,0,306,577,5,0,225,269,7,0,189,242,9,0,92,725,9,0,443,24,9,0,352,816,9,0,622,430,7,0,361,83,5,0,554,367,9,0,428,661,3,0,146,665,2,0,957,339,8,0,332,859,9,0,383,70,7,0,696,577,6,0,457,121,3,0,350,405,6,0,514,25,6,0,937,424,6,0,791,379,8,0,315,871,6,0,421,169,4,0,286,870,9,0,239,647,4,0,435,115,7,0,763,95,6,0,473,394,3,0,500,64,3,0,928,460,6,0,781,168,5,0,501,594,5,0,242,245,1,0,418,881,5,0,198,881,9,0,422,939,4,0,213,278,6,0,366,79,5,0,137,765,6,0,269,362,4,0,316,796,2,0,442,487,7,0,845,491,9,0,162,838,7,0,251,546,9,0,81,274,7,0,44,655,9,0,290,699,7,0,834,150,9,0,450,839,8,0,372,546,1,0,864,370,4,0,287,673,7,0,140,148,6,0,170,823,6,0,426,807,7,0,349,626,3,0,14,564,6,0,682,646,6,0,183,656,6,0,926,282,8,0,156,251,5,0,887,187,6,0,644,651,7,0,35,405,5,0,539,121,8,0,475,200,7,0,94,399,3,0,370,461,7,0,171,411,9,0,691,599,4,0,268,704,4,0,461,790,3,0,557,548,4,0,210,104,6,0,722,120,3,0,439,794,7,0,318,584,8,0,61,641,6,0,35,617,9,0,223,126,6,0,453,908,6,0,251,691,4,0,273,885,8,0,931,378,6,0,225,567,9,0,392,277,4,0,696,596,9,0,324,370,7,0,823,311,8,0,315,865,9,0,326,102,4,0,713,193,8,0,98,351,6,0,300,440,6,0,398,857,6,0,790,518,6,0,361,91,4,0,69,686,9,0,28,389,5,0,564,364,9,0,455,488,8,0,121,752,8,0,214,316,4,0,426,829,6,0,877,486,5,0,177,842,6,0,604,311,8,0,727,167,2,0,184,146,8,0,502,174,2,0,820,220,5,0,45,605,7,0,109,408,3,0,486,540,4,0,355,572,9,0,398,125,4,0,237,624,5,0,297,60,6,0,713,81,9,0,256,544,9,0,19,489,6,0,279,228,3,0,138,273,6,0,723,259,5,0,690,627,6,0,416,541,6,0,163,804,6,0,522,510,4,0,502,772,6,0,365,104,4,0,819,496,7,0,732,263,6,0,660,404,4,0,357,31,6,0,299,515,7,0,470,20,6,0,221,107,4,0,800,417,4,0,355,826,4,0,966,317,6,0,477,640,1,0,707,86,9,0,482,403,3,0,90,334,6,0,211,894,6,0,459,482,6,0,755,233,6,0,283,325,9,0,221,321,7,0,818,332,5,0,427,668,6,0,48,675,9,0,808,121,6,0,218,242,4,0,272,534,5,0,45,363,8,0,134,734,3,0,627,670,9,0,578,149,9,0,169,708,5,0,436,586,3,0,782,125,9,0,767,335,2,0,435,812,8,0,631,184,4,0,524,687,2,0,336,684,4,0,543,430,4,0,707,604,6,0,794,113,6,0,492,30,5,0,197,663,6,0,594,296,8,0,30,531,6,0,20,428,6,0,590,298,8,0,198,563,8,0,21,608,6,0,223,281,9,0,452,880,7,0,210,310,7,0,664,597,4,0,381,124,4,0,727,85,9,0,212,285,9,0,167,572,9,0,64,512,3,0,966,350,8,0,519,748,6,0,195,258,7,0,281,710,5,0,627,47,6,0,482,329,8,0,326,444,8,0,176,786,9,0,324,47,9,0,321,457,9,0,477,605,5,0,562,555,5,0,176,135,8,0,133,176,9,0,953,300,9,0,667,472,4,0,437,18,6,0,122,450,6,0,897,495,9,0,908,455,5,0,933,283,9,0,747,610,6,0,488,329,9,0,265,68,9,0,25,465,9,0,244,714,4,0,369,838,6,0,936,231,6,0,142,313,6,0,570,731,6,0,51,678,9,0,209,784,5,0,859,174,2,0,346,32,6,0,529,294,6,0,41,579,7,0,35,589,5,0,483,163,9,0,347,673,6,0,354,844,9,0,459,859,6,0,678,624,9,0,814,410,6,0,24,485,7,0,707,332,9,0,49,529,6,0,752,377,3,0,20,588,8,0,912,459,4,0,45,350,9,0,143,280,5,0,707,222,5,0,819,235,5,0,225,92,7,0,478,688,8,0,201,329,5,0,433,667,6,0,374,312,5,0,133,517,4,0,736,498,8,0,959,295,6,0,428,840,4,0,28,637,6,0,707,251,3,0,181,881,6,0,649,412,5,0,883,498,6,0,135,538,6,0,478,190,9,0,344,422,6,0,77,693,4,0,85,332,7,0,503,523,6,0,344,564,5,0,486,186,7,0,385,794,5,0,557,730,5,0,916,271,8,0,143,500,7,0,693,95,6,0,382,315,9,0,620,504,4,0,468,441,7,0,850,151,6,0,720,195,7,0,887,354,5,0,54,397,6,0,57,652,7,0,569,704,9,0,148,359,6,0,468,32,9,0,163,797,6,0,700,491,6,0,33,341,6,0,25,459,8,0,323,801,2,0,218,133,7,0,229,628,7,0,128,651,3,0,507,754,9,0,41,346,8,0,527,580,3,0,725,200,4,0,373,262,4,0,235,75,9,0,50,687,8,0,231,96,6,0,58,316,6,0,130,313,7,0,294,450,5,0,493,39,5,0,562,174,4,0,95,758,6,0,358,117,4,0,508,759,9,0,310,564,4,0,100,734,4,0,939,252,4,0,93,695,4,0,23,560,5,0,456,31,7,0,223,558,9,0,129,404,4,0,138,287,5,0,539,241,4,0,395,803,3,0,10,394,6,0,564,483,5,0,421,462,6,0,532,708,8,0,313,53,7,0,706,137,8,0,245,96,2,0,234,374,5,0,44,345,9,0,248,722,4,0,911,272,7,0,160,547,4,0,217,328,9,0,907,230,5,0,884,452,3,0,375,729,4,0,230,154,9,0,39,322,6,0,360,820,7,0,692,623,6,0,644,214,7,0,619,682,6,0,343,322,1,0,518,522,3,0,446,840,7,0,511,746,7,0,383,227,4,0,704,82,7,0,596,691,9,0,525,677,3,0,925,391,6,0,323,858,7,0,749,275,6,0,689,365,4,0,31,464,7,0,168,773,6,0,123,196,9,0,147,158,7,0,929,279,9,0,456,924,9,0,282,841,4,0,742,492,5,0,713,516,5,0,214,479,9,0,964,384,6,0,15,546,6,0,620,672,8,0,211,143,8,0,208,202,5,0,194,877,9,0,435,844,5,0,802,232,4,0,359,845,7,0,279,498,2,0,754,522,4,0,749,604,9,0,170,805,6,0,273,219,3,0,195,140,4,0,357,352,1,0,448,747,6,0,178,424,4,0,201,736,5,0,37,464,6,0,823,232,8,0,524,27,6,0,52,661,9,0,569,168,9,0,317,572,5,0,471,790,6,0,534,51,6,0,415,800,7,0,160,605,2,0,647,52,7,0,634,390,3,0,779,422,7,0,464,603,4,0,265,573,8,0,914,453,5,0,463,756,9,0,229,484,6,0,539,693,2,0,413,891,9,0,946,316,4,0,837,206,7,0,343,635,6,0,919,436,5,0,50,602,5,0,561,257,9,0,469,447,6,0,116,739,5,0,695,460,3,0,206,132,6,0,64,680,9,0,232,720,4,0,185,432,8,0,406,903,9,0,287,122,6,0,933,279,9,0,537,703,7,0,293,211,4,0,721,589,6,0,428,546,6,0,13,390,8,0,560,42,4,0,676,319,2,0,130,754,5,0,214,324,6,0,377,46,9,0,454,913,6,0,720,253,4,0,751,228,8,0,541,709,8,0,137,308,9,0,222,158,5,0,671,363,3,0,342,685,5,0,909,239,6,0,527,46,9,0,37,352,9,0,308,89,9,0,646,40,6,0,304,500,6,0,20,475,6,0,559,363,9,0,192,130,8,0,86,707,4,0,52,642,6,0,553,151,9,0,214,568,8,0,919,245,6,0,339,160,4,0,405,621,3,0,790,232,5,0,592,585,6,0,297,521,5,0,230,354,8,0,556,714,7,0,527,717,9,0,405,38,9,0,459,825,6,0,165,687,7,0,490,338,9,0,346,850,9,0,954,413,6,0,610,435,7,0,512,30,6,0,41,354,9,0,441,112,9,0,486,688,9,0,198,121,5,0,264,545,5,0,349,444,4,0,58,267,6,0,319,48,8,0,63,288,8,0,447,826,6,0,930,437,8,0,445,650,6,0,641,674,6,0,213,862,2,0,521,319,9,0,951,423,7,0,305,133,6,0,50,635,5,0,243,875,5,0,907,319,4,0,175,678,5,0,712,536,6,0,20,496,6,0,350,152,9,0,394,543,6,0,316,522,3,0,232,276,6,0,357,832,7,0,420,832,4,0,217,737,9,0,597,658,7,0,323,284,2,0,186,151,6,0,554,39,7,0,928,449,7,0,46,472,4,0,361,810,7,0,39,617,9,0,615,621,6,0,752,218,4,0,871,482,4,0,330,49,9,0,140,229,1,0,389,790,4,0,373,455,8,0,663,659,6,0,243,382,5,0,213,196,6,0,402,30,6,0,40,655,8,0,467,69,5,0,565,262,8,0,406,462,1,0,798,322,5,0,870,388,6,0,415,25,6,0,532,330,4,0,968,344,6,0,531,592,4,0,138,648,4,0,719,142,8,0,328,854,6,0,791,118,9,0,409,106,4,0,296,882,6,0,900,202,9,0,494,692,9,0,229,872,4,0,332,444,4,0,185,851,4,0,682,328,5,0,706,530,6,0,256,865,3,0,96,232,3,0,819,407,8,0,401,655,2,0,613,429,8,0,200,257,7,0,778,110,9,0,238,888,8,0,303,878,6,0,638,334,3,0,214,581,5,0,458,659,1,0,163,765,6,0,354,679,7,0,101,195,6,0,617,655,4,0,567,721,9,0,675,336,4,0,247,855,3,0,198,133,5,0,6,393,6,0,353,559,7,0,888,207,7,0,195,656,9,0,565,156,5,0,202,271,7,0,549,503,6,0,584,659,7,0,63,281,9,0,447,754,8,0,260,77,9,0,57,633,6,0,218,298,8,0,196,848,3,0,247,152,5,0,309,712,3,0,505,651,5,0,367,454,8,0,660,50,6,0,600,595,6,0,465,35,6,0,35,424,4,0,638,668,8,0,876,186,8,0,405,990,6,0,540,50,7,0,950,362,3,0,106,762,7,0,57,647,7,0,802,128,8,0,51,671,9,0,164,852,6,0,369,529,2,0,398,197,5,0,494,756,9,0,158,686,3,0,452,818,5,0,172,284,3,0,824,409,7,0,671,631,5,0,483,22,6,0,290,847,5,0,335,55,4,0,701,595,9,0,557,501,4,0,458,102,6,0,906,493,6,0,100,366,5,0,578,659,8,0,393,70,8,0,116,755,8,0,324,791,3,0,262,847,2,0,605,85,6,0,281,443,5,0,777,380,8,0,759,136,7,0,290,659,5,0,210,428,2,0,883,194,8,0,545,342,6,0,253,840,3,0,219,294,7,0,478,38,9,0,586,154,5,0,201,686,3,0,42,586,9,0,484,318,3,0,206,895,6,0,481,168,9,0,103,756,7,0,527,323,4,0,542,134,8,0,370,467,7,0,906,300,6,0,63,532,5,0,475,404,4,0,377,58,4,0,94,740,8,0,483,38,4,0,366,305,3,0,491,641,9,0,424,822,9,0,554,359,9,0,184,647,4,0,453,76,2,0,128,445,5,0,556,652,5,0,701,74,6,0,370,272,5,0,135,182,6,0,74,253,6,0,425,92,2,0,915,276,9,0,580,239,4,0,459,745,9,0,758,283,5,0,909,342,3,0,499,530,3,0,521,50,5,0,787,123,9,0,305,659,2,0,266,591,5,0,19,568,6,0,194,891,6,0,430,959,6,0,506,638,5,0,877,377,6,0,454,750,9,0,179,784,9,0,905,203,9,0,79,234,5,0,182,134,6,0,598,86,7,0,237,820,4,0,567,360,6,0,148,255,4,0,45,374,7,0,780,115,9,0,256,127,0,0,540,29,6,0,447,310,4,0,265,888,8,0,507,582,5,0,449,833,6,0,535,34,6,0,403,367,7,0,947,428,9,0,87,617,1,0,448,26,7,0,956,363,3,0,874,449,6,0,191,808,2,0,126,747,6,0,211,291,8,0,570,184,5,0,369,39,8,0,656,415,4,0,932,221,6,0,113,601,7,0,153,522,8,0,721,459,5,0,236,364,3,0,126,765,9,0,159,589,5,0,674,135,6,0,171,816,7,0,627,629,6,0,234,266,7,0,867,419,6,0,126,200,6,0,454,953,9,0,505,149,2,0,729,499,8,0,232,183,6,0,115,768,6,0,418,533,7,0,613,651,6,0,668,437,5,0,428,825,9,0,80,319,6,0,621,625,7,0,581,52,5,0,514,749,9,0,356,444,6,0,630,265,9,0,939,236,6,0,622,261,5,0,215,288,9,0,577,701,9,0,256,490,1,0,346,845,9,0,836,297,6,0,488,754,7,0,915,214,7,0,97,537,5,0,120,182,9,0,609,500,2,0,136,532,8,0,43,306,6,0,922,360,5,0,56,674,9,0,586,81,7,0,510,450,3,0,296,867,9,0,227,81,7,0,293,435,7,0,919,403,4,0,541,296,7,0,22,578,6,0,234,826,4,0,493,353,8,0,42,531,8,0,446,954,9,0,80,245,9,0,230,894,9,0,347,854,9,0,215,107,6,0,782,498,4,0,716,366,8,0,475,43,9,0,896,215,7,0,276,317,6,0,96,201,6,0,285,780,6,0,743,343,4,0,601,272,2,0,472,761,9,0,442,242,2,0,623,494,7,0,299,256,3,0,248,882,5,0,754,127,7,0,118,644,5,0,136,754,5,0,42,331,6,0,503,765,9,0,33,557,4,0,279,532,5,0,797,446,4,0,604,317,7,0,169,864,6,0,239,167,9,0,902,324,4,0,149,525,9,0,56,669,9,0,593,564,4,0,236,542,3,0,212,224,5,0,54,689,9,0,381,251,4,0,194,886,9,0,769,519,9,0,17,518,6,0,713,217,5,0,666,444,4,0,560,221,2,0,350,845,9,0,130,173,9,0,486,532,4,0,751,248,4,0,819,135,7,0,796,120,9,0,523,331,4,0,288,881,8,0,778,457,5,0,188,142,5,0,293,863,9,0,136,314,8,0,372,720,3,0,440,639,8,0,815,513,6,0,516,320,5,0,827,143,9,0,922,418,4,0,163,479,3,0,460,647,2,0,142,506,4,0,311,583,5,0,591,673,3,0,529,647,3,0,45,619,4,0,594,320,5,0,422,670,5,0,25,598,7,0,663,511,5,0,711,336,9,0,752,611,6,0,116,411,4,0,419,960,9,0,23,540,9,0,247,69,9,0,690,309,6,0,918,240,7,0,486,339,7,0,469,668,1,0,54,274,6,0,650,662,9,0,572,536,3,0,29,421,9,0,689,497,2,0,519,754,6,0,381,212,5,0,136,263,3,0,631,502,4,0,327,438,4,0,613,300,6,0,276,75,8,0,800,439,5,0,924,378,6,0,760,521,4,0,141,529,7,0,356,42,9,0,311,577,8,0,74,716,6,0,34,470,9,0,34,477,6,0,376,812,6,0,252,607,2,0,792,123,9,0,463,682,5,0,454,848,7,0,28,551,8,0,103,708,4,0,375,582,5,0,800,123,9,0,796,426,5,0,133,221,3,0,295,95,4,0,77,225,6,0,544,561,5,0,39,661,7,0,552,55,5,0,519,26,6,0,231,144,6,0,344,841,6,0,597,63,4,0,62,254,6,0,914,240,8,0,573,367,6,0,687,333,7,0,608,254,5,0,472,747,4,0,691,573,5,0,604,142,0,0,957,289,6,0,828,134,9,0,633,270,5,0,889,180,6,0,156,752,7,0,319,56,9,0,455,424,4,0,104,766,6,0,412,390,9,0,500,652,6,0,220,888,7,0,418,891,9,0,318,461,6,0,221,273,5,0,935,440,7,0,506,714,8,0,397,239,2,0,835,283,6,0,604,300,9,0,208,210,5,0,127,516,2,0,540,579,5,0,481,767,9,0,344,149,6,0,729,291,6,0,566,88,5,0,713,332,9,0,69,691,4,0,542,503,5,0,761,408,2,0,202,649,4,0,188,654,9,0,908,216,8,0,663,173,4,0,734,285,5,0,960,372,5,0,50,327,8,0,90,238,3,0,171,785,8,0,707,91,9,0,169,848,8,0,722,311,6,0,421,889,9,0,266,246,2,0,202,127,5,0,917,233,6,0,409,552,2,0,805,124,9,0,317,92,6,0,931,286,6,0,681,144,5,0,133,302,5,0,450,949,9,0,464,421,5,0,442,769,7,0,499,95,3,0,746,92,9,0,260,572,5,0,480,195,9,0,708,327,4,0,268,583,4,0,676,230,7,0,271,82,4,0,75,278,7,0,63,693,5,0,360,826,7,0,449,700,6,0,350,420,6,0,168,417,6,0,746,304,3,0,143,273,5,0,572,656,7,0,383,304,9,0,126,168,6,0,460,583,5,0,522,741,6,0,150,351,5,0,644,413,4,0,53,298,9,0,289,335,9,0,162,162,6,0,174,780,9,0,138,340,5,0,429,971,6,0,655,661,8,0,763,425,7,0,285,847,6,0,232,889,9,0,354,565,8,0,812,477,4,0,432,566,4,0,300,870,9,0,108,711,6,0,394,598,5,0,69,280,9,0,566,369,8,0,537,337,3,0,742,85,6,0,849,159,7,0,354,157,8,0,144,261,8,0,292,444,9,0,505,319,3,0,564,538,4,0,157,746,6,0,695,136,7,0,324,142,5,0,685,609,7,0,509,693,4,0,75,335,3,0,42,451,4,0,102,688,4,0,747,86,6,0,225,347,8,0,329,449,7,0,25,588,7,0,881,491,9,0,643,237,9,0,450,861,6,0,149,765,6,0,654,57,6,0,423,542,9,0,369,179,6,0,922,441,9,0,446,775,5,0,435,561,6,0,287,445,6,0,382,261,5,0,319,245,1,0,599,303,9,0,493,767,9,0,194,440,7,0,437,823,8,0,569,173,7,0,925,437,9,0,824,240,7,0,122,739,6,0,534,719,9,0,36,327,6,0,909,285,6,0,794,420,5,0,882,481,7,0,571,276,3,0,766,526,6,0,288,73,8,0,800,153,5,0,515,311,5,0,670,645,8,0,670,618,6,0,115,422,6,0,54,572,3,0,558,478,4,0,445,899,2,0,452,466,5,0,109,742,4,0,53,588,6,0,444,703,5,0,74,238,8,0,199,241,4,0,47,537,5,0,141,758,5,0,119,720,4,0,289,314,9,0,288,438,8,0,447,800,4,0,895,200,8,0,445,637,4,0,26,631,6,0,655,170,4,0,446,469,5,0,490,775,6,0,538,715,9,0,592,451,6,0,576,476,7,0,86,248,4,0,439,778,4,0,582,36,6,0,699,535,6,0,316,469,4,0,106,363,3,0,372,107,3,0,479,61,5,0,672,53,6,0,538,44,7,0,452,447,3,0,755,90,6,0,565,34,6,0,421,23,9,0,88,219,7,0,918,207,6,0,244,65,6,0,310,473,5,0,760,528,6,0,532,714,9,0,224,878,5,0,542,73,0,0,420,826,8,0,489,165,8,0,303,210,2,0,817,424,4,0,723,561,6,0,292,82,7,0,761,307,5,0,682,535,3,0,525,34,7,0,121,586,3,0,407,72,2,0,598,586,5,0,730,441,4,0,260,71,9,0,103,210,9,0,266,777,1,0,480,598,3,0,240,67,6,0,439,220,1,0,516,724,9,0,528,735,6,0,777,122,8,0,544,583,5,0,344,647,4,0,42,661,9,0,17,533,6,0,583,356,6,0,426,27,8,0,701,135,5,0,571,260,5,0,617,283,5,0,267,440,3,0,126,188,9,0,636,248,7,0,99,266,2,0,188,872,8,0,721,369,8,0,448,68,3,0,143,158,9,0,388,44,6,0,200,893,8,0,110,752,6,0,266,412,6,0,351,313,3,0,711,77,8,0,503,130,2,0,899,225,3,0,163,319,4,0,420,105,5,0,146,486,5,0,924,277,9,0,521,325,7,0,343,861,6,0,420,815,7,0,130,768,9,0,119,772,6,0,633,258,5,0,378,829,6,0,443,667,7,0,166,858,7,0,36,361,9,0,240,893,9,0,639,537,4,0,91,715,8,0,700,527,6,0,494,335,7,0,210,489,7,0,266,565,7,0,321,687,4,0,60,714,6,0,489,764,9,0,196,127,9,0,415,321,3,0,260,887,8,0,143,338,5,0,812,506,8,0,549,41,8,0,173,726,5,0,240,802,3,0,50,668,9,0,161,392,9,0,83,700,2,0,44,338,6,0,248,73,9,0,613,555,6,0,121,758,9,0,783,376,9,0,150,591,5,0,406,82,2,0,36,443,5,0,119,600,7,0,231,72,6,0,550,497,6,0,40,458,5,0,817,254,2,0,700,342,5,0,454,36,3,0,865,499,6,0,797,195,4,0,784,239,5,0,461,750,9,0,551,46,8,0,904,465,9,0,345,463,1,0,647,672,6,0,373,819,8,0,734,582,6,0,189,369,4,0,255,69,9,0,64,707,6,0,616,676,9,0,175,685,5,0,777,432,6,0,491,160,4,0,835,234,3,0,566,257,9,0,559,200,2,0,468,204,6,0,451,599,2,0,441,673,8,0,197,264,8,0,439,22,9,0,241,405,5,0,54,703,6,0,440,176,3,0,828,297,6,0,642,595,5,0,226,714,4,0,443,326,5,0,598,353,9,0,151,138,6,0,297,80,9,0,33,610,6,0,28,356,6,0,743,275,9,0,439,817,8,0,706,502,3,0,476,184,7,0,149,509,4,0,595,348,8,0,180,419,6,0,424,960,8,0,707,193,7,0,191,567,7,0,852,180,4,0,170,407,5,0,260,894,6,0,268,570,6,0,463,266,4,0,717,73,6,0,564,162,9,0,682,629,6,0,214,756,4,0,318,860,7,0,758,515,4,0,338,790,3,0,598,558,6,0,39,376,6,0,326,867,6,0,67,261,8,0,681,132,5,0,322,58,9,0,25,479,9,0,413,911,8,0,870,192,7,0,413,299,5,0,792,129,9,0,273,191,1,0,523,720,9,0,371,319,5,0,532,506,5,0,374,671,5,0,235,894,9,0,883,175,6,0,210,743,7,0,55,657,7,0,420,486,2,0,539,128,8,0,44,665,9,0,947,299,9,0,702,580,4,0,40,410,4,0,253,748,5,0,197,362,5,0,662,551,5,0,498,322,6,0,398,75,6,0,91,750,6,0,223,420,3,0,581,152,8,0,115,191,9,0,216,102,6,0,427,521,6,0,39,675,6,0,829,269,4,0,99,376,3,0,906,330,5,0,714,564,4,0,277,329,9,0,938,448,6,0,754,494,3,0,278,670,7,0,513,515,3,0,216,145,8,0,316,657,1,0,308,438,1,0,861,161,6,0,457,20,8,0,449,868,6,0,339,826,1,0,40,666,6,0,910,305,7,0,288,866,9,0,425,954,4,0,717,78,9,0,483,334,7,0,343,796,2,0,369,474,5,0,814,124,6,0,312,93,6,0,46,399,5,0,396,675,9,0,348,548,5,0,262,235,4,0,488,323,7,0,475,523,5,0,494,58,4,0,714,120,4,0,415,918,6,0,302,335,7,0,116,179,6,0,46,668,9,0,455,896,9,0,388,318,7,0,762,510,7,0,442,523,2,0,906,210,8,0,871,380,8,0,937,295,6,0,604,560,8,0,506,283,3,0,280,877,9,0,686,624,6,0,43,466,6,0,34,458,9,0,471,602,6,0,406,721,1,0,459,89,2,0,701,563,7,0,207,305,6,0,498,353,8,0,234,552,7,0,41,359,9,0,189,442,8,0,144,732,3,0,713,226,6,0,450,693,7,0,443,951,4,0,444,793,6,0,482,683,7,0,134,252,4,0,458,755,9,0,636,266,5,0,576,246,4,0,350,840,9,0,653,643,9,0,900,491,9,0,723,523,7,0,90,541,5,0,601,450,6,0,221,328,7,0,183,665,6,0,521,457,4,0,315,455,6,0,427,788,6,0,408,764,6,0,329,561,2,0,357,815,9,0,643,72,6,0,787,504,6,0,739,603,8,0,179,753,6,0,231,673,3,0,732,516,6,0,142,294,3,0,778,375,9,0,684,228,4,0,191,434,7,0,460,273,6,0,587,361,7,0,177,855,7,0,300,865,9,0,198,250,7,0,872,427,8,0,360,746,4,0,201,395,3,0,765,516,7,0,906,196,6,0,175,577,8,0,118,195,9,0,458,798,3,0,367,675,7,0,489,268,4,0,374,706,3,0,353,46,8,0,686,547,4,0,599,316,6,0,453,697,5,0,834,395,6,0,88,720,9,0,352,834,5,0,629,84,9,0,24,549,9,0,732,201,6,0,730,298,6,0,403,667,5,0,305,517,4,0,320,274,4,0,762,193,2,0,183,427,5,0,660,449,5,0,705,339,9,0,362,166,6,0,636,191,5,0,871,497,6,0,470,416,5,0,287,667,9,0,46,599,9,0,486,60,4,0,926,445,9,0,527,712,7,0,400,403,3,0,770,108,4,0,576,469,7,0,627,377,5,0,163,376,3,0,393,128,6,0,441,70,2,0,342,856,9,0,367,536,3,0,400,891,6,0,388,51,5,0,31,445,9,0,961,359,6,0,744,400,3,0,601,694,6,0,657,118,5,0,504,752,9,0,163,751,7,0,360,835,9,0,846,457,3,0,226,279,9,0,666,611,6,0,294,135,9,0,57,288,9,0,498,760,9,0,465,761,9,0,886,479,8,0,235,616,4,0,39,370,9,0,625,189,8,0,812,203,3,0,451,964,6,0,743,431,4,0,898,254,3,0,67,493,4,0,38,672,6,0,814,489,4,0,690,67,8,0,323,461,5,0,706,142,7,0,720,516,6,0,694,101,4,0,574,564,4,0,683,541,4,0,431,307,7,0,298,702,3,0,535,574,4,0,261,67,9,0,283,624,3,0,408,376,8,0,315,779,2,0,570,557,4,0,141,324,8,0,476,387,4,0,488,334,9,0,235,219,0,0,815,138,7,0,40,647,7,0,377,70,5,0,290,706,4,0,482,32,7,0,167,241,6,0,271,879,7,0,134,193,4,0,605,196,3,0,404,984,7,0,344,400,6,0,615,187,5,0,607,178,3,0,24,521,8,0,143,344,9,0,836,156,6,0,332,671,4,0,511,760,9,0,472,327,5,0,40,591,9,0,585,392,1,0,174,748,7,0,23,554,9,0,958,311,8,0,217,548,4,0,16,584,4,0,440,285,2,0,124,185,9,0,737,441,6,0,681,387,3,0,409,798,5,0,108,425,6,0,669,126,7,0,460,766,8,0,364,834,8,0,395,182,6,0,574,234,5,0,702,497,4,0,736,101,6,0,258,737,4,0,842,505,6,0,384,828,6,0,263,599,3,0,428,561,6,0,621,173,4,0,363,97,6,0,289,131,7,0,772,524,7,0,155,374,5,0,694,530,6,0,388,107,6,0,555,155,9,0,330,682,6,0,44,676,9,0,848,494,9,0,30,475,9,0,342,59,2,0,221,145,9,0,368,819,9,0,83,224,6,0,855,157,6,0,635,677,6,0,244,899,6,0,300,236,2,0,113,429,7,0,679,517,3,0,355,820,7,0,336,282,3,0,916,350,4,0,293,515,9,0,831,213,3,0,840,142,6,0,230,122,4,0,362,255,4,0,340,34,6,0,318,63,7,0,186,118,6,0,29,615,7,0,737,205,4,0,13,584,6,0,145,515,6,0,29,395,4,0,462,361,2,0,488,636,5,0,198,651,8,0,359,153,5,0,25,493,8,0,164,565,8,0,20,454,6,0,469,762,9,0,337,387,8,0,25,454,9,0,697,557,5,0,52,464,2,0,484,310,3,0,826,278,7,0,545,129,8,0,71,611,5,0,30,416,8,0,298,142,5,0,208,138,7,0,239,73,9,0,349,564,9,0,352,203,4,0,592,650,5,0,927,223,9,0,960,410,6,0,420,546,9,0,474,421,7,0,212,621,4,0,403,42,7,0,86,316,5,0,489,80,4,0,29,402,5,0,898,472,7,0,387,64,7,0,21,468,6,0,810,330,8,0,185,875,9,0,510,551,1,0,79,268,6,0,55,485,3,0,471,484,2,0,413,897,8,0,586,698,9,0,209,281,9,0,316,547,5,0,17,513,6,0,637,213,7,0,31,565,5,0,664,410,6,0,635,68,5,0,386,677,6,0,156,368,7,0,818,481,6,0,455,689,7,0,476,532,3,0,790,426,6,0,99,222,5,0,883,402,3,0,289,887,6,0,452,378,6,0,585,449,4,0,440,644,7,0,400,887,6,0,61,686,9,0,431,965,9,0,168,832,7,0,803,184,4,0,36,646,7,0,418,840,3,0,266,759,3,0,665,431,9,0,560,157,9,0,634,663,5,0,309,48,6,0,290,860,9,0,54,546,5,0,746,244,2,0,132,509,1,0,534,512,6,0,305,541,2,0,507,726,7,0,833,275,8,0,386,519,5,0,561,359,6,0,640,85,7,0,429,238,4,0,272,425,5,0,326,59,8,0,124,180,9,0,943,259,6,0,693,143,6,0,838,221,6,0,578,695,9,0,625,265,9,0,33,495,5,0,874,192,8,0,413,887,9,0,804,445,3,0,923,211,6,0,499,628,3,0,452,823,7,0,556,257,5,0,163,150,6,0,328,572,4,0,797,517,6,0,292,333,9,0,263,80,6,0,655,297,1,0,664,665,6,0,650,637,7,0,826,504,6,0,58,294,9,0,239,684,2,0,291,234,5,0,498,328,5,0,437,962,9,0,481,763,9,0,239,550,6,0,470,307,1,0,471,95,3,0,898,347,6,0,572,544,5,0,493,597,3,0,360,669,5,0,427,117,4,0,247,84,4,0,661,438,7,0,355,838,9,0,418,357,3,0,218,94,6,0,869,310,0,0,474,65,6,0,392,834,0,0,212,329,5,0,705,475,4,0,173,487,4,0,456,889,9,0,574,179,4,0,96,337,6,0,151,748,9,0,346,657,3,0,278,883,9,0,501,748,9,0,400,514,1,0,658,517,3,0,916,281,9,0,866,384,9,0,421,966,9,0,38,317,6,0,508,646,7,0,224,87,8,0,494,340,8,0,45,582,8,0,378,41,7,0,227,168,5,0,753,254,6,0,690,612,9,0,811,463,4,0,448,319,5,0,214,309,7,0,120,651,6,0,318,346,8,0,285,853,7,0,379,470,5,0,684,461,6,0,541,570,5,0,393,50,6,0,394,842,6,0,168,694,6,0,17,527,6,0,130,665,6,0,39,342,7,0,802,423,5,0,324,585,8,0,223,256,4,0,606,651,6,0,364,639,2,0,690,606,8,0,471,766,9,0,291,664,9,0,752,324,4,0,461,573,3,0,721,188,7,0,346,818,4,0,808,322,8,0,614,420,4,0,82,509,5,0,399,68,5,0,819,128,6,0,847,503,7,0,155,141,7,0,67,478,2,0,963,389,6,0,960,333,8,0,417,968,9,0,713,139,9,0,252,82,4,0,957,385,5,0,441,106,8,0,638,568,0,0,417,549,4,0,849,488,6,0,358,46,6,0,658,529,4,0,832,250,6,0,58,698,9,0,120,444,6,0,528,75,3,0,488,33,6,0,454,474,4,0,263,332,3,0,206,889,9,0,129,460,7,0,702,519,6,0,264,394,5,0,406,305,3,0,583,473,7,0,733,293,8,0,668,230,7,0,147,366,7,0,888,484,9,0,251,822,4,0,650,425,4,0,963,338,9,0,38,565,4,0,624,90,7,0,636,46,6,0,460,34,7,0,409,27,6,0,604,335,6,0,343,38,8,0,655,551,5,0,811,191,1,0,737,267,8,0,497,747,8,0,409,895,9,0,421,894,5,0,143,183,5,0,215,84,6,0,410,816,5,0,683,618,9,0,403,852,6,0,410,936,8,0,520,314,8,0,921,280,9,0,813,499,7,0,364,442,6,0,459,888,6,0,56,663,5,0,330,56,8,0,309,296,5,0,280,313,6,0,347,41,9,0,676,650,6,0,93,223,5,0,130,541,5,0,371,814,9,0,504,395,4,0,266,894,6,0,920,395,5,0,451,676,5,0,648,277,5,0,627,202,6,0,270,679,4,0,432,67,3,0,226,899,6,0,271,891,6,0,899,196,7,0,469,739,3,0,452,756,9,0,556,720,6,0,27,363,6,0,51,582,6,0,174,795,8,0,803,516,6,0,435,636,8,0,529,353,4,0,853,492,6,0,129,760,9,0,789,446,6,0,555,555,8,0,463,770,5,0,641,220,6,0,298,841,3,0,618,427,7,0,351,227,0,0,455,961,6,0,244,157,6,0,25,625,6,0,844,211,6,0,573,697,8,0,302,508,5,0,300,855,4,0,622,284,6,0,248,161,4,0,605,323,8,0,785,431,5,0,689,541,7,0,343,366,3,0,861,374,8,0,493,326,8,0,49,592,8,0,906,222,7,0,336,42,9,0,596,686,9,0,305,846,3,0,526,315,6,0,944,286,7,0,297,287,7,0,930,232,6,0,962,395,6,0,643,404,2,0,455,883,7,0,360,568,5,0,179,246,8,0,605,657,7,0,672,90,4,0,117,760,8,0,913,359,4,0,922,446,9,0,104,390,7,0,485,159,6,0,50,376,8,0,362,273,4,0,268,419,4,0,96,714,8,0,743,527,6,0,622,76,4,0,196,569,8,0,680,638,5,0,633,440,2,0,646,527,4,0,948,261,6,0,242,563,4,0,704,558,6,0,750,268,3,0,914,302,5,0,742,499,4,0,770,514,9,0,446,679,7,0,116,750,9,0,459,894,6,0,489,769,9,0,306,693,3,0,99,429,3,0,398,42,7,0,425,817,9,0,516,532,5,0,545,364,6,0,168,145,4,0,60,299,7,0,690,580,5,0,563,243,5,0,295,293,8,0,221,542,4,0,555,97,6,0,33,502,4,0,362,830,9,0,127,733,5,0,129,453,6,0,285,861,4,0,18,402,6,0,50,303,8,0,519,576,3,0,298,69,7,0,700,482,5,0,447,662,7,0,323,376,7,0,388,804,4,0,344,406,8,0,20,481,6,0,425,801,6,0,442,962,9,0,291,267,5,0,462,328,3,0,498,397,4,0,87,651,2,0,496,575,4,0,760,259,1,0,165,387,6,0,733,448,6,0,294,851,5,0,687,134,6,0,380,195,8,0,451,687,7,0,561,732,6,0,233,165,9,0,699,221,5,0,199,888,9,0,257,62,6,0,182,141,5,0,830,147,8,0,904,442,5,0,590,150,5,0,692,478,4,0,437,806,8,0,405,952,6,0,53,337,6,0,548,142,7,0,546,575,5,0,806,380,6,0,356,96,4,0,941,299,7,0,498,518,5,0,493,480,4,0,168,134,9,0,865,490,6,0,731,148,5,0,472,27,8,0,39,472,7,0,586,269,4,0,70,680,9,0,740,262,5,0,470,752,9,0,405,680,4,0,338,560,3,0,435,770,6,0,599,360,9,0,18,597,6,0,545,292,7,0,21,545,8,0,718,451,3,0,682,396,5,0,279,850,4,0,173,860,9,0,563,296,2,0,417,863,3,0,821,512,6,0,361,582,7,0,912,290,9,0,465,752,9,0,493,652,5,0,374,472,9,0,138,177,8,0,220,151,5,0,226,285,6,0,286,531,4,0,187,252,7,0,351,31,6,0,22,573,7,0,361,200,6,0,583,86,7,0,950,268,6,0,335,743,4,0,400,875,6,0,558,32,6,0,408,869,3,0,683,58,6,0,954,282,6,0,641,292,3,0,376,357,3,0,601,370,4,0,727,579,6,0,302,417,2,0,831,140,9,0,270,407,5,0,409,359,5,0,823,493,9,0,218,813,1,0,453,99,9,0,287,876,9,0,134,164,9,0,645,438,3,0,133,320,7,0,693,333,5,0,471,135,4,0,268,577,5,0,22,593,7,0,208,841,3,0,17,522,6,0,331,203,2,0,576,723,6,0,707,483,6,0,763,186,3,0,20,407,6,0,284,65,6,0,746,217,7,0,702,509,4,0,705,450,4,0,892,468,6,0,400,678,8,0,836,372,5,0,866,403,6,0,321,41,6,0,214,765,5,0,673,641,6,0,388,186,6,0,877,455,6,0,206,739,7,0,591,247,2,0,638,241,9,0,217,684,4,0,381,558,1,0,88,229,3,0,45,592,9,0,956,328,5,0,867,166,6,0,254,392,8,0,100,763,6,0,558,562,5,0,517,472,3,0,353,105,5,0,577,87,8,0,214,297,8,0,794,185,6,0,461,445,7,0,312,689,4,0,946,254,6,0,388,70,8,0,449,298,2,0,887,340,5,0,38,597,5,0,501,403,4,0,412,523,3,0,249,539,5,0,435,100,3,0,89,733,7,0,284,136,4,0,450,852,6,0,436,108,9,0,37,417,5,0,647,107,3,0,664,417,6,0,348,556,7,0,51,648,8,0,898,465,7,0,624,83,8,0,432,409,5,0,496,144,2,0,132,168,9,0,110,418,5,0,277,336,9,0,481,587,4,0,231,78,9,0,48,333,8,0,719,357,7,0,49,391,8,0,727,568,6,0,769,427,9,0,174,147,6,0,226,687,3,0,296,272,7,0,598,652,5,0,636,672,7,0,452,829,7,0,288,798,2,0,884,380,4,0,36,664,6,0,511,586,4,0,668,625,6,0,727,537,6,0,814,216,5,0,713,327,5,0,507,590,6,0,65,686,9,0,749,211,8,0,507,749,9,0,534,732,6,0,852,503,6,0,118,764,8,0,679,65,7,0,418,780,4,0,710,176,5,0,19,380,6,0,512,53,4,0,724,413,3,0,145,743,7,0,288,200,1,0,435,237,5,0,734,94,9,0,646,644,6,0,955,427,6,0,282,99,2,0,179,869,9,0,815,292,2,0,128,523,4,0,397,683,5,0,45,662,9,0,442,835,4,0,368,34,6,0,395,366,7,0,966,332,7,0,493,318,4,0,416,896,7,0,282,73,7,0,170,752,6,0,424,619,4,0,461,18,6,0,486,592,4,0,277,70,9,0,754,143,3,0,168,793,9,0,603,436,6,0,250,898,6,0,901,209,9,0,774,162,7,0,180,831,3,0,896,207,9,0,77,688,7,0,943,323,5,0,344,414,6,0,515,758,9,0,306,339,9,0,603,376,5,0,420,802,7,0,519,761,6,0,462,909,6,0,872,169,6,0,337,859,8,0,494,122,1,0,426,33,6,0,598,670,4,0,43,681,7,0,605,444,8,0,442,18,6,0,374,479,6,0,601,580,4,0,267,616,2,0,622,632,9,0,679,613,8,0,225,151,9,0,254,850,4,0,277,873,6,0,220,472,9,0,567,563,6,0,762,385,4,0,883,244,1,0,429,674,6,0,44,382,6,0,924,465,6,0,403,931,6,0,256,228,1,0,520,185,6,0,398,863,6,0,677,56,6,0,378,589,5,0,269,68,9,0,679,454,4,0,11,386,9,0,592,700,6,0,529,243,4,0,881,455,7,0,726,512,8,0,268,884,8,0,371,679,8,0,68,273,9,0,132,726,5,0,352,576,9,0,920,388,8,0,502,695,6,0,297,765,2,0,114,630,7,0,251,735,3,0,350,97,5,0,844,159,5,0,743,269,7,0,189,720,2,0,695,71,8,0,352,778,3,0,597,676,7,0,526,505,2,0,913,285,9,0,240,767,2,0,125,439,5,0,499,32,4,0,827,376,4,0,882,474,5,0,481,175,9,0,458,172,3,0,337,854,9,0,547,149,6,0,403,105,3,0,135,771,6,0,92,320,6,0,866,427,7,0,682,623,9,0,177,800,3,0,470,36,9,0,549,134,8,0,722,82,9,0,438,31,7,0,229,281,5,0,553,30,6,0,445,784,4,0,867,376,8,0,450,895,8,0,33,536,8,0,355,727,5,0,500,357,7,0,887,459,4,0,919,451,5,0,476,48,6,0,48,318,4,0,160,247,5,0,628,260,7,0,539,608,5,0,344,812,5,0,809,256,5,0,328,861,9,0,50,346,4,0,514,538,4,0,825,488,6,0,161,580,8,0,491,310,3,0,467,797,6,0,928,422,5,0,88,370,2,0,376,227,4,0,303,184,6,0,390,330,5,0,315,741,0,0,322,52,9,0,706,492,7,0,409,884,9,0,420,36,7,0,54,517,5,0,599,297,9,0,499,634,7,0,316,291,6,0,118,563,3,0,12,580,6,0,75,704,2,0,239,78,9,0,613,306,7,0,117,659,6,0,526,158,7,0,949,418,7,0,68,602,2,0,200,234,3,0,19,507,6,0,707,596,9,0,542,141,5,0,932,251,3,0,674,623,9,0,616,80,6,0,477,170,8,0,44,659,9,0,722,75,6,0,727,454,4,0,446,689,5,0,776,363,5,0,673,655,6,0,956,352,7,0,478,33,9,0,47,354,9,0,679,91,6,0,42,686,6,0,833,492,4,0,755,607,6,0,605,691,6,0,499,689,5,0,484,409,4,0,477,767,9,0,539,290,8,0,132,200,4,0,129,163,6,0,860,412,8,0,50,700,6,0,829,400,5,0,720,363,9,0,529,37,6,0,166,585,8,0,115,623,8,0,409,672,4,0,323,842,1,0,98,726,7,0,321,668,2,0,641,659,6,0,892,204,8,0,77,309,4,0,301,459,3,0,181,433,5,0,539,439,5,0,187,669,7,0,125,726,6,0,420,796,7,0,963,306,6,0,507,25,6,0,207,273,6,0,572,85,9,0,184,745,7,0,192,397,2,0,405,945,6,0,692,228,4,0,772,298,2,0,677,608,4,0,454,17,6,0,586,582,5,0,524,310,7,0,551,379,5,0,114,746,7,0,340,431,4,0,622,108,4,0,433,816,9,0,68,713,5,0,427,539,7,0,100,207,8,0,415,307,4,0,26,443,8,0,343,154,7,0,283,882,9,0,23,614,6,0,838,498,4,0,941,241,6,0,589,344,3,0,649,80,6,0,175,570,9,0,220,625,4,0,75,512,4,0,409,920,9,0,928,342,3,0,708,513,6,0,441,967,6,0,44,691,6,0,439,661,5,0,614,545,5,0,351,36,9,0,716,551,6,0,836,335,2,0,211,555,4,0,72,710,6,0,819,504,6,0,580,145,8,0,662,390,1,0,377,327,3,0,404,938,6,0,637,205,9,0,710,209,5,0,520,159,5,0,774,107,8,0,454,856,7,0,380,108,2,0,966,365,6,0,732,524,4,0,433,334,3,0,684,304,5,0,501,756,9,0,193,122,8,0,663,118,7,0,264,74,9,0,137,503,5,0,454,843,7,0,455,939,8,0,594,80,6,0,30,579,2,0,586,569,7,0,249,297,5,0,386,627,3,0,267,724,3,0,299,75,9,0,29,427,8,0,533,541,5,0,917,368,5,0,183,606,0,0,658,469,4,0,454,105,8,0,249,888,9,0,624,669,7,0,180,792,3,0,416,940,7,0,810,134,7,0,757,426,4,0,961,353,9,0,559,263,8,0,131,308,8,0,625,643,4,0,432,245,3,0,262,608,4,0,310,844,3,0,571,435,2,0,689,100,5,0,422,568,3,0,555,161,7,0,258,880,5,0,278,342,5,0,472,757,9,0,223,353,7,0,506,326,4,0,751,88,7,0,410,381,8,0,125,236,5,0,205,767,5,0,427,625,5,0,608,347,7,0,960,347,9,0,871,490,8,0,152,242,5,0,305,804,3,0,207,97,6,0,139,168,9,0,643,79,7,0,224,242,4,0,954,405,7,0,406,959,6,0,706,69,6,0,433,37,3,0,356,855,6,0,717,523,6,0,452,681,6,0,518,694,4,0,29,521,3,0,419,390,8,0,352,145,5,0,498,361,6,0,87,714,7,0,936,332,4,0,708,186,9,0,381,64,7,0,307,876,6,0,188,879,8,0,294,313,7,0,542,494,4,0,878,288,0,0,192,671,5,0,337,402,4,0,508,90,4,0,726,365,6,0,112,194,9,0,296,873,9,0,741,357,3,0,105,270,3,0,579,81,9,0,786,116,9,0,536,709,9,0,38,336,4,0,305,871,9,0,135,457,8,0,454,833,6,0,297,158,5,0,477,451,3,0,862,388,6,0,386,311,9,0,728,505,6,0,572,46,9,0,962,328,9,0,99,592,1,0,348,578,7,0,847,302,4,0,693,609,8,0,925,384,8,0,826,173,4,0,715,347,6,0,776,129,7,0,12,574,6,0,570,253,7,0,281,868,5,0,480,759,9,0,456,957,8,0,523,728,6,0,410,396,5,0,333,148,5,0,28,538,9,0,546,36,7,0,901,342,5,0,699,589,9,0,293,63,6,0,160,640,4,0,492,349,8,0,920,267,6,0,62,274,9,0,449,656,5,0,490,759,9,0,347,571,9,0,535,388,2,0,360,659,3,0,322,564,3,0,288,329,9,0,479,753,6,0,594,146,4,0,362,532,5,0,33,431,6,0,584,466,5,0,856,368,4,0,192,659,9,0,90,700,5,0,604,227,3,0,426,966,9,0,312,145,6,0,154,596,5,0,21,518,7,0,569,364,9,0,896,375,2,0,148,611,7,0,476,145,6,0,323,580,9,0,553,352,5,0,604,306,9,0,347,835,4,0,614,106,4,0,405,808,8,0,390,673,7,0,670,421,5,0,305,866,9,0,578,219,3,0,679,137,6,0,118,426,6,0,294,226,5,0,605,483,3,0,391,757,2,0,257,73,9,0,260,535,6,0,746,281,8,0,251,398,7,0,582,576,6,0,360,573,9,0,232,881,5,0,94,732,7,0,300,880,6,0,577,154,7,0,249,665,2,0,664,632,5,0,524,562,2,0,348,859,6,0,460,23,9,0,570,245,8,0,392,102,4,0,782,131,6,0,459,914,7,0,466,766,8,0,371,449,8,0,125,761,9,0,438,668,8,0,414,189,4,0,512,643,5,0,209,584,5,0,604,223,3,0,216,293,9,0,18,573,7,0,551,723,5,0,83,718,8,0,890,347,7,0,558,396,4,0,45,672,9,0,285,887,6,0,235,157,9,0,391,200,4,0,171,854,9,0,108,197,9,0,36,391,4,0,699,95,5,0,901,317,5,0,216,334,6,0,260,541,8,0,626,68,3,0,382,671,5,0,464,30,9,0,564,725,9,0,186,737,4,0,532,303,8,0,426,258,2,0,468,590,4,0,371,74,4,0,402,914,6,0,968,338,6,0,782,120,9,0,348,48,5,0,450,902,4,0,69,699,2,0,547,29,6,0,490,648,7,0,877,496,6,0,475,516,8,0,273,627,2,0,426,457,3,0,637,198,8,0,92,216,7,0,611,675,7,0,148,168,6,0,431,804,7,0,658,637,6,0,745,533,6,0,519,32,5,0,494,761,9,0,110,219,3,0,794,441,6,0,73,683,8,0,794,177,6,0,204,279,5,0,472,428,4,0,278,79,4,0,286,655,3,0,574,692,5,0,593,517,3,0,259,561,5,0,138,497,4,0,447,761,9,0,449,890,6,0,223,286,9,0,658,596,3,0,202,745,4,0,122,763,9,0,840,491,6,0,438,829,6,0,42,667,9,0,784,108,6,0,498,546,4,0,287,516,6,0,144,165,9,0,412,988,6,0,738,277,7,0,194,245,7,0,151,300,5,0,460,428,6,0,596,49,5,0,454,743,6,0,364,815,7,0,84,723,7,0,404,613,5,0,661,123,8,0,249,64,6,0,20,461,6,0,21,446,6,0,220,83,8,0,30,644,6,0,919,253,6,0,322,554,4,0,552,703,6,0,442,28,8,0,399,362,9,0,923,220,6,0,530,626,6,0,419,772,4,0,900,478,5,0,224,275,8,0,602,346,9,0,383,118,5,0,140,749,7,0,687,146,6,0,167,128,6,0,369,810,4,0,236,563,6,0,323,66,5,0,425,532,7,0,424,69,3,0,886,213,5,0,475,194,7,0,436,322,3,0,594,306,9,0,362,839,9,0,923,284,7,0,879,444,7,0,394,111,4,0,47,680,9,0,789,360,5,0,221,290,8,0,40,521,3,0,292,878,7,0,605,66,2,0,148,531,7,0,212,471,9,0,910,206,8,0,870,223,1,0,395,38,5,0,331,388,7,0,560,694,3,0,169,700,6,0,708,523,7,0,787,129,9,0,163,845,6,0,272,413,7,0,595,592,4,0,596,697,6,0,874,179,4,0,734,141,5,0,605,595,5,0,466,500,2,0,725,193,6,0,831,153,6,0,82,281,5,0,180,777,8,0,352,857,6,0,158,518,3,0,705,214,5,0,907,296,8,0,437,510,6,0,292,885,6,0,386,220,4,0,273,607,8,0,964,378,6,0,732,574,6,0,218,286,9,0,322,363,7,0,120,745,8,0,103,531,5,0,720,136,7,0,488,681,6,0,736,298,3,0,452,886,7,0,163,134,9,0,92,710,7,0,911,280,8,0,468,757,9,0,234,656,2,0,279,604,9,0,825,259,6,0,276,432,4,0,284,702,6,0,820,212,4,0,623,652,3,0,139,522,7,0,767,510,8,0,294,248,9,0,453,286,2,0,869,433,9,0,667,239,5,0,441,678,8,0,30,348,6,0,13,569,6,0,366,842,6,0,64,267,7,0,290,855,8,0,101,748,9,0,742,522,6,0,44,669,9,0,388,606,4,0,428,556,8,0,414,792,5,0,244,747,3,0,666,605,5,0,136,463,9,0,311,873,6,0,387,240,2,0,832,381,8,0,385,290,7,0,365,41,7,0,61,485,6,0,227,147,9,0,594,655,8,0,524,291,5,0,115,199,9,0,935,289,7,0,116,616,5,0,183,816,2,0,273,326,6,0,74,272,9,0,147,347,9,0,541,285,7,0,308,666,5,0,452,495,6,0,524,297,6,0,367,142,2,0,168,160,5,0,26,370,6,0,21,437,6,0,177,409,5,0,574,252,4,0,320,869,6,0,387,572,2,0,843,433,3,0,279,424,6,0,152,152,7,0,595,664,5,0,375,509,5,0,48,290,6,0,221,167,4,0,452,944,8,0,845,375,7,0,256,549,8,0,212,97,6,0,85,503,5,0,145,306,5,0,65,730,6,0,783,520,6,0,370,211,2,0,240,84,4,0,458,908,9,0,327,43,9,0,496,639,9,0,336,814,2,0,718,83,9,0,596,457,7,0,405,33,9,0,420,112,5,0,434,642,5,0,60,385,5,0,532,637,4,0,459,838,6,0,36,453,9,0,636,80,9,0,906,312,6,0,96,345,7,0,281,664,7,0,481,516,3,0,730,370,6,0,793,508,3,0,186,131,7,0,912,296,7,0,499,701,8,0,400,117,4,0,907,445,8,0,615,180,6,0,358,841,9,0,183,681,4,0,290,324,9,0,454,863,9,0,414,958,7,0,409,406,5,0,295,694,4,0,73,233,6,0,440,355,1,0,93,704,6,0,332,845,4,0,435,800,7,0,98,692,5,0,242,162,7,0,459,465,5,0,238,394,3,0,726,140,6,0,47,587,8,0,33,378,6,0,68,254,7,0,470,517,6,0,283,774,6,0,132,748,6,0,450,396,5,0,770,423,5,0,153,502,4,0,414,925,7,0,172,125,6,0,192,882,9,0,379,36,6,0,255,886,6,0,478,763,9,0,234,271,7,0,606,341,8,0,788,373,9,0,924,426,7,0,183,781,6,0,472,238,4,0,916,287,9,0,111,610,6,0,15,559,6,0,282,520,8,0,549,552,6,0,748,160,5,0,39,611,8,0,286,78,7,0,129,181,9,0,811,422,8,0,650,133,3,0,664,127,8,0,597,55,6,0,773,169,6,0,430,508,5,0,412,945,7,0,672,611,7,0,516,254,6,0,425,812,7,0,712,448,7,0,469,684,5,0,109,644,3,0,289,243,4,0,372,48,6,0,265,877,4,0,620,64,4,0,560,369,9,0,429,820,9,0,744,510,5,0,390,298,5,0,42,664,9,0,81,540,4,0,500,741,5,0,485,378,4,0,42,615,7,0,723,375,4,0,676,462,5,0,343,576,9,0,595,311,8,0,898,501,6,0,235,709,2,0,148,502,7,0,231,409,2,0,392,722,3,0,168,412,5,0,456,26,9,0,442,762,7,0,219,568,9,0,420,820,9,0,300,247,5,0,611,83,7,0,432,831,5,0,918,224,5,0,223,572,8,0,183,242,8,0,33,371,7,0,458,498,5,0,50,353,5,0,679,619,9,0,612,362,4,0,192,681,3,0,631,422,1,0,285,662,9,0,148,178,5,0,311,138,8,0,121,768,9,0,23,375,6,0,556,725,7,0,513,504,5,0,944,441,6,0,355,428,5,0,310,341,9,0,525,60,4,0,316,297,6,0,304,446,7,0,159,536,7,0,480,362,2,0,138,450,2,0,73,689,7,0,551,575,5,0,647,183,3,0,396,346,5,0,134,242,6,0,474,764,9,0,62,446,3,0,134,293,6,0,20,583,7,0,489,694,7,0,861,419,6,0,28,572,5,0,287,522,9,0,149,343,6,0,446,108,9,0,249,894,9,0,25,473,9,0,419,555,6,0,788,303,5,0,509,770,6,0,805,328,6,0,402,181,4,0,518,505,5,0,322,863,9,0,33,641,9,0,778,237,5,0,456,762,9,0,395,767,4,0,519,719,9,0,158,527,5,0,537,304,5,0,952,294,9,0,225,99,2,0,401,137,4,0,655,434,4,0,506,762,9,0,751,237,5,0,198,634,4,0,261,565,7,0,259,386,6,0,658,559,5,0,220,898,6,0,735,365,4,0,133,468,7,0,552,141,6,0,668,138,6,0,381,297,7,0,615,610,7,0,310,133,6,0,18,578,7,0,473,32,9,0,517,329,5,0,452,618,2,0,422,973,6,0,291,319,7,0,359,766,4,0,911,199,6,0,928,216,6,0,183,127,9,0,175,246,8,0,525,697,5,0,671,414,4,0,52,280,6,0,927,366,6,0,215,729,4,0,896,278,4,0,808,234,4,0,314,58,9,0,722,435,5,0,602,59,6,0,455,904,8,0,95,288,2,0,430,809,8,0,531,125,3,0,851,268,3,0,316,341,8,0,469,422,9,0,198,451,6,0,482,200,7,0,621,99,4,0,51,286,5,0,748,437,6,0,223,135,6,0,577,34,6,0,60,680,9,0,610,616,7,0,826,305,5,0,335,36,6,0,629,678,6,0,621,183,5,0,116,186,7,0,359,422,5,0,69,517,3,0,180,672,6,0,562,721,9,0,473,151,5,0,454,811,5,0,92,719,9,0,446,22,8,0,589,681,5,0,667,638,5,0,445,696,5,0,44,325,7,0,170,683,7,0,919,459,3,0,584,686,5,0,55,389,9,0,477,772,8,0,71,405,4,0,662,58,9,0,491,588,4,0,778,370,9,0,723,360,7,0,548,567,6,0,319,145,7,0,497,347,6,0,540,731,6,0,472,321,8,0,416,406,9,0,509,103,4,0,342,571,6,0,161,815,6,0,325,95,5,0,360,38,9,0,863,379,9,0,728,588,8,0,72,293,7,0,514,754,9,0,442,824,6,0,77,434,3,0,226,75,6,0,895,480,9,0,181,121,6,0,504,734,2,0,462,921,6,0,464,25,9,0,374,35,6,0,382,48,5,0,265,405,4,0,567,178,6,0,164,558,6,0,664,424,7,0,274,444,5,0,176,713,4,0,252,552,5,0,486,175,8,0,197,643,5,0,23,584,6,0,409,901,9,0,569,234,5,0,332,52,9,0,288,85,4,0,717,373,5,0,667,315,3,0,82,305,4,0,449,844,8,0,819,309,8,0,50,656,9,0,521,714,8,0,510,756,9,0,532,698,5,0,913,229,9,0,547,49,7,0,339,101,4,0,731,195,5,0,604,674,6,0,457,321,4,0,670,408,4,0,331,89,3,0,195,371,4,0,774,511,4,0,432,630,6,0,406,388,6,0,568,163,9,0,827,391,6,0,67,682,9,0,387,666,4,0,807,508,9,0,952,275,6,0,400,37,9,0,170,245,6,0,13,382,7,0,609,319,6,0,570,71,3,0,41,601,8,0,784,424,8,0,456,919,7,0,873,371,2,0,871,203,4,0,175,812,3,0,258,66,8,0,660,431,9,0,285,314,9,0,394,551,5,0,380,309,8,0,577,653,8,0,63,675,7,0,403,382,6,0,136,152,6,0,273,68,9,0,481,186,9,0,608,302,9,0,712,71,6,0,298,445,9,0,557,109,4,0,815,417,6,0,849,204,5,0,69,286,8,0,491,437,4,0,827,494,8,0,362,577,9,0,465,512,6,0,348,270,3,0,474,73,6,0,865,483,4,0,609,307,9,0,282,85,2,0,789,111,6,0,643,230,4,0,825,250,6,0,29,439,8,0,47,671,9,0,86,340,9,0,217,486,9,0,894,341,7,0,149,518,9,0,693,546,5,0,321,294,6,0,215,127,5,0,737,82,6,0,551,156,6,0,432,105,9,0,484,325,8,0,754,466,1,0,332,786,4,0,396,33,6,0,887,194,7,0,801,343,5,0,460,948,6,0,932,454,6,0,204,218,3,0,694,348,2,0,477,782,6,0,78,500,3,0,295,439,9,0,585,417,3,0,24,419,9,0,136,375,2,0,279,676,6,0,486,273,4,0,460,942,7,0,580,689,5,0,383,282,6,0,671,428,4,0,731,268,5,0,351,569,9,0,421,431,3,0,222,551,6,0,388,424,3,0,149,371,9,0,450,955,9,0,645,166,3,0,492,344,9,0,569,82,6,0,882,347,3,0,601,686,8,0,129,773,6,0,125,594,5,0,219,89,9,0,715,353,6,0,298,86,6,0,32,364,7,0,172,420,8,0,783,231,5,0,466,427,7,0,274,382,5,0,353,40,9,0,354,115,3,0,784,456,3,0,349,412,8,0,186,866,6,0,935,226,6,0,610,164,3,0,574,146,5,0,301,56,6,0,253,64,6,0,166,781,6,0,187,571,7,0,924,228,6,0,222,741,8,0,601,80,7,0,210,883,7,0,571,723,9,0,875,444,9,0,469,317,5,0,497,648,9,0,129,567,2,0,464,436,4,0,32,353,7,0,251,387,3,0,335,639,4,0,306,454,5,0,288,250,6,0,831,508,6,0,194,226,2,0,174,415,9,0,54,694,7,0,816,342,2,0,505,745,7,0,796,377,6,0,391,57,4,0,109,621,4,0,352,811,9,0,275,600,9,0,231,88,3,0,394,119,5,0,120,201,8,0,56,640,8,0,296,664,6,0,138,279,7,0,40,631,5,0,547,372,6,0,328,154,5,0,413,881,8,0,94,371,5,0,747,425,5,0,384,274,6,0,213,532,3,0,374,191,7,0,241,882,7,0,293,328,9,0,189,469,3,0,123,544,3,0,155,147,9,0,481,48,6,0,257,242,5,0,33,633,9,0,893,474,8,0,296,510,7,0,923,409,5,0,671,453,5,0,501,580,6,0,90,345,9,0,27,609,6,0,933,370,7,0,59,492,5,0,208,751,5,0,473,689,6,0,333,853,7,0,910,465,8,0,683,602,4,0,548,357,6,0,271,801,4,0,383,58,5,0,902,469,9,0,528,306,8,0,839,379,7,0,37,621,8,0,564,268,6,0,510,312,4,0,236,382,3,0,588,560,6,0,139,350,6,0,615,575,1,0,738,289,5,0,377,100,5,0,463,915,6,0,611,440,6,0,808,502,9,0,376,805,6,0,844,485,5,0,654,655,9,0,231,347,5,0,902,354,5,0,834,144,9,0,29,621,8,0,210,462,7,0,454,892,9,0,563,183,2,0,332,100,3,0,170,565,8,0,656,630,3,0,879,217,3,0,966,357,6,0,35,627,7,0,832,387,9,0,189,428,4,0,559,487,7,0,410,33,7,0,364,846,6,0,530,28,6,0,641,207,6,0,922,236,3,0,291,526,7,0,704,205,5,0,809,127,9,0,702,571,5,0,694,618,6,0,213,775,5,0,532,44,6,0,533,724,8,0,953,309,6,0,561,710,9,0,245,282,3,0,607,188,4,0,647,418,7,0,574,240,6,0,399,644,1,0,146,299,7,0,781,504,6,0,274,467,2,0,347,680,6,0,501,638,8,0,882,187,8,0,927,273,5,0,55,678,9,0,753,434,5,0,738,89,9,0,98,700,5,0,202,658,7,0,256,79,7,0,564,152,9,0,463,579,6,0,593,356,9,0,553,263,7,0,27,545,9,0,449,233,4,0,814,324,9,0,40,350,9,0,58,277,9,0,322,697,4,0,374,595,5,0,355,673,7,0,409,980,8,0,325,38,6,0,242,275,3,0,49,384,8,0,39,433,3,0,457,877,7,0,491,23,6,0,421,561,5,0,385,205,6,0,506,32,5,0,127,624,3,0,466,249,3,0,694,591,6,0,220,283,9,0,304,493,5,0,263,883,7,0,317,139,6,0,748,334,3,0,161,826,6,0,231,261,6,0,262,684,3,0,767,97,6,0,710,468,3,0,172,790,9,0,34,655,6,0,20,413,6,0,131,187,8,0,738,198,3,0,33,637,9,0,408,913,9,0,84,347,6,0,475,506,5,0,630,192,8,0,696,584,7,0,755,349,3,0,446,114,9,0,712,187,9,0,292,839,3,0,131,480,7,0,446,847,5,0,397,307,5,0,514,428,4,0,589,458,7,0,27,432,5,0,845,146,6,0,267,77,9,0,623,483,3,0,498,554,4,0,243,887,9,0,186,235,5,0,330,37,6,0,347,37,9,0,123,773,6,0,583,694,9,0,856,495,4,0,373,833,6,0,26,414,7,0,147,324,5,0,747,263,4,0,300,874,8,0,426,102,6,0,212,215,5,0,271,566,2,0,629,538,4,0,459,872,6,0,492,687,8,0,357,578,8,0,329,374,6,0,774,101,6,0,531,298,9,0,14,398,6,0,401,902,6,0,465,19,6,0,25,567,4,0,786,380,9,0,373,502,5,0,684,481,2,0,174,404,4,0,312,346,9,0,467,775,4,0,905,306,5,0,881,181,8,0,40,680,6,0,573,707,8,0,658,667,6,0,942,418,6,0,455,769,6,0,523,41,7,0,180,150,7,0,201,422,5,0,410,810,7,0,300,134,7,0,912,311,4,0,219,317,5,0,145,143,6,0,309,350,9,0,121,173,6,0,458,692,5,0,378,205,5,0,356,36,9,0,177,347,5,0,60,261,6,0,434,763,5,0,352,806,8,0,298,861,9,0,325,354,4,0,537,487,3,0,938,286,8,0,303,532,3,0,651,605,3,0,904,361,4,0,54,381,6,0,220,249,5,0,377,51,5,0,162,809,6,0,134,474,8,0,302,92,7,0,923,432,5,0,899,189,6,0,404,814,6,0,446,959,9,0,429,815,8,0,298,791,5,0,248,366,3,0,826,166,6,0,808,430,5,0,567,58,1,0,306,73,5,0,175,866,8,0,344,43,8,0,459,831,6,0,881,209,5,0,197,149,5,0,293,88,4,0,34,604,6,0,867,198,4,0,293,340,5,0,391,590,3,0,161,820,6,0,407,878,4,0,501,238,4,0,493,208,6,0,312,80,4,0,43,315,7,0,202,567,9,0,712,181,8,0,442,957,8,0,204,250,4,0,877,477,5,0,27,593,6,0,139,162,9,0,648,315,5,0,279,526,8,0,355,810,9,0,717,467,4,0,272,873,5,0,646,658,9,0,645,88,5,0,305,263,4,0,403,190,3,0,551,560,7,0,303,862,7,0,617,434,8,0,857,198,4,0,291,873,8,0,932,360,4,0,509,764,9,0,30,457,9,0,371,589,6,0,450,667,3,0,598,41,6,0,205,636,2,0,207,799,2,0,341,848,9,0,425,794,7,0,214,138,9,0,634,87,7,0,140,485,7,0,924,454,5,0,114,713,5,0,216,496,9,0,238,669,3,0,609,654,8,0,546,730,6,0,422,525,6,0,107,190,6,0,275,419,5,0,836,137,6,0,629,79,7,0,657,421,7,0,281,890,6,0,502,761,9,0,509,532,3,0,278,323,9,0,271,318,5,0,87,212,5,0,780,416,4,0,682,100,4,0,576,76,7,0,263,569,9,0,295,362,1,0,618,86,6,0,9,383,9,0,638,74,8,0,642,421,3,0,432,595,3,0,656,649,7,0,426,891,4,0,174,411,9,0,740,423,6,0,574,51,6,0,802,158,5,0,696,566,4,0,432,26,9,0,966,372,6,0,454,869,8,0,174,141,7,0,433,785,5,0,542,655,5,0,924,249,5,0,561,148,9,0,819,244,4,0,501,706,6,0,823,402,5,0,459,865,6,0,583,201,1,0,215,877,4,0,388,122,6,0,281,360,2,0,226,161,7,0,331,61,5,0,611,658,6,0,582,564,8,0,246,291,3,0,37,632,9,0,281,128,5,0,273,528,5,0,960,323,8,0,144,171,9,0,165,820,8,0,434,128,2,0,400,881,6,0,354,415,6,0,135,485,6,0,102,339,3,0,111,202,9,0,720,542,6,0,142,768,6,0,830,257,7,0,284,608,8,0,98,720,8,0,254,714,4,0,305,345,9,0,237,96,5,0,370,492,4,0,278,612,9,0,573,165,6,0,152,683,6,0,48,696,6,0,459,882,6,0,691,117,3,0,482,692,7,0,310,868,9,0,262,799,4,0,283,875,9,0,653,669,6,0,112,763,6,0,506,719,7,0,134,760,6,0,485,181,9,0,958,418,6,0,268,72,9,0,591,61,3,0,708,113,3,0,479,69,6,0,790,436,4,0,433,826,9,0,584,149,9,0,442,805,7,0,298,834,4,0,442,183,4,0,348,159,6,0,780,314,4,0,140,303,5,0,425,412,6,0,382,801,4,0,565,716,9,0,168,578,9,0,350,850,9,0,622,269,5,0,366,86,5,0,392,313,7,0,84,241,5,0,496,697,8,0,307,83,8,0,464,597,4,0,731,237,2,0,658,361,6,0,418,284,3,0,851,166,5,0,487,521,3,0,392,782,3,0,824,499,8,0,176,155,4,0,315,351,9,0,316,476,4,0,410,804,7,0,221,78,6,0,914,266,5,0,907,460,8,0,404,860,7,0,898,485,9,0,495,681,4,0,757,290,3,0,791,451,5,0,456,804,4,0,131,534,9,0,79,734,6,0,214,631,4,0,223,491,7,0,487,54,5,0,150,261,5,0,282,337,9,0,24,425,9,0,15,552,6,0,754,134,8,0,37,637,9,0,480,181,9,0,739,447,6,0,454,899,7,0,901,460,7,0,402,256,2,0,316,448,6,0,399,691,2,0,310,571,5,0,384,102,6,0,506,700,6,0,551,274,6,0,336,568,3,0,580,559,5,0,529,511,5,0,151,467,2,0,427,185,6,0,309,487,6,0,48,659,9,0,701,66,6,0,483,777,6,0,413,179,3,0,34,333,6,0,696,603,8,0,493,751,6,0,474,585,5,0,277,701,5,0,113,771,6,0,52,308,8,0,584,532,4,0,146,266,7,0,47,652,8,0,502,646,9,0,553,146,9,0,402,908,6,0,469,402,4,0,620,371,3,0,929,242,1,0,474,594,4,0,875,433,9,0,357,806,7,0,462,506,5,0,115,206,7,0,401,896,6,0,447,17,6,0,696,63,6,0,266,359,5,0,103,724,5,0,45,358,9,0,560,726,9,0,282,318,8,0,441,565,5,0,371,55,4,0,30,451,9,0,564,703,9,0,589,304,9,0,326,686,7,0,741,94,7,0,912,219,7,0,202,103,6,0,759,99,5,0,607,682,9,0,601,46,7,0,283,695,5,0,122,553,2,0,700,141,9,0,145,751,9,0,551,35,8,0,217,323,9,0,317,84,5,0,146,151,9,0,624,681,6,0,666,403,4,0,910,449,8,0,478,293,1,0,544,43,8,0,903,192,6,0,741,516,5,0,715,458,3,0,334,614,5,0,430,636,6,0,851,321,3,0,397,668,5,0,45,647,5,0,339,845,9,0,663,653,5,0,452,763,9,0,84,401,3,0,445,818,4,0,34,547,5,0,522,103,5,0,934,237,6,0,293,610,5,0,370,99,4,0,630,114,3,0,300,451,6,0,435,837,5,0,551,695,3,0,554,709,8,0,447,683,7,0,744,205,4,0,498,766,9,0,110,595,4,0,139,258,5,0,413,412,6,0,145,354,5,0,406,972,6,0,482,392,1,0,266,386,4,0,619,47,6,0,747,517,6,0,685,595,2,0,317,51,9,0,298,265,7,0,796,434,5,0,288,65,6,0,104,383,6,0,212,149,5,0,275,64,6,0,122,457,6,0,231,160,9,0,61,720,6,0,582,654,7,0,800,314,4,0,490,514,4,0,350,42,9,0,307,857,3,0,602,654,7,0,245,374,8,0,530,452,2,0,451,209,5,0,178,240,6,0,270,128,3,0,690,60,6,0,488,344,7,0,516,714,9,0,303,86,9,0,950,304,9,0,27,498,9,0,284,211,4,0,52,314,6,0,505,642,8,0,184,187,2,0,152,515,5,0,519,514,5,0,460,687,8,0,579,570,6,0,440,757,6,0,594,301,9,0,104,353,3,0,419,906,5,0,465,689,6,0,473,770,9,0,316,363,6,0,372,614,4,0,459,639,3,0,416,395,9,0,903,446,4,0,498,587,6,0,34,437,6,0,280,881,9,0,346,101,3,0,144,399,3,0,892,495,9,0,302,80,8,0,667,132,7,0,763,102,6,0,447,810,4,0,170,415,9,0,304,66,4,0,662,643,2,0,962,300,6,0,15,386,7,0,378,271,5,0,44,611,5,0,13,578,6,0,464,785,3,0,491,261,2,0,486,197,5,0,708,128,3,0,197,109,6,0,61,541,4,0,699,551,6,0,322,313,2,0,670,58,9,0,226,830,2,0,193,447,7,0,165,394,6,0,520,307,5,0,856,358,1,0,208,388,4,0,871,439,9,0,203,885,8,0,807,418,6,0,237,697,4,0,219,278,7,0,59,676,9,0,117,607,5,0,247,78,8,0,490,407,2,0,295,127,6,0,845,384,6,0,316,578,9,0,154,677,5,0,28,558,7,0,420,808,7,0,383,322,6,0,482,76,5,0,413,533,4,0,605,328,6,0,807,425,8,0,940,291,9,0,128,241,8,0,718,316,7,0,589,695,9,0,933,434,6,0,101,742,8,0,893,192,5,0,908,487,6,0,536,58,5,0,226,725,5,0,690,586,4,0,294,71,9,0,321,72,4,0,52,652,9,0,422,714,1,0,265,453,1,0,255,539,8,0,92,681,2,0,706,77,8,0,342,552,4,0,207,566,9,0,197,504,3,0,476,681,4,0,550,716,5,0,732,493,7,0,753,261,4,0,930,227,8,0,599,309,9,0,287,431,6,0,221,563,9,0,347,192,3,0,176,419,8,0,939,437,7,0,944,356,2,0,53,292,9,0,170,138,9,0,206,453,5,0,569,149,6,0,748,524,7,0,297,332,6,0,814,131,8,0,855,376,6,0,409,39,6,0,75,286,6,0,339,95,4,0,340,41,8,0,279,856,4,0,221,749,4,0,572,202,4,0,435,969,6,0,717,114,5,0,685,315,3,0,619,538,4,0,203,141,3,0,452,314,4,0,656,79,3,0,520,701,7,0,533,269,4,0,334,392,7,0,342,852,9,0,291,308,8,0,360,678,6,0,545,56,4,0,403,245,2,0,673,131,5,0,565,253,9,0,175,820,4,0,625,196,8,0,614,685,6,0,501,52,4,0,546,649,5,0,807,226,3,0,186,675,6,0,607,677,9,0,459,851,6,0,452,874,8,0,831,289,5,0,483,756,7,0,431,735,2,0,172,870,6,0,211,675,2,0,192,238,5,0,481,54,5,0,259,392,9,0,416,506,3,0,360,213,4,0,128,194,9,0,425,780,5,0,365,826,9,0,573,728,6,0,600,113,0,0,402,768,5,0,455,578,4,0,915,292,5,0,714,600,6,0,231,730,3,0,911,224,9,0,142,175,9,0,459,844,6,0,916,259,5,0,272,588,5,0,261,399,6,0,367,423,4,0,788,420,5,0,664,557,6,0,301,667,5,0,29,409,7,0,704,486,8,0,407,966,6,0,46,567,4,0,517,236,5,0,140,155,9,0,715,360,7,0,678,595,3,0,757,438,6,0,198,874,7,0,477,511,7,0,79,716,8,0,523,707,6,0,269,602,8,0,28,462,9,0,559,164,8,0,292,520,9,0,258,703,3,0,48,416,3,0,102,715,6,0,110,385,7,0,170,689,9,0,937,410,3,0,98,244,5,0,750,257,7,0,186,337,5,0,371,800,2,0,866,410,6,0,244,79,9,0,740,588,6,0,730,387,3,0,418,886,9,0,928,432,7,0,391,681,6,0,407,415,5,0,514,762,6,0,674,62,8,0,885,204,8,0,761,131,7,0,239,173,8,0,361,429,7,0,961,402,6,0,875,232,4,0,654,45,6,0,831,168,5,0,104,696,5,0,132,157,6,0,566,710,9,0,241,369,8,0,90,206,6,0,98,383,5,0,685,94,5,0,443,657,7,0,48,341,6,0,223,733,6,0,143,349,9,0,224,792,4,0,864,188,3,0,160,138,8,0,215,562,9,0,229,176,5,0,815,226,4,0,724,90,7,0,702,86,9,0,806,130,8,0,605,553,6,0,460,490,6,0,486,170,9,0,402,673,8,0,180,769,6,0,859,381,8,0,345,388,2,0,354,849,9,0,493,630,5,0,226,156,9,0,310,448,6,0,748,224,7,0,755,153,7,0,74,243,8,0,759,431,7,0,246,394,4,0,658,555,7,0,291,510,6,0,385,327,7,0,447,713,2,0,260,872,3,0,35,347,5,0,894,353,6,0,675,101,4,0,237,161,9,0,123,527,4,0,79,240,7,0,399,869,6,0,889,500,6,0,228,741,3,0,95,209,7,0,415,401,9,0,457,683,6,0,178,414,8,0,704,589,8,0,545,527,2,0,176,875,6,0,61,726,6,0,119,188,9,0,919,284,9,0,28,469,9,0,511,722,9,0,225,263,7,0,19,501,6,0,650,649,9,0,276,879,8,0,219,140,9,0,839,148,9,0,352,259,3,0,362,850,6,0,539,542,5,0,24,620,6,0,282,434,5,0,617,303,4,0,802,431,4,0,317,693,5,0,668,650,7,0,448,707,5,0,716,307,3,0,137,172,9,0,498,753,9,0,55,533,5,0,622,277,3,0,272,72,9,0,798,116,6,0,421,924,6,0,685,641,6,0,340,498,3,0,73,678,5,0,319,506,4,0,748,529,8,0,352,437,5,0,53,666,9,0,765,431,8,0,126,176,9,0,378,290,7,0,609,312,5,0,345,68,2,0,415,762,4,0,445,721,4,0,490,204,8,0,389,707,4,0,286,341,3,0,573,648,4,0,281,747,2,0,657,426,7,0,485,770,8,0,907,403,1,0,267,531,5,0,183,568,7,0,476,759,9,0,291,301,3,0,371,485,8,0,326,454,8,0,435,312,6,0,441,811,8,0,789,169,6,0,942,426,8,0,892,484,9,0,280,121,6,0,602,679,9,0,933,275,6,0,58,524,5,0,426,762,4,0,313,46,6,0,320,578,9,0,376,117,4,0,235,631,6,0,851,380,7,0,443,684,6,0,515,705,6,0,135,327,7,0,518,709,7,0,840,454,2,0,911,481,6,0,169,154,4,0,668,660,6,0,953,319,3,0,113,212,6,0,564,168,9,0,401,374,5,0,787,267,3,0,110,706,5,0,139,516,4,0,687,380,3,0,142,535,3,0,104,397,4,0,582,700,8,0,729,94,8,0,215,896,6,0,40,365,9,0,403,803,6,0,507,469,2,0,41,311,6,0,713,593,5,0,566,47,5,0,813,428,7,0,325,149,6,0,752,283,5,0,88,727,8,0,348,809,9,0,938,280,5,0,59,476,3,0,137,159,9,0,521,724,9,0,342,439,5,0,235,69,6,0,337,108,4,0,91,351,6,0,566,248,8,0,156,133,6,0,569,716,9,0,359,437,4,0,656,280,4,0,133,523,6,0,458,453,4,0,277,887,7,0,847,452,3,0,260,548,8,0,858,502,6,0,517,93,7,0,620,192,7,0,565,733,6,0,47,684,9,0,431,112,8,0,447,120,4,0,405,897,8,0,902,473,9,0,455,114,6,0,419,412,8,0,168,810,8,0,242,147,4,0,301,569,1,0,440,117,7,0,181,547,4,0,258,555,6,0,912,210,9,0,919,381,5,0,389,798,5,0,686,636,6,0,415,806,7,0,876,384,5,0,420,749,2,0,625,286,4,0,173,240,8,0,680,523,2,0,20,551,7,0,937,245,5,0,402,761,5,0,222,480,9,0,342,678,8,0,81,335,6,0,583,708,6,0,88,536,5,0,337,849,9,0,251,76,8,0,752,596,9,0,227,886,8,0,632,197,9,0,263,577,6,0,572,33,6,0,561,716,9,0,587,691,9,0,129,741,5,0,142,461,5,0,709,82,9,0,547,348,7,0,365,572,6,0,534,293,7,0,554,373,8,0,308,466,3,0,423,556,8,0,803,118,6,0,573,151,7,0,255,421,2,0,429,21,6,0,40,572,4,0,446,965,6,0,385,334,5,0,921,274,9,0,570,76,5,0,82,711,6,0,232,558,9,0,410,606,4,0,909,440,5,0,413,905,9,0,109,459,4,0,34,411,7,0,57,283,9,0,54,331,7,0,701,601,8,0,574,81,9,0,316,199,3,0,537,376,4,0,122,191,9,0,437,955,5,0,300,293,5,0,759,93,6,0,212,132,7,0,527,460,4,0,109,769,6,0,513,727,9,0,650,656,9,0,110,391,7,0,552,418,3,0,229,267,9,0,359,109,3,0,556,46,7,0,332,865,6,0,478,164,9,0,724,318,5,0,58,688,9,0,187,886,6,0,467,84,1,0,183,857,4,0,560,50,4,0,565,548,5,0,33,358,8,0,499,24,6,0,442,633,5,0,515,649,5,0,72,259,7,0,347,535,4,0,368,481,4,0,120,628,5,0,568,727,9,0,598,431,5,0,544,617,2,0,391,77,5,0,683,369,4,0,49,359,6,0,297,337,8,0,957,304,9,0,629,95,3,0,945,305,5,0,796,127,8,0,238,557,8,0,485,765,9,0,29,481,6,0,354,800,4,0,459,899,6,0,149,496,6,0,763,437,6,0,435,163,5,0,949,289,8,0,353,553,7,0,140,470,5,0,706,230,3,0,72,730,6,0,966,322,7,0,8,389,7,0,103,217,6,0,315,556,4,0,882,460,5,0,480,43,8,0,186,753,5,0,609,688,6,0,728,597,6,0,244,893,9,0,468,582,5,0,147,681,5,0,238,899,6,0,588,704,6,0,36,530,7,0,627,636,6,0,60,671,6,0,312,87,9,0,493,358,7,0,233,171,9,0,305,140,6,0,590,687,9,0,626,435,4,0,674,446,5,0,510,705,6,0,150,742,7,0,963,343,9,0,272,333,8,0,350,823,3,0,575,170,4,0,671,388,4,0,878,449,8,0,505,709,7,0,955,345,7,0,256,398,8,0,150,146,8,0,74,229,6,0,919,470,6,0,361,43,8,0,298,503,5,0,185,764,4,0,838,214,7,0,603,401,2,0,153,530,8,0,552,103,6,0,189,662,9,0,697,614,6,0,436,674,8,0,498,104,5,0,328,47,9,0,155,541,8,0,328,674,4,0,404,978,6,0,714,340,5,0,374,254,6,0,78,344,4,0,557,733,6,0,492,331,9,0,515,767,6,0,612,680,9,0,627,271,7,0,461,761,9,0,416,666,4,0,476,317,4,0,796,345,6,0,424,310,5,0,285,147,3,0,79,720,6,0,472,774,6,0,120,535,4,0,698,90,6,0,408,124,3,0,338,840,5,0,425,631,6,0,467,324,6,0,338,576,7,0,35,660,6,0,230,564,7,0,243,70,9,0,912,234,8,0,545,499,8,0,389,343,5,0,599,340,6,0,717,190,9,0,666,122,8,0,446,673,5,0,540,37,6,0,468,168,3,0,426,109,8,0,293,254,8,0,602,52,7,0,693,468,5,0,457,209,6,0,254,891,9,0,507,382,1,0,698,474,5,0,121,247,3,0,371,81,4,0,58,693,9,0,295,150,4,0,162,156,8,0,182,372,4,0,188,437,9,0,65,249,6,0,485,645,3,0,666,63,8,0,324,692,6,0,171,235,4,0,182,249,7,0,477,331,5,0,377,319,7,0,319,372,5,0,461,928,6,0,193,870,6,0,368,45,4,0,589,665,3,0,682,337,6,0,99,360,6,0,390,36,6,0,535,27,6,0,307,95,5,0,430,919,3,0,512,699,6,0,577,96,3,0,57,683,9,0,44,368,7,0,888,472,7,0,453,837,7,0,379,452,6,0,433,792,7,0,908,292,6,0,728,529,6,0,456,932,7,0,737,149,6,0,450,21,8,0,378,679,5,0,228,273,9,0,226,185,4,0,180,728,3,0,499,642,9,0,389,350,6,0,208,438,3,0,528,704,6,0,337,581,6,0,703,92,9,0,147,630,1,0,219,191,4,0,217,557,8,0,105,539,5,0,455,506,4,0,364,38,8,0,483,191,9,0,359,853,6,0,47,576,4,0,109,718,4,0,376,492,5,0,560,250,7,0,473,164,5,0,74,248,7,0,263,552,6,0,461,936,8,0,139,320,7,0,808,496,7,0,418,949,4,0,136,526,7,0,449,769,7,0,598,682,9,0,712,529,7,0,281,331,9,0,193,528,3,0,574,361,6,0,245,618,4,0,732,87,9,0,770,126,5,0,143,479,6,0,919,217,5,0,423,405,9,0,191,114,6,0,553,568,5,0,401,844,5,0,434,20,6,0,320,452,9,0,875,361,3,0,891,489,9,0,548,709,6,0,354,50,4,0,786,366,7,0,176,769,6,0,476,21,6,0,235,81,8,0,174,693,7,0,585,298,4,0,300,342,8,0,743,211,6,0,496,773,6,0,599,74,3,0,706,335,9,0,909,469,9,0,522,648,5,0,327,52,9,0,683,403,4,0,429,322,3,0,302,486,3,0,762,503,3,0,117,594,8,0,769,102,6,0,84,255,5,0,494,581,5,0,298,309,5,0,80,220,6,0,157,389,7,0,599,324,6,0,47,666,9,0,28,603,6,0,102,495,1,0,205,878,4,0,623,676,9,0,367,93,4,0,469,349,2,0,376,486,7,0,731,80,6,0,166,196,4,0,295,219,6,0,162,130,6,0,341,764,2,0,409,889,9,0,24,513,3,0,25,534,7,0,813,382,5,0,878,172,6,0,333,576,6,0,707,564,6,0,591,309,7,0,206,148,3,0,642,105,3,0,240,375,9,0,47,296,6,0,409,928,8,0,285,334,9,0,338,522,2,0,961,366,6,0,450,482,6,0,469,380,2,0,284,526,9,0,409,993,6,0,650,72,5,0,915,475,6,0,168,837,9,0,232,900,6,0,536,587,4,0,765,162,5,0,836,506,6,0,14,588,6,0,369,824,8,0,588,654,8,0,610,355,6,0,272,77,8,0,463,319,5,0,874,397,2,0,530,309,5,0,666,52,6,0,676,302,3,0,668,340,4,0,283,427,7,0,842,203,7,0,451,647,3,0,96,746,9,0,669,114,4,0,746,593,9,0,37,585,9,0,181,574,8,0,30,626,8,0,32,597,5,0,914,447,7,0,848,234,3,0,86,466,3,0,166,541,4,0,714,86,9,0,503,587,8,0,686,454,4,0,839,153,9,0,445,580,2,0,322,448,9,0,301,226,6,0,46,640,4,0,874,198,7,0,405,568,1,0,342,580,6,0,455,948,9,0,35,448,9,0,240,266,4,0,270,228,3,0,658,658,7,0,303,152,4,0,781,382,8,0,544,722,5,0,461,812,6,0,294,857,8,0,556,268,7,0,538,508,4,0,386,129,4,0,376,660,4,0,92,340,9,0,562,641,3,0,42,673,9,0,31,630,8,0,164,789,6,0,346,108,2,0,37,384,6,0,945,423,9,0,415,32,8,0,39,538,7,0,574,718,9,0,179,745,8,0,606,508,4,0,688,632,6,0,550,364,9,0,274,709,6,0,957,392,7,0,421,537,9,0,751,204,4,0,291,140,6,0,412,952,7,0,734,600,6,0,604,352,9,0,815,403,6,0,375,465,7,0,879,193,7,0,645,248,4,0,311,697,4,0,169,720,4,0,217,574,6,0,215,230,6,0,652,527,4,0,52,682,9,0,712,345,9,0,694,487,3,0,523,585,4,0,740,144,6,0,36,668,6,0,964,312,6,0,140,266,8,0,137,742,4,0,496,47,5,0,229,621,5,0,152,364,8,0,62,635,7,0,572,487,5,0,416,813,6,0,296,303,4,0,319,358,9,0,744,604,9,0,912,444,8,0,217,465,8,0,658,607,4,0,783,370,9,0,447,333,3,0,478,28,7,0,717,184,8,0,190,247,9,0,155,345,3,0,266,821,3,0,416,933,6,0,440,800,8,0,375,396,2,0,472,471,2,0,245,553,5,0,593,40,6,0,529,480,5,0,487,574,4,0,452,28,6,0]};
+
+  var LAST_BOX = {w: 1, h: 1};
+
+  function sampleTargets(){
+    var SRC = isLight() ? PORTRAIT_LIGHT : PORTRAIT;
+    var a = SRC.aspect, st = SRC.stride || 3, arr = SRC.p, n = arr.length / st;
+    var pw, ph, cx, cy;
+    if(W >= 1000){ pw = Math.min(W * .42, H * .72 * a); ph = pw / a; cx = W * .71; cy = H * .5; }
+    else { pw = Math.min(W * .96, H * .5 * a); ph = pw / a; cx = W / 2; cy = H * .57; }
+    var m = narrow ? 3200 : 5400, pts = [];
+    for(var i = 0; i < n && pts.length < m; i++){
+      var o = i * st;
+      if(st > 3 && arr[o + 3] === 1) continue;             // skip the photo's background specks
+      pts.push([cx + (arr[o] / 999 - .5) * pw, cy + (arr[o + 1] / 999 - .5) * ph, arr[o + 2], 0]);
+    }
+    LAST_BOX = {w: pw, h: ph};
+    return pts;
+  }
+
+  function spawn(){
+    return {x: W / 2 + gauss() * W * .17, y: H * .42 + gauss() * H * .2, vx: 0, vy: 0,
+            has: false, tx: 0, ty: 0, cx: 0, cy: 0, u: 0, hx: 0, hy: 0, b: 0, lum: 0, hot: false, fig: false, s: Math.random()};
+  }
+
+  // Map the particles onto the timeline's loss curve, at the exact spot the chart will pin.
+  // Leftmost letters go to the start of the curve so the colour gradient carries over.
+  function assignCurve(){
+    curveOK = false;
+    if(!window.RUN || !nT) return;
+    var g = RUN.geometry();
+    if(!g || g.pts.length < 2) return;
+    pinY = Math.max(1, g.pinY);
+    var src = g.pts, cum = [0], i;
+    for(i = 1; i < src.length; i++){
+      var dx = src[i][0] - src[i - 1][0], dy = src[i][1] - src[i - 1][1];
+      cum.push(cum[i - 1] + Math.sqrt(dx * dx + dy * dy));
+    }
+    var L = cum[cum.length - 1], thick = narrow ? 2.2 : 3;
+    var order = [];
+    for(i = 0; i < nT; i++) order.push(i);
+    order.sort(function(a, b){ return P[a].tx - P[b].tx; });
+    var j = 0;
+    for(var r = 0; r < nT; r++){
+      var sPos = (r + .5) / nT * L;
+      while(j < cum.length - 2 && cum[j + 1] < sPos) j++;
+      var seg = (cum[j + 1] - cum[j]) || 1, f = (sPos - cum[j]) / seg;
+      var p = P[order[r]];
+      p.cx = src[j][0] + (src[j + 1][0] - src[j][0]) * f + (Math.random() - .5) * thick * .6;
+      p.cy = src[j][1] + (src[j + 1][1] - src[j][1]) * f + (Math.random() - .5) * thick;
+      p.u = r / nT;
+    }
+    curveOK = true;
+  }
+
+  function build(){
+    W = Math.max(1, Math.round(window.innerWidth));
+    H = Math.max(1, Math.round(window.innerHeight));
+    DPR = Math.min(2, window.devicePixelRatio || 1);
+    cvs.width = Math.round(W * DPR);
+    cvs.height = Math.round(H * DPR);
+    narrow = W < 760;
+    pinY = hero.offsetHeight;
+
+    var pts = sampleTargets();
+    nT = pts.length;
+    var nOut = 0;
+    var total = nT + nOut;
+    while(P.length < total) P.push(spawn());
+    P.length = total;
+
+    for(var i = 0; i < total; i++){
+      var p = P[i];
+      if(i < nT){
+        p.has = true; p.hot = false;
+        p.tx = pts[i][0]; p.ty = pts[i][1]; p.lum = pts[i][2]; p.fig = pts[i][3] === 1;
+        p.b = Math.min(NB - 1, Math.max(0, Math.floor(p.tx / W * NB)));
+      } else {
+        p.has = false;
+        p.hot = (i - nT) < 7;
+        p.hx = W >= 1000 ? W * .46 + Math.random() * W * .54 : Math.random() * W;
+        p.hy = W >= 1000 ? H * .08 + Math.random() * H * .84 : H * .38 + Math.random() * H * .58;
+        p.b = Math.floor(Math.random() * NB);
+      }
+    }
+    buildMesh(LAST_BOX);
+    assignCurve();
+  }
+
+  // Where each particle wants to be right now: somewhere between its letter and its spot on the curve.
+  function goal(p){
+    if(!curveOK || prog <= 0) return [p.tx, p.ty];
+    var q = (prog - .35 * p.u) / .65;
+    q = q < 0 ? 0 : (q > 1 ? 1 : q);
+    q = q * q * (3 - 2 * q);
+    return [p.tx + (p.cx - p.tx) * q, p.ty + (p.cy - p.ty) * q];
+  }
+
+  function settle(){
+    for(var i = 0; i < P.length; i++){
+      var p = P[i];
+      if(p.has){ p.x = p.tx; p.y = p.ty; } else { p.x = p.hx; p.y = p.hy; }
+      p.vx = p.vy = 0;
+    }
+    epoch = 320; converged = true; lastLoss = .0011;
+  }
+
+  function placeStatic(){
+    for(var i = 0; i < P.length; i++){
+      var p = P[i];
+      if(p.has){ var g = goal(p); p.x = g[0]; p.y = g[1]; }
+      else { p.x = p.hx; p.y = p.hy; }
+      p.vx = p.vy = 0;
+    }
+  }
+
+  function reinit(user){
+    for(var i = 0; i < P.length; i++){
+      var p = P[i];
+      p.x = W / 2 + gauss() * W * .17;
+      p.y = H * .42 + gauss() * H * .2;
+      p.vx = p.vy = 0;
+    }
+    epoch = 0; frame = 0; hist = []; converged = false;
+    if(user && window.SND) SND.swoosh();
+    if(reduce){ settle(); placeStatic(); draw(); readout(); }
+    else kick();
+  }
+
+  // Once the name has formed: reveal the scroll cue and let the assistant arrive.
+  var announced = false;
+  function ready(){
+    hero.classList.add('ready');
+    if(announced) return;
+    announced = true;
+    window.dispatchEvent(new Event('hero:ready'));
+  }
+
+  function lrNow(){
+    var warm = Math.min(1, epoch / 70);
+    var e = Math.min(epoch, 320) / 320;
+    return 3e-4 * warm * .5 * (1 + Math.cos(Math.PI * e)) + 1e-6;
+  }
+
+  function step(){
+    frame++;
+    if(frame % 5 === 0) epoch++;
+    var warm = Math.min(1, epoch / 70);
+    var noise = (2.6 * Math.exp(-epoch / 80) + .06) * (1 - prog * .85);
+    var k = .003 + .042 * warm * warm, damp = .88;
+    if(prog > 0 && k < .03) k = .03;          // the scroll morph should track even mid-training
+    var R = narrow ? 70 : 105, R2 = R * R, sum = 0, useMouse = mOn && prog < .15;
+
+    for(var i = 0; i < P.length; i++){
+      var p = P[i], ax, ay, gx = 0, gy = 0;
+      if(p.has){
+        var g = goal(p);
+        gx = g[0]; gy = g[1];
+        ax = (gx - p.x) * k;
+        ay = (gy - p.y) * k;
+      } else {
+        ax = (p.hx - p.x) * .0015 + Math.sin(frame * .012 + p.s * 40) * .03;
+        ay = (p.hy - p.y) * .0015 + Math.cos(frame * .01 + p.s * 30) * .03;
+      }
+      ax += (Math.random() - .5) * noise;
+      ay += (Math.random() - .5) * noise;
+      if(useMouse){
+        var dx = p.x - mx, dy = p.y - my, d2 = dx * dx + dy * dy;
+        if(d2 < R2 && d2 > .01){
+          var d = Math.sqrt(d2), f = (1 - d / R) * 4.2;
+          ax += dx / d * f;
+          ay += dy / d * f;
+        }
+      }
+      p.vx = (p.vx + ax) * damp;
+      p.vy = (p.vy + ay) * damp;
+      p.x += p.vx;
+      p.y += p.vy;
+      if(p.has){
+        var ex = gx - p.x, ey = gy - p.y;
+        sum += Math.sqrt(ex * ex + ey * ey);
+      }
+    }
+    lastLoss = sum / Math.max(1, nT) / (Math.max(W, H) * .5);
+    if(!converged && epoch > 55 && lastLoss < .008){ converged = true; ready(); if(window.SND) SND.converge(); }
+  }
+
+  // Mesh: each brain dot linked to its nearest neighbours (from target positions), ridges flagged.
+  var MESH = [], MESH_CELL = 14, clearTick = 0;
+  function buildMesh(box){
+    MESH = [];
+    if(!nT) return;
+    var spacing = Math.sqrt(box.w * box.h * .6 / nT);
+    var cell = MESH_CELL = Math.max(5, spacing * 1.7), lim2 = cell * cell;
+    var grid = {}, i, j, k;
+    for(i = 0; i < nT; i++){
+      var key = Math.floor(P[i].tx / cell) + ',' + Math.floor(P[i].ty / cell);
+      (grid[key] || (grid[key] = [])).push(i);
+    }
+    var seen = {};
+    for(i = 0; i < nT; i++){
+      var p = P[i], gx = Math.floor(p.tx / cell), gy = Math.floor(p.ty / cell), best = [];
+      for(var ox = -1; ox <= 1; ox++) for(var oy = -1; oy <= 1; oy++){
+        var c = grid[(gx + ox) + ',' + (gy + oy)];
+        if(!c) continue;
+        for(k = 0; k < c.length; k++){
+          j = c[k]; if(j === i) continue;
+          var dx = P[j].tx - p.tx, dy = P[j].ty - p.ty, d2 = dx * dx + dy * dy;
+          if(d2 < lim2) best.push([d2, j]);
+        }
+      }
+      best.sort(function(u, v){ return u[0] - v[0]; });
+      for(k = 0; k < Math.min(4, best.length); k++){
+        j = best[k][1];
+        var lo = Math.min(i, j), hi = Math.max(i, j), id = lo * 100000 + hi;
+        if(seen[id]) continue;
+        seen[id] = 1;
+        if(P[lo].lum < 5 || P[hi].lum < 5) continue;       // only link along folds, never across a groove
+        MESH.push(lo, hi, (P[lo].lum >= 7 && P[hi].lum >= 7) ? 1 : 0);
+      }
+    }
+  }
+
+  function strokeMesh(ridge, color, alpha, width, maxLen2){
+    ctx.strokeStyle = color; ctx.globalAlpha = alpha; ctx.lineWidth = width;
+    ctx.beginPath();
+    for(var k = 0; k < MESH.length; k += 3){
+      if(MESH[k + 2] !== ridge) continue;
+      var a = P[MESH[k]], b = P[MESH[k + 1]], dx = a.x - b.x, dy = a.y - b.y;
+      if(dx * dx + dy * dy > maxLen2) continue;          // skip edges stretched by the cursor or the morph
+      ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y);
+    }
+    ctx.stroke();
+  }
+
+  function draw(){
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    var L = isLight();
+    // Keep this canvas transparent so the background network shows through; short trails in dark mode.
+    clearTick++;
+    if(L || reduce || clearTick % 90 === 0){ ctx.clearRect(0, 0, W, H); }
+    else {
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.globalAlpha = .38; ctx.fillStyle = '#000'; ctx.fillRect(0, 0, W, H);
+      ctx.globalCompositeOperation = 'source-over';
+    }
+    ctx.globalAlpha = 1;
+
+    // Brain wireframe: appears as the dots settle, fades out as the scroll morph begins.
+    var formed = Math.max(0, Math.min(1, 1 - lastLoss / .035));
+    var mA = formed * Math.max(0, 1 - prog / .4);
+    if(MESH.length && mA > .01){
+      var acc = (L || reduce) ? 1 : 2.4;                    // trails accumulate strokes in dark mode
+      var ml2 = MESH_CELL * MESH_CELL * 3;
+      strokeMesh(0, L ? 'rgb(84,67,209)' : 'rgb(160,180,248)', (L ? .5 : .4) * mA / acc, narrow ? .5 : .65, ml2);
+      strokeMesh(1, L ? 'rgb(28,24,96)' : 'rgb(236,241,255)', (L ? .75 : .7) * mA / acc, narrow ? .7 : .9, ml2);
+    }
+
+    for(var b = 0; b < buckets.length; b++) buckets[b].length = 0;
+    for(var i = 0; i < P.length; i++){
+      var p = P[i], idx;
+      if(p.hot) idx = B_HOT;
+      else if(!p.has) idx = B_OUT;
+      else if((p.vx * p.vx + p.vy * p.vy) > 1.8 || p.lum >= 7) idx = NB + p.b;   // ridges: bright
+      else if(p.lum <= 3) idx = B_DIM + p.b;                                       // grooves: faint
+      else idx = p.b;
+      buckets[idx].push(p);
+    }
+
+    var s = narrow ? 1.4 : 1.7, outA = Math.max(0, 1 - prog * 1.4);
+    for(var bi = 0; bi < buckets.length; bi++){
+      var arr = buckets[bi];
+      if(!arr.length) continue;
+      var isOut = bi === B_HOT || bi === B_OUT;
+      if(isOut && outA <= 0) continue;
+      var dim = bi >= B_DIM;
+      ctx.globalAlpha = isOut ? outA : (dim ? (L ? .32 : .38) : 1);
+      ctx.fillStyle = dim ? cols[bi - B_DIM] : bi === B_HOT ? HOT : (bi === B_OUT ? cols[4] : (bi >= NB ? colsHi[bi - NB] : cols[bi]));
+      var ss = bi === B_HOT ? s * 2 : dim ? s * .85 : (bi >= NB && bi < NB * 2 ? s * 1.45 : s);   // ridge dots a touch larger
+      for(var j = 0; j < arr.length; j++){
+        var q = arr[j];
+        ctx.fillRect(q.x - ss / 2, q.y - ss / 2, ss, ss);
+      }
+    }
+
+    if(mOn && prog < .15 && !reduce){
+      var R = narrow ? 70 : 105;
+      ctx.globalAlpha = .35 * (1 - prog / .15);
+      ctx.strokeStyle = L ? 'rgba(84,67,209,.6)' : 'rgba(161,147,255,.55)';
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(mx, my, R, 0, Math.PI * 2); ctx.stroke();
+    }
+    ctx.globalAlpha = 1;
+  }
+
+  function readout(){
+    hist.push(lastLoss);
+    if(hist.length > 90) hist.shift();
+    if(window.SND) SND.loss(lastLoss);
+    var pts = [];
+    for(var i = 0; i < hist.length; i++){
+      var lv = Math.log(Math.max(hist[i], 1e-4)) / Math.LN10;
+      var y = 2 + (Math.min(0, Math.max(-3, lv)) / -3) * 24;
+      pts.push((i / 89 * 120).toFixed(1) + ',' + y.toFixed(1));
+    }
+    if(elSpark) elSpark.setAttribute('points', pts.join(' '));
+  }
+
+  function loop(){
+    raf = 0;
+    if(handed || document.hidden) return;
+    step();
+    draw();
+    if(frame % 5 === 0) readout();
+    raf = requestAnimationFrame(loop);
+  }
+
+  function kick(){
+    if(!raf && started && !reduce && !handed && !document.hidden) raf = requestAnimationFrame(loop);
+  }
+
+  // Scroll drives the morph; once the chart pins, the real SVG takes over and the canvas rests.
+  function phase(){
+    if(!curveOK && started) assignCurve();
+    prog = Math.min(1, Math.max(0, window.scrollY / pinY));
+    var done = curveOK && window.scrollY >= pinY - 2;
+    if(done !== handed){
+      handed = done;
+      run.classList.toggle('handoff', done);
+      cvs.classList.toggle('gone', done);
+    }
+    var hv = prog < .35;
+    if(hv !== heroSnd){ heroSnd = hv; if(window.SND) SND.hero(hv); }
+    if(reduce && started && !handed){ placeStatic(); draw(); }
+    kick();
+  }
+
+  function start(){
+    if(started) return;
+    started = true;
+    build();
+    if(reduce){
+      settle(); placeStatic(); draw(); readout(); ready();
+    } else {
+      reinit();
+    }
+    phase();
+  }
+
+  window.addEventListener('scroll', phase, {passive: true});
+
+  window.addEventListener('pointermove', function(e){
+    if(prog >= .15 || (e.target.closest && e.target.closest('button,a,.bar'))){ mOn = false; pmx = null; return; }
+    mx = e.clientX; my = e.clientY; mOn = true;
+    if(pmx !== null && window.SND){
+      var sp = Math.sqrt((mx - pmx) * (mx - pmx) + (my - pmy) * (my - pmy));
+      if(sp > 6) SND.pluck(mx / W, Math.min(1, sp / 40));
+    }
+    pmx = mx; pmy = my;
+  }, {passive: true});
+  document.addEventListener('mouseout', function(e){ if(!e.relatedTarget){ mOn = false; pmx = pmy = null; } });
+  window.addEventListener('pointercancel', function(){ mOn = false; pmx = pmy = null; });
+
+  hero.addEventListener('click', function(e){
+    if(e.target.closest && e.target.closest('a,button')) return;
+    reinit(true);
+  });
+
+  // "Career" links scroll to the hand-off point, so the morph plays on the way down.
+  [].forEach.call(document.querySelectorAll('a[href="#career"]'), function(a){
+    a.addEventListener('click', function(e){
+      e.preventDefault();
+      if(!curveOK) assignCurve();
+      window.scrollTo({top: pinY, behavior: reduce ? 'auto' : 'smooth'});
+    });
+  });
+
+  document.addEventListener('visibilitychange', kick);
+
+  var rt;
+  window.addEventListener('resize', function(){
+    clearTimeout(rt);
+    rt = setTimeout(function(){
+      if(!started) return;
+      var oldW = W;
+      build();
+      if(reduce){ settle(); placeStatic(); draw(); }
+      else if(Math.abs(W - oldW) > 40){ epoch = Math.min(epoch, 60); converged = false; }
+      phase();
+    }, 200);
+  });
+  window.addEventListener('load', function(){ if(started){ assignCurve(); phase(); } });
+  window.addEventListener('themechange', function(){
+    palette();
+    if(!started) return;
+    build();
+    if(reduce){ settle(); placeStatic(); draw(); }
+    else { converged = false; epoch = Math.min(epoch, 90); kick(); }
+    phase();
+  });
+
+  if(document.readyState === 'complete') setTimeout(start, 0);
+  else window.addEventListener('load', function(){ setTimeout(start, 0); });
+  setTimeout(start, 1500);
+})();
+
+/* ---------- Timeline: career as a training run ---------- */
+(function(){
+  var steps = [].slice.call(document.querySelectorAll('.step'));
+  var svg = document.getElementById('chart');
+  var fig = document.getElementById('fig');
+  if(!steps.length || !svg) return;
+
+  var NS = 'http://www.w3.org/2000/svg';
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var yearEl = document.getElementById('fig-year');
+  var tagEl = document.getElementById('fig-tag');
+  var titleEl = document.getElementById('fig-title');
+  var scrub = document.getElementById('scrub');
+
+  var ts = steps.map(function(s){ return parseFloat(s.dataset.t); });
+  var T0 = 2013.5, T1 = 2027.1, NOW = ts[ts.length - 1];
+  var mq = window.matchMedia('(max-width: 900px)');
+  var V, pts, segs, live, cks, mkLine, mkHalo, mkDot, mkLab;
+
+  function X(t){ return V.l + (t - T0) / (T1 - T0) * (V.w - V.l - V.r); }
+  function Y(v){ return V.t + (1 - v) * (V.h - V.t - V.b); }
+
+  // One warm restart per move; each settles to a lower floor than the last.
+  var R = [
+    {t: 2013.6,  p: .95, f: .50, tau: 1.2},
+    {t: 2018.45, p: .72, f: .36, tau: .5},
+    {t: 2019.7,  p: .60, f: .22, tau: .7},
+    {t: 2022.0,  p: .36, f: .17, tau: .3},
+    {t: 2022.78, p: .30, f: .12, tau: .6},
+    {t: 2024.6,  p: .19, f: .05, tau: .8}
+  ];
+
+  function loss(t){
+    if(t < R[0].t) return R[0].p;
+    var seg = R[0];
+    for(var i = 0; i < R.length; i++) if(t >= R[i].t) seg = R[i];
+    var base = seg.f + (seg.p - seg.f) * Math.exp(-(t - seg.t) / seg.tau);
+    var n = .012 * Math.sin(t * 53.3) + .012 * Math.sin(t * 131.7 + 1.3) + .011 * Math.sin(t * 297.1 + 2.1) + .009 * Math.sin(t * 611.9 + .4);
+    return Math.max(.02, base + n * base);
+  }
+
+  function el(name, attrs, parent){
+    var e = document.createElementNS(NS, name);
+    for(var k in attrs) e.setAttribute(k, attrs[k]);
+    (parent || svg).appendChild(e);
+    return e;
+  }
+
+  function buildChart(){
+    V = mq.matches ? {w: 600, h: 150, l: 6, r: 10, t: 12, b: 8} : {w: 600, h: 300, l: 36, r: 14, t: 16, b: 30};
+    while(svg.firstChild) svg.removeChild(svg.firstChild);
+    svg.setAttribute('viewBox', '0 0 ' + V.w + ' ' + V.h);
+
+    pts = [];
+    for(var t = T0; t <= NOW + 1e-6; t += .01) pts.push([X(t), Y(loss(t))]);
+    segs = pts.map(function(p){ return p[0].toFixed(1) + ' ' + p[1].toFixed(1); });
+
+    var defs = el('defs', {});
+    var g = el('linearGradient', {id: 'liveGrad', x1: '0', y1: '0', x2: '1', y2: '0'}, defs);
+    el('stop', {offset: '0', 'class': 'g1'}, g);
+    el('stop', {offset: '1', 'class': 'g2'}, g);
+
+    [.25, .5, .75, 0].forEach(function(v){
+      el('line', {x1: V.l, x2: V.w - V.r, y1: Y(v), y2: Y(v), 'class': 'grid'});
+    });
+    if(!mq.matches){
+      for(var yr = 2014; yr <= 2026; yr += 2){
+        el('text', {x: X(yr), y: V.h - 8, 'text-anchor': 'middle', 'class': 'tick'}).textContent = yr;
+      }
+      el('text', {x: V.l - 8, y: Y(.75) + 4, 'text-anchor': 'end', 'class': 'axis-label'}).textContent = 'loss';
+    }
+
+    el('path', {d: 'M' + segs.join(' L'), 'class': 'dim'});
+    live = el('path', {d: '', 'class': 'live'});
+    var r = mq.matches ? 4 : 5;
+    cks = ts.map(function(t){ return el('circle', {cx: X(t), cy: Y(loss(t)), r: r, 'class': 'ck'}); });
+    mkLine = el('line', {'class': 'mk-line', y2: Y(0)});
+    mkHalo = el('circle', {r: mq.matches ? 10 : 13, 'class': 'mk-halo'});
+    mkDot = el('circle', {r: r, 'class': 'mk-dot'});
+    mkLab = el('text', {'class': 'mk-label', 'text-anchor': 'start'});
+  }
+
+  buildChart();
+
+  var runBody = document.querySelector('.run-body');
+  window.RUN = {
+    geometry: function(){
+      var fr = fig.getBoundingClientRect(), cr = svg.getBoundingClientRect();
+      if(!cr.width) return null;
+      var st = parseFloat(getComputedStyle(fig).top) || 0;
+      var sc = cr.width / V.w, top = st + (cr.top - fr.top);
+      return {
+        pinY: runBody.getBoundingClientRect().top + window.scrollY - st,
+        pts: pts.map(function(p){ return [cr.left + p[0] * sc, top + p[1] * sc]; })
+      };
+    }
+  };
+  if(!window.__morph) document.getElementById('career').classList.add('handoff');
+
+  if(mq.addEventListener) mq.addEventListener('change', function(){ buildChart(); update(); });
+
+  var btns = steps.map(function(s, i){
+    var li = document.createElement('li');
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.textContent = s.dataset.short;
+    b.setAttribute('aria-label', s.querySelector('h3').textContent + ', ' + s.querySelector('.step-date').textContent);
+    b.addEventListener('click', function(){
+      steps[i].scrollIntoView({behavior: reduce ? 'auto' : 'smooth', block: 'center'});
+    });
+    li.appendChild(b);
+    scrub.appendChild(li);
+    return b;
+  });
+
+  var active = -1, primed = false;
+
+  function setActive(i){
+    if(i === active) return;
+    active = i;
+    if(primed && window.SND) SND.step(i, steps[i].querySelector('.step-tag').textContent);
+    primed = true;
+    steps.forEach(function(s, j){ s.classList.toggle('on', j === i); });
+    btns.forEach(function(b, j){
+      if(j === i) b.setAttribute('aria-current', 'step'); else b.removeAttribute('aria-current');
+    });
+    var s = steps[i];
+    yearEl.textContent = s.dataset.year;
+    tagEl.textContent = s.querySelector('.step-tag').textContent;
+    titleEl.textContent = s.querySelector('h3').textContent;
+    [yearEl, tagEl, titleEl].forEach(function(e){
+      e.classList.remove('flip'); void e.offsetWidth; e.classList.add('flip');
+    });
+  }
+
+  function update(){
+    var top = window.matchMedia('(max-width: 900px)').matches ? fig.getBoundingClientRect().bottom : 0;
+    var vc = top + (window.innerHeight - top) * .5;
+    var centers = steps.map(function(s){ var r = s.getBoundingClientRect(); return r.top + r.height / 2; });
+
+    var ai = 0, best = Infinity;
+    centers.forEach(function(c, i){ var d = Math.abs(c - vc); if(d < best){ best = d; ai = i; } });
+    setActive(ai);
+
+    var n = centers.length, t = ts[0];
+    if(vc >= centers[n - 1]) t = ts[n - 1];
+    else if(vc > centers[0]){
+      for(var i = 0; i < n - 1; i++){
+        if(vc >= centers[i] && vc < centers[i + 1]){
+          var f = (vc - centers[i]) / (centers[i + 1] - centers[i]);
+          var g = Math.min(1, Math.max(0, (f - .3) / .4));
+          g = g * g * (3 - 2 * g);
+          t = ts[i] + (ts[i + 1] - ts[i]) * g;
+          break;
+        }
+      }
+    }
+
+    var k = Math.max(1, Math.min(pts.length, Math.round((t - T0) / .01) + 1));
+    live.setAttribute('d', 'M' + segs.slice(0, k).join(' L'));
+    var x = X(t), y = Y(loss(t));
+    mkLine.setAttribute('x1', x); mkLine.setAttribute('x2', x); mkLine.setAttribute('y1', y);
+    mkHalo.setAttribute('cx', x); mkHalo.setAttribute('cy', y);
+    mkDot.setAttribute('cx', x); mkDot.setAttribute('cy', y);
+    var flipLeft = x > V.w - 120;
+    mkLab.setAttribute('text-anchor', flipLeft ? 'end' : 'start');
+    mkLab.setAttribute('x', flipLeft ? x - 14 : x + 14);
+    mkLab.setAttribute('y', y - 12);
+    mkLab.textContent = 'loss ' + loss(t).toFixed(3);
+    cks.forEach(function(c, i){ c.classList.toggle('done', ts[i] <= t + .005); });
+  }
+
+  var queued = false;
+  function onScroll(){
+    if(queued) return;
+    queued = true;
+    requestAnimationFrame(function(){ queued = false; update(); });
+  }
+  window.addEventListener('scroll', onScroll, {passive: true});
+  window.addEventListener('resize', onScroll);
+  update();
+})();
+</script>
+
+
+<script>
+(function(){
+  var sk = document.getElementById('skills');
+  if(!sk) return;
+  [].forEach.call(sk.querySelectorAll('.tags li'), function(li, i){ li.style.setProperty('--i', i); });
+  if(!('IntersectionObserver' in window)){ sk.classList.add('in'); return; }
+  var io = new IntersectionObserver(function(es){
+    if(es[0].isIntersecting){ sk.classList.add('in'); io.disconnect(); }
+  }, {threshold: .15});
+  io.observe(sk);
+})();
+</script>
+
+<script>
+/* ---------- Header: appears once the hero has scrolled away ---------- */
+(function(){
+  var bar = document.getElementById('bar');
+  if(!bar) return;
+  var shown = false, q = false;
+  function check(){
+    q = false;
+    var on = window.scrollY > window.innerHeight * .55;
+    if(on !== shown){ shown = on; bar.classList.toggle('show', on); }
+  }
+  window.addEventListener('scroll', function(){ if(!q){ q = true; requestAnimationFrame(check); } }, {passive: true});
+  check();
+  bar.querySelector('.bar-name').addEventListener('click', function(e){
+    e.preventDefault();
+    window.scrollTo({top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+  });
+})();
+</script>
+
+</body>
+</html>
